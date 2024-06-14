@@ -1,30 +1,30 @@
 ToDo List:
-Make it available to get data paths
-set seeds
-explain all the hyper parameters
-decouple extra codes
-fix eval_density error
-fix mle_error
-write a class for computing all score together for each dataset
-Study each dataset
-Choose best datasets
-Check to add the code for visualizations
+  Make it available to get data paths
+  set seeds
+  explain all the hyper parameters
+  decouple extra codes
+  fix eval_density error
+  fix mle_error
+  write a class for computing all score together for each dataset
+  Study each dataset
+  Choose best datasets
+  Check to add the code for visualizations
 
 
 Environment Setup:
-Can’t use Cuda 12.1
+  Can’t use Cuda 12.1
 
-pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
-Extra:
-pip3 install pydantic
-pip3 install pydantic==2.0.3
+  pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
+  Extra:
+  pip3 install pydantic
+  pip3 install pydantic==2.0.3
 
-For synth city:
-Extra:
+  For synth city:
+  Extra:
 
-pip install sdmetrics
-pip install icecream
-pip install tomli
-pip install tomli-w
-pip install zero
-pip install prdc
+  pip install sdmetrics
+  pip install icecream
+  pip install tomli
+  pip install tomli-w
+  pip install zero
+  pip install prdc
