@@ -8,7 +8,7 @@
 [ToDo] Study each dataset
 [ToDo] Choose best datasets
 [ToDo] Check to add the code for visualizations
-
+[ToDo] Make it available to get data paths
 
 Environment Setup:
   Can’t use Cuda 12.1
