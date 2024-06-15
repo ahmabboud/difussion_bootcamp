@@ -8,7 +8,7 @@
     "target_col_idx": [10],
 
     "file_type": "csv",
-    "data_path": "/projects/aieng/diffussion_bootcamp/data/tabular/magic/magic04.data",
+    "data_path": "/projects/aieng/diffusion_bootcamp/data/tabular/raw_data/magic/magic04.data",
     "test_path": null
 }
 

@@ -5,22 +5,9 @@ import sys
 import json
 import argparse
 
-TYPE_TRANSFORM ={
-    'float', np.float32,
-    'str', str,
-    'int', int
-}
 
-INFO_PATH = 'data/Info'
-
-parser = argparse.ArgumentParser(description='process dataset')
-
-# General configs
-parser.add_argument('--dataname', type=str, default=None, help='Name of dataset.')
-args = parser.parse_args()
-
-def preprocess_beijing():
-    with open(f'{INFO_PATH}/beijing.json', 'r') as f:
+def preprocess_beijing(info_path):
+    with open(f'{info_path}/beijing.json', 'r') as f:
         info = json.load(f)
     
     data_path = info['raw_data_path']
@@ -34,8 +21,8 @@ def preprocess_beijing():
     df_cleaned = data_df.dropna()
     df_cleaned.to_csv(info['data_path'], index = False)
 
-def preprocess_news():
-    with open(f'{INFO_PATH}/news.json', 'r') as f:
+def preprocess_news(info_path, raw_data_dir):
+    with open(f'{info_path}/news.json', 'r') as f:
         info = json.load(f)
 
     data_path = info['raw_data_path']
@@ -56,7 +43,7 @@ def preprocess_news():
     data_df['data_channel'] = cat_col1
     data_df['weekday'] = cat_col2
     
-    data_save_path = '/projects/aieng/diffussion_bootcamp/data/tabular/news/news.csv'
+    data_save_path = f'{raw_data_dir}/news/news.csv'
     data_df.to_csv(f'{data_save_path}', index = False)
 
     columns = np.array(data_df.columns.tolist())
@@ -70,7 +57,7 @@ def preprocess_news():
     info['data_path'] = data_save_path
     
     name = 'news'
-    with open(f'{INFO_PATH}/{name}.json', 'w') as file:
+    with open(f'{info_path}/{name}.json', 'w') as file:
         json.dump(info, file, indent=4)
 
 
@@ -116,7 +103,7 @@ def train_val_test_split(data_df, cat_columns, num_train = 0, num_test = 0):
     idx = np.arange(total_num)
 
 
-    seed = 1234
+    seed = 2024
 
     while True:
         np.random.seed(seed)
@@ -145,14 +132,18 @@ def train_val_test_split(data_df, cat_columns, num_train = 0, num_test = 0):
     return train_df, test_df, seed    
 
 
-def process_data(name):
+def process_data(name, info_path, data_dir):
+    
+    raw_data_dir = os.path.join(data_dir, 'raw_data')
+    processed_data_dir = os.path.join(data_dir, 'processed_data')
+    synthetic_data_dir = os.path.join(data_dir, 'synthetic_data')
 
     if name == 'news':
-        preprocess_news()
+        preprocess_news(info_path, raw_data_dir)
     elif name == 'beijing':
-        preprocess_beijing()
+        preprocess_beijing(info_path)
 
-    with open(f'{INFO_PATH}/{name}.json', 'r') as f:
+    with open(f'{info_path}/{name}.json', 'r') as f:
         info = json.load(f)
 
     data_path = info['data_path']
@@ -184,7 +175,7 @@ def process_data(name):
 
         with open(test_path, 'r') as f:
             lines = f.readlines()[1:]
-            test_save_path = f'/projects/aieng/diffussion_bootcamp/data/tabular/{name}/test.data'
+            test_save_path = f'{raw_data_dir}/{name}/test.data'
             if not os.path.exists(test_save_path):
                 with open(test_save_path, 'a') as f1:     
                     for line in lines:
@@ -258,27 +249,27 @@ def process_data(name):
     y_test = test_df[target_columns].to_numpy()
 
  
-    save_dir = f'/projects/aieng/diffussion_bootcamp/data/tabular/{name}'
-    np.save(f'{save_dir}/X_num_train.npy', X_num_train)
-    np.save(f'{save_dir}/X_cat_train.npy', X_cat_train)
-    np.save(f'{save_dir}/y_train.npy', y_train)
+    
+    if not os.path.exists(f'{processed_data_dir}/{name}'):
+        os.makedirs(f'{processed_data_dir}/{name}')
+        
+    np.save(f'{processed_data_dir}/{name}/X_num_train.npy', X_num_train)
+    np.save(f'{processed_data_dir}/{name}/X_cat_train.npy', X_cat_train)
+    np.save(f'{processed_data_dir}/{name}/y_train.npy', y_train)
 
-    np.save(f'{save_dir}/X_num_test.npy', X_num_test)
-    np.save(f'{save_dir}/X_cat_test.npy', X_cat_test)
-    np.save(f'{save_dir}/y_test.npy', y_test)
+    np.save(f'{processed_data_dir}/{name}/X_num_test.npy', X_num_test)
+    np.save(f'{processed_data_dir}/{name}/X_cat_test.npy', X_cat_test)
+    np.save(f'{processed_data_dir}/{name}/y_test.npy', y_test)
 
     train_df[num_columns] = train_df[num_columns].astype(np.float32)
     test_df[num_columns] = test_df[num_columns].astype(np.float32)
 
 
-    train_df.to_csv(f'{save_dir}/train.csv', index = False)
-    test_df.to_csv(f'{save_dir}/test.csv', index = False)
+    train_df.to_csv(f'{processed_data_dir}/{name}/train.csv', index = False)
+    test_df.to_csv(f'{processed_data_dir}/{name}/test.csv', index = False)
 
-    if not os.path.exists(f'synthetic/{name}'):
-        os.makedirs(f'synthetic/{name}')
-    
-    train_df.to_csv(f'synthetic/{name}/real.csv', index = False)
-    test_df.to_csv(f'synthetic/{name}/test.csv', index = False)
+    if not os.path.exists(f'{synthetic_data_dir}/{name}'):
+        os.makedirs(f'{synthetic_data_dir}/{name}')
 
     print('Numerical', X_num_train.shape)
     print('Categorical', X_cat_train.shape)
@@ -321,7 +312,7 @@ def process_data(name):
 
     info['metadata'] = metadata
 
-    with open(f'{save_dir}/info.json', 'w') as file:
+    with open(f'{processed_data_dir}/{name}/info.json', 'w') as file:
         json.dump(info, file, indent=4)
 
     print(f'Processing and Saving {name} Successfully!')
@@ -341,12 +332,21 @@ def process_data(name):
 
 
 if __name__ == "__main__":
+    
+    parser = argparse.ArgumentParser(description='process dataset')
 
+    # General configs
+    parser.add_argument('--dataname', type=str, default=None, help='Name of dataset.')
+    args = parser.parse_args()
+    
+    INFO_PATH = 'data/Info'
+    DATA_DIR = '/projects/aieng/diffusion_bootcamp/data/tabular'
+    
     if args.dataname:
-        process_data(args.dataname)
+        process_data(args.dataname, INFO_PATH, DATA_DIR)
     else:
         for name in ['adult', 'default', 'shoppers', 'magic', 'beijing', 'news']:    
-            process_data(name)
+            process_data(name, INFO_PATH, DATA_DIR)
 
         
 

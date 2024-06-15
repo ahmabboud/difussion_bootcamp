@@ -22,6 +22,29 @@ def main(args):
     
     args.train = True
     raw_config = src.load_config(config_path)
+    
+    real_data_path = os.path.normpath(real_data_path)
+
+    # zero.improve_reproducibility(seed)
+
+    T = src.Transformations(**raw_config['train']['T'])
+
+
+    dataset = make_dataset(
+        real_data_path,
+        T,
+        task_type = raw_config['task_type'],
+        change_val = False,
+    )
+    
+    K = np.array(dataset.get_category_sizes('train'))
+    if len(K) == 0 or raw_config['train']['T']['cat_encoding'] == 'one-hot':
+        K = np.array([0])
+
+    num_numerical_features = dataset.X_num['train'].shape[1] if dataset.X_num is not None else 0
+    d_in = np.sum(K) + num_numerical_features
+    raw_config['model_params']['d_in'] = d_in
+    print(d_in)
 
     ''' 
     Modification of configs
@@ -31,9 +54,9 @@ def main(args):
     train(
         **raw_config['train']['main'],
         **raw_config['diffusion_params'],
+        dataset=dataset,
         model_save_path=model_save_path,
-        real_data_path=real_data_path,
-        task_type=raw_config['task_type'],
+        num_classes = K,
         model_type=raw_config['model_type'],
         model_params=raw_config['model_params'],
         T_dict=raw_config['train']['T'],

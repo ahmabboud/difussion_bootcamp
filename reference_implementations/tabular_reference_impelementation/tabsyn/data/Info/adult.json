@@ -41,8 +41,8 @@
         14
     ],
     "file_type": "csv",
-    "data_path": "/projects/aieng/diffussion_bootcamp/data/tabular/adult/adult.data",
-    "test_path": "/projects/aieng/diffussion_bootcamp/data/tabular/adult/adult.test",
+    "data_path": "/projects/aieng/diffusion_bootcamp/data/tabular/raw_data/adult/adult.data",
+    "test_path": "/projects/aieng/diffusion_bootcamp/data/tabular/raw_data/adult/adult.test",
     "column_info": {
         "age": "float",
         "workclass": "str",

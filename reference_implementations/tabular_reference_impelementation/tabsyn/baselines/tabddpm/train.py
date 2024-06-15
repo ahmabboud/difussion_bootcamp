@@ -123,13 +123,13 @@ class Trainer:
             # print('Time: ', end_time - start_time)
 
 def train(
+    dataset,
     model_save_path,
-    real_data_path,
+    num_classes,
     steps = 1000,
     lr = 0.002,
     weight_decay = 1e-4,
     batch_size = 1024,
-    task_type = 'binclass',
     model_type = 'mlp',
     model_params = None,
     num_timesteps = 1000,
@@ -141,28 +141,6 @@ def train(
     seed = 0,
     change_val = False
 ):
-    real_data_path = os.path.normpath(real_data_path)
-
-    # zero.improve_reproducibility(seed)
-
-    T = src.Transformations(**T_dict)
-
-
-    dataset = make_dataset(
-        real_data_path,
-        T,
-        task_type = task_type,
-        change_val = False,
-    )
-
-    K = np.array(dataset.get_category_sizes('train'))
-    if len(K) == 0 or T_dict['cat_encoding'] == 'one-hot':
-        K = np.array([0])
-
-    num_numerical_features = dataset.X_num['train'].shape[1] if dataset.X_num is not None else 0
-    d_in = np.sum(K) + num_numerical_features
-    model_params['d_in'] = d_in
-    print(d_in)
     
     print(model_params)
     model = get_model(
@@ -178,7 +156,7 @@ def train(
     train_loader = src.prepare_fast_dataloader(dataset, split='train', batch_size=batch_size)
 
     diffusion = GaussianMultinomialDiffusion(
-        num_classes=K,
+        num_classes=num_classes,
         num_numerical_features=num_numerical_features,
         denoise_fn=model,
         gaussian_loss_type=gaussian_loss_type,
