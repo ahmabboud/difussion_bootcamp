@@ -1,29 +1,10 @@
 import os
-import sys
 import time
 import torch
 import numpy as np
 import pandas as pd
 
 from copy import deepcopy
-
-import src
-from utils_train import make_dataset, update_ema
-from baselines.tabddpm.models.modules import MLPDiffusion
-from baselines.tabddpm.models.gaussian_multinomial_distribution import GaussianMultinomialDiffusion
-
-def get_model(
-    model_name,
-    model_params,
-    n_num_features,
-    category_sizes
-): 
-    print(model_name)
-    if model_name == 'mlp':
-        model = MLPDiffusion(**model_params)
-    else:
-        raise "Unknown model!"
-    return model
 
 class Trainer:
     def __init__(self, diffusion, train_iter, lr, weight_decay, steps, model_save_path, device=torch.device('cuda:1')):
@@ -121,73 +102,3 @@ class Trainer:
             step += 1
             # end_time = time.time()
             # print('Time: ', end_time - start_time)
-
-def train(
-    dataset,
-    model_save_path,
-    num_classes,
-    steps = 1000,
-    lr = 0.002,
-    weight_decay = 1e-4,
-    batch_size = 1024,
-    model_type = 'mlp',
-    model_params = None,
-    num_timesteps = 1000,
-    gaussian_loss_type = 'mse',
-    scheduler = 'cosine',
-    T_dict = None,
-    num_numerical_features = 0,
-    device = torch.device('cuda:0'),
-    seed = 0,
-    change_val = False
-):
-    
-    print(model_params)
-    model = get_model(
-        model_type,
-        model_params,
-        num_numerical_features,
-        category_sizes=dataset.get_category_sizes('train')
-    )
-    model.to(device)
-
-    print(model)
-
-    train_loader = src.prepare_fast_dataloader(dataset, split='train', batch_size=batch_size)
-
-    diffusion = GaussianMultinomialDiffusion(
-        num_classes=num_classes,
-        num_numerical_features=num_numerical_features,
-        denoise_fn=model,
-        gaussian_loss_type=gaussian_loss_type,
-        num_timesteps=num_timesteps,
-        scheduler=scheduler,
-        device=device
-    )
-
-    num_params = sum(p.numel() for p in diffusion.parameters())
-    print("the number of parameters", num_params)
-    
-
-    diffusion.to(device)
-
-    diffusion.train()
-
-    trainer = Trainer(
-        diffusion,
-        train_loader,
-        lr=lr,
-        weight_decay=weight_decay,
-        steps=steps,
-        model_save_path=model_save_path,
-        device=device
-    )
-    trainer.run_loop()
-
-    if not os.path.exists(model_save_path):
-        os.makedirs(model_save_path)
-
-    torch.save(diffusion._denoise_fn.state_dict(), os.path.join(model_save_path, 'model.pt'))
-    torch.save(trainer.ema_model.state_dict(), os.path.join(model_save_path, 'model_ema.pt'))
-
-    trainer.loss_history.to_csv(os.path.join(model_save_path, 'loss.csv'), index=False)

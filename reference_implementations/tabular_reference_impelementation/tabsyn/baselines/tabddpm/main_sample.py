@@ -1,8 +1,10 @@
 import os
 import argparse
-from baselines.tabddpm.sample import sample
+from baselines.tabddpm.tabddpm import sample
 
 import src
+from tabsyn.utils import make_dataset
+import numpy as np
 
 
 def main(args):
@@ -21,24 +23,41 @@ def main(args):
     
     raw_config = src.load_config(config_path)
 
+    T = src.Transformations(**raw_config['train']['T'])
+
+    dataset = make_dataset(
+        real_data_path,
+        T,
+        task_type = raw_config['task_type'],
+        change_val = False,
+    )
+
+    K = np.array(dataset.get_category_sizes('train'))
+    if len(K) == 0 or raw_config['train']['T']['cat_encoding'] == 'one-hot':
+        K = np.array([0])
+
+    num_numerical_features = dataset.X_num['train'].shape[1] if dataset.X_num is not None else 0
+    d_in = np.sum(K) + num_numerical_features
+    raw_config['model_params']['d_in'] = int(d_in)
+
     ''' 
     Modification of configs
     '''
     print('START SAMPLING')
     
     sample(
+        dataset=dataset,
         num_samples=raw_config['sample']['num_samples'],
         batch_size=raw_config['sample']['batch_size'],
         disbalance=raw_config['sample'].get('disbalance', None),
+        num_classes=K,
         **raw_config['diffusion_params'],
         model_save_path=model_save_path,
         sample_save_path=sample_save_path,
         real_data_path=real_data_path,
-        task_type=raw_config['task_type'],
         model_type=raw_config['model_type'],
         model_params=raw_config['model_params'],
-        T_dict=raw_config['train']['T'],
-        num_numerical_features=raw_config['num_numerical_features'],
+        num_numerical_features=num_numerical_features,
         device=device,
         ddim=args.ddim,
         steps=args.steps

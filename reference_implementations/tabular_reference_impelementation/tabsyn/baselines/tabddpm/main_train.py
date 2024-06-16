@@ -1,9 +1,11 @@
 import os
 import argparse
 
-from baselines.tabddpm.train import train
+from baselines.tabddpm.tabddpm import train
 
 import src
+import numpy as np
+from tabsyn.utils import make_dataset
 
 
 def main(args):
@@ -60,7 +62,7 @@ def main(args):
         model_type=raw_config['model_type'],
         model_params=raw_config['model_params'],
         T_dict=raw_config['train']['T'],
-        num_numerical_features=raw_config['num_numerical_features'],
+        num_numerical_features=num_numerical_features,
         device=device
     )
 

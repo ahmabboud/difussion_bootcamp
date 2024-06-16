@@ -10,7 +10,7 @@ from tabsyn.latent_utils import get_input_generate, recover_data, split_num_cat_
 from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
 import json
 import sys
-from utils_train import preprocess, TabularDataset
+from tabsyn.utils import preprocess, TabularDataset
 
 warnings.filterwarnings('ignore')
 

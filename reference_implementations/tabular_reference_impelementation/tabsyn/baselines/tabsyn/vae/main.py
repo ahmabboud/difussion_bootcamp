@@ -13,7 +13,7 @@ import json
 import time
 
 from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
-from utils_train import preprocess, TabularDataset
+from tabsyn.utils import preprocess, TabularDataset
 
 warnings.filterwarnings('ignore')
 
