@@ -11,7 +11,7 @@ from baselines.tabddpm.models.gaussian_multinomial_distribution import (
 from baselines.tabddpm.models.modules import MLPDiffusion
 
 import src
-from tabsyn.utils import make_dataset
+from utils import make_dataset
 
 
 @torch.no_grad()
