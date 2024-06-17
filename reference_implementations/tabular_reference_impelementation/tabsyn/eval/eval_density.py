@@ -1,11 +1,10 @@
-import numpy as np
 import pandas as pd
 import os
 
 import json
 
 # Metrics
-from sdmetrics.reports.single_table import QualityReport, DiagnosticReport
+from sdmetrics.reports.single_table import QualityReport
 
 
 import argparse
@@ -98,13 +97,7 @@ if __name__ == "__main__":
     qual_report = QualityReport()
     qual_report.generate(new_real_data, new_syn_data, metadata)
 
-    diag_report = DiagnosticReport()
-    diag_report.generate(new_real_data, new_syn_data, metadata)
-    print("hereee2")
-
     quality = qual_report.get_properties()
-    diag = diag_report.get_properties()
-    print("hereee", diag)
 
     Shape = quality["Score"][0]
     Trend = quality["Score"][1]
@@ -117,8 +110,6 @@ if __name__ == "__main__":
 
     shapes = qual_report.get_details(property_name="Column Shapes")
     trends = qual_report.get_details(property_name="Column Pair Trends")
-    coverages = diag_report.get_details("Coverage")
 
     shapes.to_csv(f"{save_dir}/shape.csv")
     trends.to_csv(f"{save_dir}/trend.csv")
-    coverages.to_csv(f"{save_dir}/coverage.csv")
