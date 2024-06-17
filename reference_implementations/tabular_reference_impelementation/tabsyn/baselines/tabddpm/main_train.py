@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from baselines.tabddpm.tabddpm import train
+from baselines.tabddpm.tabddpm import TabDDPM
 
 import src
 import numpy as np
@@ -16,7 +16,9 @@ def main(args):
 
     config_path = f"{curr_dir}/configs/{dataname}.toml"
     model_save_path = f"{ckpt_dir}/tabddpm/{dataname}"
-    real_data_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    real_data_path = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
 
     if not os.path.exists(model_save_path):
         os.makedirs(model_save_path)
@@ -52,18 +54,21 @@ def main(args):
     Modification of configs
     """
     print("START TRAINING")
-
-    train(
-        **raw_config["train"]["main"],
-        **raw_config["diffusion_params"],
+    tabddpm = TabDDPM(
         dataset=dataset,
-        model_save_path=model_save_path,
         num_classes=K,
+        **raw_config["diffusion_params"],
+        ckpt_path=model_save_path,
+        real_data_path=real_data_path,
         model_type=raw_config["model_type"],
         model_params=raw_config["model_params"],
-        T_dict=raw_config["train"]["T"],
         num_numerical_features=num_numerical_features,
         device=device,
+    )
+
+    tabddpm.train(
+        **raw_config["train"]["main"],
+        model_save_path=model_save_path,
     )
 
 

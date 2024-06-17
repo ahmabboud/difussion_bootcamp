@@ -70,7 +70,9 @@ if __name__ == "__main__":
 
     real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
 
-    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    data_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
     print(syn_path)
 
     with open(f"{data_dir}/info.json", "r") as f:
@@ -102,7 +104,7 @@ if __name__ == "__main__":
 
     quality = qual_report.get_properties()
     diag = diag_report.get_properties()
-    print("hereee",diag)
+    print("hereee", diag)
 
     Shape = quality["Score"][0]
     Trend = quality["Score"][1]

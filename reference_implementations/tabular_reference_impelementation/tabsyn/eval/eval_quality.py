@@ -35,7 +35,9 @@ if __name__ == "__main__":
         syn_path = args.path
     real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/main.csv"
 
-    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    data_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
 
     print(syn_path)
 

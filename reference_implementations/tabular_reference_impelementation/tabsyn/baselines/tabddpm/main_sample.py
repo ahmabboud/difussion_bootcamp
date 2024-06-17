@@ -1,6 +1,6 @@
 import os
 import argparse
-from baselines.tabddpm.tabddpm import sample
+from baselines.tabddpm.tabddpm import TabDDPM
 
 import src
 from utils import make_dataset
@@ -16,7 +16,9 @@ def main(args):
 
     config_path = f"{curr_dir}/configs/{dataname}.toml"
     model_save_path = f"{ckpt_dir}/tabddpm/{dataname}/model_100000.pt"
-    real_data_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    real_data_path = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
     sample_save_path = args.save_path
 
     args.train = True
@@ -47,20 +49,23 @@ def main(args):
     """
     print("START SAMPLING")
 
-    sample(
+    tabddpm = TabDDPM(
         dataset=dataset,
-        num_samples=raw_config["sample"]["num_samples"],
-        batch_size=raw_config["sample"]["batch_size"],
-        disbalance=raw_config["sample"].get("disbalance", None),
         num_classes=K,
         **raw_config["diffusion_params"],
-        model_path=model_save_path,
-        sample_save_path=sample_save_path,
+        ckpt_path=model_save_path,
         real_data_path=real_data_path,
         model_type=raw_config["model_type"],
         model_params=raw_config["model_params"],
         num_numerical_features=num_numerical_features,
         device=device,
+    )
+
+    tabddpm.sample(
+        num_samples=raw_config["sample"]["num_samples"],
+        batch_size=raw_config["sample"]["batch_size"],
+        disbalance=raw_config["sample"].get("disbalance", None),
+        sample_save_path=sample_save_path,
         ddim=args.ddim,
         steps=args.steps,
     )
