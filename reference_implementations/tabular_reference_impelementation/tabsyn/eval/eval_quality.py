@@ -5,7 +5,7 @@ import sys
 import json
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tabsyn.utils import preprocess, TabularDataset
+from utils import preprocess, TabularDataset
 from sklearn.preprocessing import OneHotEncoder
 from synthcity.metrics import eval_detection, eval_performance, eval_statistical
 from synthcity.plugins.core.dataloader import GenericDataLoader
@@ -30,12 +30,12 @@ if __name__ == "__main__":
     model = args.model
 
     if not args.path:
-        syn_path = f"synthetic/{dataname}/{model}.csv"
+        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
     else:
         syn_path = args.path
-    real_path = f"synthetic/{dataname}/real.csv"
+    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/main.csv"
 
-    data_dir = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
+    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
 
     print(syn_path)
 

@@ -5,18 +5,18 @@ from baselines.tabddpm.tabddpm import train
 
 import src
 import numpy as np
-from tabsyn.utils import make_dataset
+from utils import make_dataset
 
 
 def main(args):
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    ckpt_dir = "/projects/aieng/diffussion_bootcamp/models/tabular"
+    ckpt_dir = "/projects/aieng/diffusion_bootcamp/models/tabular"
     dataname = args.dataname
     device = f"cuda:{args.gpu}"
 
     config_path = f"{curr_dir}/configs/{dataname}.toml"
     model_save_path = f"{ckpt_dir}/tabddpm/{dataname}"
-    real_data_path = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
+    real_data_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
 
     if not os.path.exists(model_save_path):
         os.makedirs(model_save_path)

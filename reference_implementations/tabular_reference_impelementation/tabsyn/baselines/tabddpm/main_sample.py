@@ -3,7 +3,7 @@ import argparse
 from baselines.tabddpm.tabddpm import sample
 
 import src
-from tabsyn.utils import make_dataset
+from utils import make_dataset
 import numpy as np
 
 
@@ -12,11 +12,11 @@ def main(args):
     device = f"cuda:{args.gpu}"
 
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    ckpt_dir = "/projects/aieng/diffussion_bootcamp/models/tabular"
+    ckpt_dir = "/projects/aieng/diffusion_bootcamp/models/tabular"
 
     config_path = f"{curr_dir}/configs/{dataname}.toml"
-    model_save_path = f"{ckpt_dir}/tabddpm/{dataname}"
-    real_data_path = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
+    model_save_path = f"{ckpt_dir}/tabddpm/{dataname}/model_100000.pt"
+    real_data_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
     sample_save_path = args.save_path
 
     args.train = True
@@ -54,7 +54,7 @@ def main(args):
         disbalance=raw_config["sample"].get("disbalance", None),
         num_classes=K,
         **raw_config["diffusion_params"],
-        model_save_path=model_save_path,
+        model_path=model_save_path,
         sample_save_path=sample_save_path,
         real_data_path=real_data_path,
         model_type=raw_config["model_type"],

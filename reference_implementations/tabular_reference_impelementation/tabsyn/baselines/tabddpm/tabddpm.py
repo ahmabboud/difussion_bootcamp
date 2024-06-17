@@ -98,7 +98,7 @@ def train(
 
 def sample(
     dataset,
-    model_save_path,
+    model_path,
     sample_save_path,
     real_data_path,
     num_classes,
@@ -122,8 +122,6 @@ def sample(
         num_numerical_features,
         category_sizes=dataset.get_category_sizes("train"),
     )
-
-    model_path = f"{model_save_path}/model.pt"
 
     model.load_state_dict(torch.load(model_path, map_location="cpu"))
 
