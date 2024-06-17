@@ -8,8 +8,8 @@ from baselines.tabddpm.models.gaussian_multinomial_distribution import (
     GaussianMultinomialDiffusion,
 )
 from baselines.tabddpm.models.modules import MLPDiffusion
-from baselines.tabddpm.train import Trainer
-from baselines.tabddpm.sample import split_num_cat_target, recover_data
+from baselines.tabddpm.train_utils import Trainer
+from baselines.tabddpm.sample_utils import split_num_cat_target, recover_data
 
 
 def get_model(model_name, model_params, n_num_features, category_sizes):

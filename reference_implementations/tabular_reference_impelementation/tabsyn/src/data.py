@@ -617,6 +617,8 @@ class FastTensorDataLoader:
 
 
 def prepare_fast_dataloader(D: Dataset, split: str, batch_size: int):
+    assert D.X_num is not None
+    assert D.X_cat is not None
     X = torch.from_numpy(
         np.concatenate([D.X_num[split], D.X_cat[split]], axis=1)
     ).float()
@@ -627,12 +629,15 @@ def prepare_fast_dataloader(D: Dataset, split: str, batch_size: int):
         yield from dataloader
 
 
+## No usage of this function
 def prepare_fast_torch_dataloader(D: Dataset, split: str, batch_size: int):
     if D.X_cat is not None:
+        assert D.X_num is not None
         X = torch.from_numpy(
             np.concatenate([D.X_num[split], D.X_cat[split]], axis=1)
         ).float()
     else:
+        assert D.X_num is not None
         X = torch.from_numpy(D.X_num[split]).float()
     y = torch.from_numpy(D.y[split])
     dataloader = FastTensorDataLoader(
