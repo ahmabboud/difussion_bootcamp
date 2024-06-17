@@ -2,13 +2,14 @@
 [ToDo] set seeds
 [ToDo] explain all the hyper parameters
 [ToDo] decouple extra codes
-[ToDo] fix eval_density error
+[ToDo] fix eval_density error still has errro in converage while decrease sdmetrics version
 [ToDo] fix mle_error
 [ToDo] write a class for computing all score together for each dataset
 [ToDo] Study each dataset
 [ToDo] Choose best datasets
 [ToDo] Check to add the code for visualizations
 [ToDo] Make it available to get data paths
+[ToDo] Redownload synthcity
 
 Environment Setup:
   Can’t use Cuda 12.1
@@ -26,6 +27,8 @@ Environment Setup:
     pip install tomli-w
     pip install zero
     pip install prdc
+    pip install category_encoders
+    
 
   Add to jupyter:
     pip install ipykernel
