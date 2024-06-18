@@ -1,16 +1,14 @@
 import os
 import numpy as np
 import torch
-import torch.nn as nn
 import argparse
 import warnings
 
 from tabsyn.model import MLPDiffusion, Model
-from tabsyn.latent_utils import get_input_generate, recover_data, split_num_cat_target
+from tabsyn.latent_utils import recover_data, split_num_cat_target
 from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
 import json
-import sys
-from tabsyn.utils import preprocess, TabularDataset
+from tabsyn.utils import preprocess
 
 warnings.filterwarnings("ignore")
 

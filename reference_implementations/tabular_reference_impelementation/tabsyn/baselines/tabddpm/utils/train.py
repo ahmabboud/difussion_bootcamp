@@ -123,5 +123,5 @@ class Trainer:
             # update_ema(self.ema_model.parameters(), self.diffusion._denoise_fn.parameters())
 
             step += 1
-            # end_time = time.time()
-            # print('Time: ', end_time - start_time)
+            end_time = time.time()
+            print("Time: ", end_time - start_time)

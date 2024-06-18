@@ -1,15 +1,7 @@
 import numpy as np
 import pandas as pd
 from xgboost import XGBClassifier, XGBRegressor
-from sklearn.ensemble import (
-    AdaBoostClassifier,
-    RandomForestClassifier,
-    RandomForestRegressor,
-)
-from sklearn.linear_model import LogisticRegression, LinearRegression
-from sklearn.neural_network import MLPClassifier, MLPRegressor
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import (
     classification_report,
     accuracy_score,
@@ -27,7 +19,6 @@ from sklearn.metrics import (
 from sklearn.model_selection import ParameterGrid
 from sklearn.utils._testing import ignore_warnings
 from sklearn.exceptions import ConvergenceWarning
-import logging
 from prdc import compute_prdc
 from tqdm import tqdm
 
@@ -383,8 +374,8 @@ def _evaluate_multi_classification(train, test, info):
 
             try:
                 model.fit(x_trains, y_trains)
-            except:
-                pass
+            except Exception as e:
+                print("Error caught in model fit:", str(e))
 
             if len(unique_labels) != len(np.unique(y_valid)):
                 pred = [unique_labels[0]] * len(x_valid)
@@ -409,7 +400,8 @@ def _evaluate_multi_classification(train, test, info):
                 else:
                     try:
                         tmp.append(pred_prob[:, [j]])
-                    except:
+                    except Exception:
+                        print("Error catched in appending to temp list")
                         tmp.append(pred_prob[:, np.newaxis])
                     j += 1
 
@@ -450,8 +442,8 @@ def _evaluate_multi_classification(train, test, info):
 
             try:
                 best_model.fit(x_train, y_train)
-            except:
-                pass
+            except Exception as e:
+                print("Error caught in model fit:", str(e))
 
             if len(unique_labels) != len(np.unique(y_test)):
                 pred = [unique_labels[0]] * len(x_test)
@@ -475,7 +467,8 @@ def _evaluate_multi_classification(train, test, info):
                 else:
                     try:
                         tmp.append(pred_prob[:, [j]])
-                    except:
+                    except Exception:
+                        print("Error catched in appending to temp list")
                         tmp.append(pred_prob[:, np.newaxis])
                     j += 1
             roc_auc = roc_auc_score(
@@ -580,7 +573,8 @@ def _evaluate_binary_classification(train, test, info):
                 else:
                     try:
                         tmp.append(pred_prob[:, [j]])
-                    except:
+                    except Exception:
+                        print("Error catched in appending to temp list")
                         tmp.append(pred_prob[:, np.newaxis])
                     j += 1
             roc_auc = roc_auc_score(np.eye(size)[y_valid], np.hstack(tmp))
@@ -640,7 +634,8 @@ def _evaluate_binary_classification(train, test, info):
                 else:
                     try:
                         tmp.append(pred_prob[:, [j]])
-                    except:
+                    except Exception:
+                        print("Error catched in appending to temp list")
                         tmp.append(pred_prob[:, np.newaxis])
                     j += 1
             try:
@@ -705,7 +700,6 @@ def _evaluate_regression(train, test, info):
     best_ev_scores = []
     best_mae_scores = []
     best_rmse_scores = []
-    best_avg_scores = []
 
     y_trains = np.log(np.clip(y_trains, 1, 20000))
     y_test = np.log(np.clip(y_test, 1, 20000))

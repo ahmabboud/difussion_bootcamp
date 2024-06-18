@@ -1,7 +1,6 @@
 import torch
 import numpy as np
 import torch.nn.functional as F
-from torch.profiler import record_function
 from inspect import isfunction
 
 
@@ -150,7 +149,6 @@ def index_to_log_onehot(x, num_classes):
 
 
 def log_sum_exp_by_classes(x, slices):
-    device = x.device
     res = torch.zeros_like(x)
     for ixs in slices:
         res[:, ixs] = torch.logsumexp(x[:, ixs], dim=1, keepdim=True)

@@ -1,14 +1,7 @@
 import torch
 
-from baselines.tabddpm.main_train import main as train_tabddpm
-from baselines.tabddpm.main_sample import main as sample_tabddpm
-
-from baselines.tabsyn.vae.main import main as train_vae
-from baselines.tabsyn.main import main as train_tabsyn
-from baselines.tabsyn.sample import main as sample_tabsyn
 
 import argparse
-import importlib
 
 
 def execute_function(method, mode):

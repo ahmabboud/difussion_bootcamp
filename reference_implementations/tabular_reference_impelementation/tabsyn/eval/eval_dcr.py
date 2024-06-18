@@ -6,13 +6,13 @@ import json
 import os
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tabsyn.utils import preprocess, TabularDataset
 from sklearn.preprocessing import OneHotEncoder
 
-pd.options.mode.chained_assignment = None
-
 import argparse
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+pd.options.mode.chained_assignment = None
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataname", type=str, default="adult")

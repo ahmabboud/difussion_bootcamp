@@ -1,8 +1,5 @@
 import os
-import numpy
-import pandas as pd
 from urllib import request
-import shutil
 import zipfile
 
 

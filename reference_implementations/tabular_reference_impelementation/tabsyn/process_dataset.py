@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import os
-import sys
 import json
 import argparse
 
@@ -47,9 +46,6 @@ def preprocess_news(info_path, raw_data_dir):
     data_df.to_csv(f"{data_save_path}", index=False)
 
     columns = np.array(data_df.columns.tolist())
-    num_columns = columns[list(range(45))]
-    cat_columns = ["data_channel", "weekday"]
-    target_columns = columns[[45]]
 
     info["num_col_idx"] = list(range(45))
     info["cat_col_idx"] = [46, 47]

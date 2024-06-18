@@ -47,8 +47,6 @@ def reorder(real_data, syn_data, info):
     columns = metadata["columns"]
     metadata["columns"] = {}
 
-    inverse_idx_mapping = info["inverse_idx_mapping"]
-
     for i in range(len(new_real_data.columns)):
         if i < len(num_col_idx):
             metadata["columns"][i] = columns[num_col_idx[i]]

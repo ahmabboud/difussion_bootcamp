@@ -67,7 +67,6 @@ def main(args):
     with open(info_path, "r") as f:
         info = json.load(f)
 
-    curr_dir = os.path.dirname(os.path.abspath(__file__))
     ckpt_dir = (
         f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}/vae"
     )

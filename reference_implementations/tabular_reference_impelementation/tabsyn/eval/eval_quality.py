@@ -4,15 +4,15 @@ import os
 import sys
 import json
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils import preprocess, TabularDataset
 from sklearn.preprocessing import OneHotEncoder
-from synthcity.metrics import eval_detection, eval_performance, eval_statistical
+from synthcity.metrics import eval_statistical
 from synthcity.plugins.core.dataloader import GenericDataLoader
 
-pd.options.mode.chained_assignment = None
-
 import argparse
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+pd.options.mode.chained_assignment = None
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataname", type=str, default="adult")

@@ -15,7 +15,7 @@ Environment Setup:
   Can’t use Cuda 12.1
 
   pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
-  
+
   Extra for tabsyn: /projects/aieng/diffusion_bootcamp/env/tab_synth_env
     pip3 install pydantic
     pip3 install pydantic==2.0.3
@@ -28,7 +28,7 @@ Environment Setup:
     pip install zero
     pip install prdc
     pip install category_encoders
-    
+
 
   Add to jupyter:
     pip install ipykernel

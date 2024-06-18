@@ -44,7 +44,7 @@ def main(args):
     d_in = np.sum(K) + num_numerical_features
     raw_config["model_params"]["d_in"] = int(d_in)
 
-    """ 
+    """
     Modification of configs
     """
     print("START SAMPLING")

@@ -8,7 +8,21 @@ import torch
 import math
 
 import numpy as np
-from baselines.tabddpm.models.utils import *
+from baselines.tabddpm.models.utils import (
+    normal_kl,
+    log_add_exp,
+    log_categorical,
+    log_1_min_a,
+    extract,
+    mean_flat,
+    discretized_gaussian_log_likelihood,
+    sliced_logsumexp,
+    default,
+    index_to_log_onehot,
+    sum_except_batch,
+    ohe_to_categories,
+    FoundNANsError,
+)
 
 """
 Based in part on: https://github.com/lucidrains/denoising-diffusion-pytorch/blob/5989f4c77eafcdc6be0fb4739f0f277a6dd7f7d8/denoising_diffusion_pytorch/denoising_diffusion_pytorch.py#L281
@@ -766,7 +780,6 @@ class GaussianMultinomialDiffusion(torch.nn.Module):
         gaussian_loss = []
         xstart_mse = []
         mse = []
-        mu_mse = []
         out_mean = []
         true_mean = []
         multinomial_loss = []
@@ -807,7 +820,6 @@ class GaussianMultinomialDiffusion(torch.nn.Module):
             multinomial_loss.append(kl)
             gaussian_loss.append(out["output"])
             xstart_mse.append(mean_flat((out["pred_xstart"] - x_num) ** 2))
-            # mu_mse.append(mean_flat(out["mean_mse"]))
             out_mean.append(mean_flat(out["out_mean"]))
             true_mean.append(mean_flat(out["true_mean"]))
 
@@ -818,7 +830,6 @@ class GaussianMultinomialDiffusion(torch.nn.Module):
         multinomial_loss = torch.stack(multinomial_loss, dim=1)
         xstart_mse = torch.stack(xstart_mse, dim=1)
         mse = torch.stack(mse, dim=1)
-        # mu_mse = torch.stack(mu_mse, dim=1)
         out_mean = torch.stack(out_mean, dim=1)
         true_mean = torch.stack(true_mean, dim=1)
 
@@ -837,7 +848,6 @@ class GaussianMultinomialDiffusion(torch.nn.Module):
             "losses_multinimial": multinomial_loss,
             "xstart_mse": xstart_mse,
             "mse": mse,
-            # "mu_mse": mu_mse
             "out_mean": out_mean,
             "true_mean": true_mean,
         }

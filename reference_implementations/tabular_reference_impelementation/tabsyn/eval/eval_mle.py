@@ -1,5 +1,3 @@
-import numpy as np
-import torch
 import pandas as pd
 import os
 import sys
@@ -7,12 +5,12 @@ import sys
 import json
 from mle.mle import get_evaluator
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import warnings
+import argparse
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 warnings.filterwarnings("ignore")
-
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--dataname", type=str, default="adult")

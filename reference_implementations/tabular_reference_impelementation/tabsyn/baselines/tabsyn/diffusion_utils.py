@@ -3,7 +3,6 @@
 
 import torch
 import numpy as np
-from scipy.stats import betaprime
 
 # ----------------------------------------------------------------------------
 # Loss function corresponding to the variance preserving (VP) formulation

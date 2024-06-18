@@ -16,9 +16,9 @@ warnings.filterwarnings("ignore")
 
 
 def main(args):
-    dataname = args.dataname
+    # dataname = args.dataname
     device = args.device
-    steps = args.steps
+    # steps = args.steps
     save_path = args.save_path
 
     train_z, _, _, ckpt_path, info, num_inverse, cat_inverse = get_input_generate(args)
@@ -33,7 +33,7 @@ def main(args):
     model.load_state_dict(torch.load(f"{ckpt_path}/model.pt"))
 
     """
-        Generating samples    
+        Generating samples
     """
     start_time = time.time()
 

@@ -1,11 +1,9 @@
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.init as nn_init
 import torch.nn.functional as F
 from torch import Tensor
 
-import typing as ty
 import math
 
 
@@ -218,9 +216,7 @@ class Transformer(nn.Module):
         return x
 
     def forward(self, x):
-        for layer_idx, layer in enumerate(self.layers):
-            is_last_layer = layer_idx + 1 == len(self.layers)
-
+        for _, layer in enumerate(self.layers):
             x_residual = self._start_residual(x, layer, 0)
             x_residual = layer["attention"](
                 # for the last attention, it is enough to process only [CLS]
@@ -302,7 +298,6 @@ class VAE(nn.Module):
 
         z = self.reparameterize(mu_z, std_z)
 
-        batch_size = x_num.size(0)
         h = self.decoder(z[:, 1:])
 
         return h, mu_z, std_z

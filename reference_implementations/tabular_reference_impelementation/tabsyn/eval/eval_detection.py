@@ -1,17 +1,11 @@
-import numpy as np
-import torch
 import pandas as pd
 import os
-import sys
 
 import json
-import pickle
 
 # Metrics
-from sdmetrics import load_demo
 from sdmetrics.single_table import LogisticDetection
 
-from matplotlib import pyplot as plt
 
 import argparse
 import warnings
@@ -55,8 +49,6 @@ def reorder(real_data, syn_data, info):
 
     columns = metadata["columns"]
     metadata["columns"] = {}
-
-    inverse_idx_mapping = info["inverse_idx_mapping"]
 
     for i in range(len(new_real_data.columns)):
         if i < len(num_col_idx):

@@ -50,7 +50,7 @@ def main(args):
     raw_config["model_params"]["d_in"] = d_in
     print(d_in)
 
-    """ 
+    """
     Modification of configs
     """
     print("START TRAINING")

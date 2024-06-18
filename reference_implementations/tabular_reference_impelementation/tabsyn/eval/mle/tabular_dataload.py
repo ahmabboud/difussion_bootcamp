@@ -15,6 +15,7 @@
 
 # pylint: skip-file
 """Return training and evaluation/test datasets from config files."""
+
 import torch
 import numpy as np
 import pandas as pd
@@ -56,7 +57,6 @@ def _get_columns(metadata):
 
 def load_data(name):
     data_dir = f"data/{name}"
-    info_path = f"{data_dir}/info.json"
 
     train = pd.read_csv(f"{data_dir}/train.csv").to_numpy()
     test = pd.read_csv(f"{data_dir}/test.csv").to_numpy()
@@ -65,8 +65,6 @@ def load_data(name):
         info = json.load(f)
 
     task_type = info["task_type"]
-
-    num_cols = info["num_col_idx"]
     cat_cols = info["cat_col_idx"]
     target_cols = info["target_col_idx"]
 

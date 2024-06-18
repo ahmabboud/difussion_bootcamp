@@ -26,7 +26,7 @@ def main(args):
 
     in_dim = train_z.shape[1]
 
-    mean, std = train_z.mean(0), train_z.std(0)
+    mean, _ = train_z.mean(0), train_z.std(0)
 
     train_z = (train_z - mean) / 2
     train_data = train_z
