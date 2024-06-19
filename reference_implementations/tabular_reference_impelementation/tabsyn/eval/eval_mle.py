@@ -30,16 +30,16 @@ if __name__ == "__main__":
     model = args.model
 
     if not args.path:
-        train_path = f"synthetic/{dataname}/{model}.csv"
+        train_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
     else:
         train_path = args.path
-    test_path = f"synthetic/{dataname}/test.csv"
+    test_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/test.csv"
 
     train = pd.read_csv(train_path).to_numpy()
     test = pd.read_csv(test_path).to_numpy()
 
     with open(
-        f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}/info.json", "r"
+        f"/projects/aieng/diffussion_bootcamp/data/tabular/processed_data/{dataname}/info.json", "r"
     ) as f:
         info = json.load(f)
 
