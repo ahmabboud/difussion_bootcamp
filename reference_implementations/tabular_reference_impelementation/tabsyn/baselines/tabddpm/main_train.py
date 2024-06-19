@@ -58,7 +58,6 @@ def main(args):
         dataset=dataset,
         num_classes=K,
         **raw_config["diffusion_params"],
-        ckpt_path=model_save_path,
         real_data_path=real_data_path,
         model_type=raw_config["model_type"],
         model_params=raw_config["model_params"],
