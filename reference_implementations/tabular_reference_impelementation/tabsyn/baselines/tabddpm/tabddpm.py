@@ -35,7 +35,7 @@ class TabDDPM:
         self.device = device
         self.num_classes = num_classes
         self.num_timesteps = num_timesteps
-        self.gaussion_loss_type = gaussian_loss_type
+        self.gaussian_loss_type = gaussian_loss_type
         self.scheduler = scheduler
         self.change_val = change_val
         self.info_path = f"{real_data_path}/info.json"
