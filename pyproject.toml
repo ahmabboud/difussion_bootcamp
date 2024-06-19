@@ -6,7 +6,7 @@ authors = ["Vector AI Engineering <fl4health@vectorinstitute.ai>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9.0,<3.13"
 pre-commit = "^3.7.0"
 ipykernel = "^6.29.4"
 
@@ -147,6 +147,8 @@ nvidia-cusparse-cu11 = { version = "11.7.4.91", platform = 'linux' }
 nvidia-nccl-cu11 = { version = "2.14.3", platform = 'linux' }
 nvidia-nvtx-cu11 = { version = "11.7.91", platform = 'linux' }
 triton = { version = "2.0.0", platform = 'linux' }
+sdmetrics = "^0.14.1"
+copulas = "^0.11.0"
 
 [build-system]
 requires = ["poetry-core"]

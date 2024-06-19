@@ -587,6 +587,40 @@ test = ["Pillow", "contourpy[test-no-images]", "matplotlib"]
 test-no-images = ["pytest", "pytest-cov", "pytest-xdist", "wurlitzer"]
 
 [[package]]
+name = "copulas"
+version = "0.11.0"
+description = "Create tabular synthetic data using copulas-based modeling."
+optional = false
+python-versions = "<3.13,>=3.8"
+files = [
+    {file = "copulas-0.11.0-py3-none-any.whl", hash = "sha256:d50df30c00d6289e763dd0b516b6474afd0ce2b0239421be01beb1bd01808a5b"},
+    {file = "copulas-0.11.0.tar.gz", hash = "sha256:7bfdb16e04ea0af19fed23089bca7521d62bc6fdbb8f9b966833707cb08173e9"},
+]
+
+[package.dependencies]
+numpy = [
+    {version = ">=1.20.0", markers = "python_version < \"3.10\""},
+    {version = ">=1.23.3", markers = "python_version >= \"3.10\" and python_version < \"3.12\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+]
+pandas = [
+    {version = ">=1.1.3", markers = "python_version < \"3.10\""},
+    {version = ">=1.3.4", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
+    {version = ">=1.5.0", markers = "python_version >= \"3.11\""},
+]
+plotly = ">=5.10.0"
+scipy = [
+    {version = ">=1.5.4", markers = "python_version < \"3.10\""},
+    {version = ">=1.9.2", markers = "python_version >= \"3.10\" and python_version < \"3.12\""},
+    {version = ">=1.12.0", markers = "python_version >= \"3.12\""},
+]
+
+[package.extras]
+dev = ["Jinja2 (>=2,<3)", "Sphinx (>=1.7.1,<3)", "alabaster (<0.7.13)", "autoflake (>=1.1,<2)", "autopep8 (>=1.4.3,<1.6)", "boto3 (>=1.7.47,<1.10)", "build (>=1.0.0,<2)", "bump-my-version (>=0.18.3,<1)", "copulas[test,tutorials]", "coverage (>=4.5.1,<6)", "dlint (>=0.11.0,<0.12)", "doc8 (>=0.8.0,<0.9)", "docutils (>=0.10,<0.15)", "flake8 (>=3.7.7,<4)", "flake8-absolute-import (>=1.0,<2)", "flake8-builtins (>=1.5.3,<1.6)", "flake8-comprehensions (>=3.6.1,<3.7)", "flake8-debugger (>=4.0.0,<4.1)", "flake8-docstrings (>=1.5.0,<2)", "flake8-eradicate (>=1.1.0,<1.2)", "flake8-expression-complexity (>=0.0.9,<0.1)", "flake8-fixme (>=1.1.1,<1.2)", "flake8-mock (>=0.3,<0.4)", "flake8-multiline-containers (>=0.0.18,<0.1)", "flake8-mutable (>=1.2.0,<1.3)", "flake8-print (>=4.0.0,<4.1)", "flake8-pytest-style (>=1.5.0,<2)", "flake8-quotes (>=3.3.0,<4)", "flake8-sfs (>=0.0.3,<0.1)", "flake8-variables-names (>=0.0.4,<0.1)", "invoke", "isort (>=4.3.4,<5)", "m2r (>=0.2.0,<0.3)", "nbsphinx (>=0.5.0,<0.7)", "pandas-vet (>=0.2.2,<0.3)", "pep8-naming (>=0.12.1,<0.13)", "pip (>=9.0.1)", "pydocstyle (>=6.1.1,<6.2)", "sphinx-rtd-theme (>=0.2.4,<0.5)", "sphinxcontrib-applehelp (<1.0.8)", "sphinxcontrib-devhelp (<1.0.6)", "sphinxcontrib-htmlhelp (<2.0.5)", "sphinxcontrib-qthelp (<1.0.7)", "sphinxcontrib-serializinghtml (<1.1.10)", "tabulate (>=0.8.3,<0.9)", "tox (>=2.9.1,<4)", "twine (>=1.10.0,<4)", "urllib3 (>=1.20,<1.26)", "watchdog (>=1.0.1,<5)", "wheel (>=0.30.0)"]
+test = ["copulas[tutorials]", "pytest (>=6.2.5,<7)", "pytest-cov (>=2.6.0,<3)", "pytest-rerunfailures (>=10.3,<15)", "rundoc (>=0.4.3,<0.5)", "tomli (>=2.0.0,<3)"]
+tutorials = ["jupyter (>=1.0.0,<2)", "markupsafe (<=2.0.1)", "scikit-learn (>=0.24,<1.2)", "scikit-learn (>=0.24,<1.5)"]
+
+[[package]]
 name = "cycler"
 version = "0.12.1"
 description = "Composable style cycles"
@@ -3192,6 +3226,49 @@ doc = ["jupyterlite-pyodide-kernel", "jupyterlite-sphinx (>=0.12.0)", "jupytext"
 test = ["array-api-strict", "asv", "gmpy2", "hypothesis (>=6.30)", "mpmath", "pooch", "pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "scikit-umfpack", "threadpoolctl"]
 
 [[package]]
+name = "sdmetrics"
+version = "0.14.1"
+description = "Metrics for Synthetic Data Generation Projects"
+optional = false
+python-versions = "<3.13,>=3.8"
+files = [
+    {file = "sdmetrics-0.14.1-py3-none-any.whl", hash = "sha256:8c859fa625767f16fc7090f1743c422e610741111fcf36bee308132b6cf3556e"},
+    {file = "sdmetrics-0.14.1.tar.gz", hash = "sha256:8add8b639aaa82cc9a167dd364cd64d6b8cc1be243b7fb4658c751f9e53319e9"},
+]
+
+[package.dependencies]
+copulas = ">=0.11.0"
+numpy = [
+    {version = ">=1.21.0", markers = "python_version < \"3.10\""},
+    {version = ">=1.23.3", markers = "python_version >= \"3.10\" and python_version < \"3.12\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+]
+pandas = [
+    {version = ">=1.4.0", markers = "python_version < \"3.11\""},
+    {version = ">=1.5.0", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
+    {version = ">=2.1.1", markers = "python_version >= \"3.12\""},
+]
+plotly = ">=5.19.0"
+scikit-learn = [
+    {version = ">=1.0.2", markers = "python_version < \"3.10\""},
+    {version = ">=1.1.0", markers = "python_version >= \"3.10\" and python_version < \"3.11\""},
+    {version = ">=1.1.3", markers = "python_version >= \"3.11\" and python_version < \"3.12\""},
+    {version = ">=1.3.1", markers = "python_version >= \"3.12\""},
+]
+scipy = [
+    {version = ">=1.7.3", markers = "python_version < \"3.10\""},
+    {version = ">=1.9.2", markers = "python_version >= \"3.10\" and python_version < \"3.12\""},
+    {version = ">=1.12.0", markers = "python_version >= \"3.12\""},
+]
+tqdm = ">=4.29"
+
+[package.extras]
+dev = ["autoflake (>=1.1,<3)", "autopep8 (>=1.4.3,<3)", "build (>=1.0.0,<2)", "bump-my-version (>=0.18.3,<1)", "coverage (>=4.5.12,<8)", "dlint (>=0.11.0,<1)", "flake8 (>=3.7.7,<8)", "flake8-absolute-import (>=1.0,<2)", "flake8-builtins (>=1.5.3,<3)", "flake8-comprehensions (>=3.6.1,<4)", "flake8-debugger (>=4.0.0,<5)", "flake8-docstrings (>=1.5.0,<2)", "flake8-eradicate (>=1.1.0,<2)", "flake8-expression-complexity (>=0.0.9,<0.1)", "flake8-fixme (>=1.1.1,<1.2)", "flake8-mock (>=0.3,<1)", "flake8-multiline-containers (>=0.0.18,<0.1)", "flake8-mutable (>=1.2.0,<1.3)", "flake8-print (>=4.0.0,<4.1)", "flake8-pytest-style (>=2.0.0,<3)", "flake8-quotes (>=3.3.0,<4)", "flake8-sfs (>=0.0.3,<2)", "flake8-variables-names (>=0.0.4,<0.1)", "isort (>=5.13.2,<6)", "packaging (>=20,<25)", "pandas-vet (>=0.2.3,<2024)", "pep8-naming (>=0.12.1,<1)", "pip (>=9.0.1)", "pydocstyle (>=6.1.1,<7)", "sdmetrics[test,torch]", "tox (>=2.9.1,<5)", "twine (>=1.10.0,<6)", "watchdog (>=1.0.1,<5)", "wheel (>=0.30.0)"]
+pomegranate = ["pomegranate (>=0.14.1,<0.14.7)"]
+test = ["invoke", "jupyter (>=1.0.0,<2)", "pytest (>=6.2.5,<7)", "pytest-cov (>=2.6.0,<3)", "pytest-rerunfailures (>=10.3,<15)", "pytest-runner (>=2.11.1)", "rundoc (>=0.4.3,<0.5)", "sdmetrics[torch]", "tomli (>=2.0.0,<3)"]
+torch = ["torch (>=1.8.0)", "torch (>=2.0.0)", "torch (>=2.2.0)"]
+
+[[package]]
 name = "setuptools"
 version = "70.0.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -4177,5 +4254,5 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.9"
-content-hash = "5f0cd4d9ed846f8aec8a48d00e2a9c4e8b7f21f4967ddffa3c302a741aaa78ba"
+python-versions = ">=3.9.0,<3.13"
+content-hash = "9c3bb02faf5e130c363343881aa0352042ff920415f5140540d425aa2d695b14"
