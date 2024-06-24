@@ -1,0 +1,29 @@
+[ToDo] Study the datasets
+[ToDo] Choose best dataset+
+[ToDo] Create the notebook for the reference implementation
+[ToDo] set seeds
+[ToDo] set all the hyper parameters and explain them
+[ToDo] Write the code for loading the data
+[ToDo] Write the code for the data preprocessing
+[ToDo] Write the code for the model
+[ToDo] Write the code for the training
+[ToDo] Write the code for the evaluation
+[ToDo] Write the code for the visualization
+[ToDo] Write the code for synthetic data generation
+[ToDo] Write the code for training on the synthetic data
+[ToDo] Write the code for evaluation on the synthetic data
+[ToDo] Write the code for visualization on the synthetic data
+[ToDo] Add the code for custom dataset
+[ToDo] Write the code for refining the forcasters task (if time permits)
+[ToDo] Test the code from all the aspects
+[ToDo] Add description to the notebook
+[ToDo] Add the references to the notebook
+[ToDo] Revise the README.md
+
+Environment Setup:
+
+  conda create --name tsdiff --yes python=3.8 && conda activate tsdiff+
+
+  pip install --editable "."
+  
+  For tsdiff: pip unistall pykeops # cannot use pykeops on the cluster
