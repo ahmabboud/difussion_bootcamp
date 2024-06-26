@@ -32,7 +32,7 @@ import numpy as np
 import tomli
 import tomli_w
 import torch
-import zero
+# import zero
 
 from . import env
 
@@ -281,7 +281,7 @@ def start(
         report["environment"].update(
             {
                 "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES"),
-                "gpus": zero.hardware.get_gpus_info(),
+                # "gpus": zero.hardware.get_gpus_info(),
                 "torch.version.cuda": torch.version.cuda,
                 "torch.backends.cudnn.version()": torch.backends.cudnn.version(),  # type: ignore[code]
                 "torch.cuda.nccl.version()": torch.cuda.nccl.version(),  # type: ignore[code]
