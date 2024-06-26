@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-import zero
+# import zero
 from torch import Tensor
 
 from .util import TaskType
@@ -85,43 +85,43 @@ def is_oom_exception(err: RuntimeError) -> bool:
     )
 
 
-def train_with_auto_virtual_batch(
-    optimizer,
-    loss_fn,
-    step,
-    batch,
-    chunk_size: int,
-) -> tuple[Tensor, int]:
-    batch_size = len(batch)
-    random_state = zero.random.get_state()
-    loss = None
-    while chunk_size != 0:
-        try:
-            zero.random.set_state(random_state)
-            optimizer.zero_grad()
-            if batch_size <= chunk_size:
-                loss = loss_fn(*step(batch))
-                loss.backward()
-            else:
-                loss = None
-                for chunk in zero.iter_batches(batch, chunk_size):
-                    chunk_loss = loss_fn(*step(chunk))
-                    chunk_loss = chunk_loss * (len(chunk) / batch_size)
-                    chunk_loss.backward()
-                    if loss is None:
-                        loss = chunk_loss.detach()
-                    else:
-                        loss += chunk_loss.detach()
-        except RuntimeError as err:
-            if not is_oom_exception(err):
-                raise
-            chunk_size //= 2
-        else:
-            break
-    if not chunk_size:
-        raise RuntimeError("Not enough memory even for batch_size=1")
-    optimizer.step()
-    return cast(Tensor, loss), chunk_size
+# def train_with_auto_virtual_batch(
+#     optimizer,
+#     loss_fn,
+#     step,
+#     batch,
+#     chunk_size: int,
+# ) -> tuple[Tensor, int]:
+#     batch_size = len(batch)
+#     random_state = zero.random.get_state()
+#     loss = None
+#     while chunk_size != 0:
+#         try:
+#             zero.random.set_state(random_state)
+#             optimizer.zero_grad()
+#             if batch_size <= chunk_size:
+#                 loss = loss_fn(*step(batch))
+#                 loss.backward()
+#             else:
+#                 loss = None
+#                 for chunk in zero.iter_batches(batch, chunk_size):
+#                     chunk_loss = loss_fn(*step(chunk))
+#                     chunk_loss = chunk_loss * (len(chunk) / batch_size)
+#                     chunk_loss.backward()
+#                     if loss is None:
+#                         loss = chunk_loss.detach()
+#                     else:
+#                         loss += chunk_loss.detach()
+#         except RuntimeError as err:
+#             if not is_oom_exception(err):
+#                 raise
+#             chunk_size //= 2
+#         else:
+#             break
+#     if not chunk_size:
+#         raise RuntimeError("Not enough memory even for batch_size=1")
+#     optimizer.step()
+#     return cast(Tensor, loss), chunk_size
 
 
 def process_epoch_losses(losses: list[Tensor]) -> tuple[list[float], float]:
