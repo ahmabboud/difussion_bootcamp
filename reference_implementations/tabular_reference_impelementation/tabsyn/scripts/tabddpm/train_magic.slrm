@@ -15,5 +15,5 @@
 source /projects/aieng/diffussion_bootcamp/env/tabsyn_env/bin/activate
 
 nvidia-smi
- 
+
 python main.py --dataname magic --method tabddpm --mode train

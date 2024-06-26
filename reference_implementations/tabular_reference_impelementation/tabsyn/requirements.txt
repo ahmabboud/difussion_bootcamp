@@ -1,13 +1,13 @@
 numpy
 pandas
-scikit-learn
+scikit - learn
 scipy
 icecream
 xlrd
-tomli-w
+tomli - w
 zero
 category_encoders
-imbalanced-learn
+imbalanced - learn
 kaggle
 transformers
 datasets

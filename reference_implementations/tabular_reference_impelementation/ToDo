@@ -2,20 +2,21 @@
 [ToDo] set seeds
 [ToDo] explain all the hyper parameters
 [ToDo] decouple extra codes
-[ToDo] fix eval_density error
+[ToDo] fix eval_density error still has errro in converage while decrease sdmetrics version
 [ToDo] fix mle_error
 [ToDo] write a class for computing all score together for each dataset
 [ToDo] Study each dataset
 [ToDo] Choose best datasets
 [ToDo] Check to add the code for visualizations
 [ToDo] Make it available to get data paths
+[ToDo] Redownload synthcity
 
 Environment Setup:
   Can’t use Cuda 12.1
 
   pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
-  
-  Extra for tabsyn: /projects/aieng/diffusion_bootcamp/env/tabsyn_env
+
+  Extra for tabsyn: /projects/aieng/diffusion_bootcamp/env/tab_synth_env
     pip3 install pydantic
     pip3 install pydantic==2.0.3
 
@@ -26,3 +27,9 @@ Environment Setup:
     pip install tomli-w
     pip install zero
     pip install prdc
+    pip install category_encoders
+
+
+  Add to jupyter:
+    pip install ipykernel
+    ipython kernel install --user --name=dm_tab_synth

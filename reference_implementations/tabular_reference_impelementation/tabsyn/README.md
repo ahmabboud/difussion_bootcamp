@@ -1,4 +1,4 @@
-# (ICLR 2024 Oral) Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space 
+# (ICLR 2024 Oral) Mixed-Type Tabular Data Synthesis with Score-based Diffusion in Latent Space
 
 <p align="center">
   <!-- <a href="https://github.com/hengruizhang98/tabsyn/blob/main/LICENSE">
