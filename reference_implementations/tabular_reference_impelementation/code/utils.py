@@ -67,19 +67,6 @@ def preprocess(
     else:
         return dataset
 
-
-def update_ema(target_params, source_params, rate=0.999):
-    """
-    Update target parameters to be closer to those of source parameters using
-    an exponential moving average.
-    :param target_params: the target parameter sequence.
-    :param source_params: the source parameter sequence.
-    :param rate: the EMA rate (closer to 1 means slower).
-    """
-    for target, source in zip(target_params, source_params):
-        target.detach().mul_(rate).add_(source.detach(), alpha=1 - rate)
-
-
 def concat_y_to_X(X, y):
     if X is None:
         return y.reshape(-1, 1)
