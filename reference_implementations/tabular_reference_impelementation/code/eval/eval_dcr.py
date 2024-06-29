@@ -35,7 +35,9 @@ if __name__ == "__main__":
     real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
     test_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/test.csv"
 
-    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    data_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
 
     with open(f"{data_dir}/info.json", "r") as f:
         info = json.load(f)

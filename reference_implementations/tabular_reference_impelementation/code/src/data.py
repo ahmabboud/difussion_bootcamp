@@ -13,10 +13,11 @@ import sklearn.preprocessing
 import torch
 from category_encoders import LeaveOneOutEncoder
 from sklearn.impute import SimpleImputer
+import os
 
 from . import util
 from .metrics import calculate_metrics as calculate_metrics_
-from .util import TaskType
+from .util import TaskType, load_json
 
 ArrayDict = Dict[str, np.ndarray]
 TensorDict = Dict[str, torch.Tensor]
@@ -29,6 +30,11 @@ NumNanPolicy = Literal["drop-rows", "mean"]
 CatNanPolicy = Literal["most_frequent"]
 CatEncoding = Literal["one-hot", "counter"]
 YPolicy = Literal["default"]
+
+
+def get_category_sizes(X: Union[torch.Tensor, np.ndarray]) -> List[int]:
+    XT = X.T.cpu().tolist() if isinstance(X, torch.Tensor) else X.T.tolist()
+    return [len(set(x)) for x in XT]
 
 
 @dataclass(frozen=False)
@@ -440,6 +446,7 @@ def transform_dataset(
 ## DataLoader##
 ###############
 
+
 class FastTensorDataLoader:
     """
     A DataLoader-like object for a set of tensors that can be much faster than
@@ -500,3 +507,97 @@ def prepare_fast_dataloader(D: Dataset, split: str, batch_size: int):
     while True:
         yield from dataloader
 
+
+def read_pure_data(path, split="train"):
+    y = np.load(os.path.join(path, f"y_{split}.npy"), allow_pickle=True)
+    X_num = None
+    X_cat = None
+    if os.path.exists(os.path.join(path, f"X_num_{split}.npy")):
+        X_num = np.load(os.path.join(path, f"X_num_{split}.npy"), allow_pickle=True)
+    if os.path.exists(os.path.join(path, f"X_cat_{split}.npy")):
+        X_cat = np.load(os.path.join(path, f"X_cat_{split}.npy"), allow_pickle=True)
+
+    return X_num, X_cat, y
+
+
+def concat_y_to_X(X, y):
+    if X is None:
+        return y.reshape(-1, 1)
+    return np.concatenate([y.reshape(-1, 1), X], axis=1)
+
+
+def make_dataset(
+    data_path: str,
+    T: Transformations,
+    task_type,
+    change_val: bool,
+    concat=True,
+):
+    print("data_path", data_path)
+
+    # classification
+    if task_type == "binclass" or task_type == "multiclass":
+        X_cat = (
+            {} if os.path.exists(os.path.join(data_path, "X_cat_train.npy")) else None
+        )
+        X_num = (
+            {} if os.path.exists(os.path.join(data_path, "X_num_train.npy")) else None
+        )
+        y = {} if os.path.exists(os.path.join(data_path, "y_train.npy")) else None
+
+        for split in ["train", "test"]:
+            X_num_t, X_cat_t, y_t = read_pure_data(data_path, split)
+            if X_num is not None:
+                X_num[split] = X_num_t
+            if X_cat is not None:
+                if concat:
+                    X_cat_t = concat_y_to_X(X_cat_t, y_t)
+                X_cat[split] = X_cat_t
+            if y is not None:
+                y[split] = y_t
+    else:
+        # regression
+        X_cat = (
+            {} if os.path.exists(os.path.join(data_path, "X_cat_train.npy")) else None
+        )
+        X_num = (
+            {} if os.path.exists(os.path.join(data_path, "X_num_train.npy")) else None
+        )
+        y = {} if os.path.exists(os.path.join(data_path, "y_train.npy")) else None
+
+        for split in ["train", "test"]:
+            X_num_t, X_cat_t, y_t = read_pure_data(data_path, split)
+
+            if X_num is not None:
+                if concat:
+                    X_num_t = concat_y_to_X(X_num_t, y_t)
+                X_num[split] = X_num_t
+            if X_cat is not None:
+                X_cat[split] = X_cat_t
+            if y is not None:
+                y[split] = y_t
+
+    info = load_json(os.path.join(data_path, "info.json"))
+
+    D = Dataset(
+        X_num,
+        X_cat,
+        y,
+        y_info={},
+        task_type=TaskType(info["task_type"]),
+        n_classes=info.get("n_classes"),
+    )
+
+    if change_val:
+        D = change_val(D)
+
+    # def categorical_to_idx(feature):
+    #     unique_categories = np.unique(feature)
+    #     idx_mapping = {category: index for index, category in enumerate(unique_categories)}
+    #     idx_feature = np.array([idx_mapping[category] for category in feature])
+    #     return idx_feature
+
+    # for split in ['train', 'val', 'test']:
+    # D.y[split] = categorical_to_idx(D.y[split].squeeze(1))
+
+    return transform_dataset(D, T, None)

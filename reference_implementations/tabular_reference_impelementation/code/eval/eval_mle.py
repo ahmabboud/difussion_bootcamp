@@ -39,7 +39,8 @@ if __name__ == "__main__":
     test = pd.read_csv(test_path).to_numpy()
 
     with open(
-        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json", "r"
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json",
+        "r",
     ) as f:
         info = json.load(f)
 

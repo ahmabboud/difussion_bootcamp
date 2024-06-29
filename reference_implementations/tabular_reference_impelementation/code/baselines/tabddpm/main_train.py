@@ -5,7 +5,6 @@ from baselines.tabddpm.tabddpm import TabDDPM
 
 import src
 import numpy as np
-from utils import make_dataset
 
 
 def main(args):
@@ -32,7 +31,7 @@ def main(args):
 
     T = src.Transformations(**raw_config["train"]["T"])
 
-    dataset = make_dataset(
+    dataset = src.make_dataset(
         real_data_path,
         T,
         task_type=raw_config["task_type"],

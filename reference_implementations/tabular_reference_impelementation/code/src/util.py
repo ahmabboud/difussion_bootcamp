@@ -25,7 +25,6 @@ class TaskType(enum.Enum):
         return self.value
 
 
-
 def raise_unknown(unknown_what: str, unknown_value: Any):
     raise ValueError(f"Unknown {unknown_what}: {unknown_value}")
 
