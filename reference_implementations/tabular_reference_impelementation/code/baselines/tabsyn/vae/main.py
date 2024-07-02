@@ -13,7 +13,7 @@ import json
 import time
 
 from baselines.tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
-from utils import preprocess, TabularDataset
+from src import preprocess, TabularDataset
 
 warnings.filterwarnings("ignore")
 
@@ -54,7 +54,7 @@ def compute_loss(X_num, X_cat, Recon_X_num, Recon_X_cat, mu_z, logvar_z):
 
 def main(args):
     dataname = args.dataname
-    data_dir = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
+    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
 
     max_beta = args.max_beta
     min_beta = args.min_beta
@@ -62,13 +62,13 @@ def main(args):
 
     device = args.device
 
-    info_path = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}/info.json"
+    info_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json"
 
     with open(info_path, "r") as f:
         info = json.load(f)
 
     ckpt_dir = (
-        f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}/vae"
+        f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}/vae"
     )
     if not os.path.exists(ckpt_dir):
         os.makedirs(ckpt_dir)

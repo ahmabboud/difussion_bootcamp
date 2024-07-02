@@ -3,7 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 import torch
-from utils import preprocess
+from src import preprocess
 from baselines.tabsyn.vae.model import Decoder_model
 
 
@@ -12,17 +12,17 @@ def get_input_train(args):
 
     curr_dir = os.path.dirname(os.path.abspath(__file__))
 
-    dataset_dir = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
+    dataset_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
 
     with open(
-        f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}/info.json", "r"
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json", "r"
     ) as f:
         info = json.load(f)
 
         ckpt_dir = (
             f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}"
         )
-    embedding_save_path = f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}/vae/train_z.npy"
+    embedding_save_path = f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}/vae/train_z.npy"
     train_z = torch.tensor(np.load(embedding_save_path)).float()
 
     train_z = train_z[:, 1:, :]
@@ -38,8 +38,8 @@ def get_input_generate(args):
     dataname = args.dataname
 
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    dataset_dir = f"/projects/aieng/diffussion_bootcamp/data/tabular/{dataname}"
-    ckpt_dir = f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}"
+    dataset_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    ckpt_dir = f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}"
 
     with open(f"{dataset_dir}/info.json", "r") as f:
         info = json.load(f)
@@ -50,7 +50,7 @@ def get_input_generate(args):
         dataset_dir, task_type=task_type, inverse=True
     )
 
-    embedding_save_path = f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}/vae/train_z.npy"
+    embedding_save_path = f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}/vae/train_z.npy"
     train_z = torch.tensor(np.load(embedding_save_path)).float()
 
     train_z = train_z[:, 1:, :]
@@ -61,7 +61,7 @@ def get_input_generate(args):
     train_z = train_z.view(B, in_dim)
     pre_decoder = Decoder_model(2, d_numerical, categories, 4, n_head=1, factor=32)
 
-    decoder_save_path = f"/projects/aieng/diffussion_bootcamp/models/tabular/tabsyn/{dataname}/vae/decoder.pt"
+    decoder_save_path = f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}/vae/decoder.pt"
     pre_decoder.load_state_dict(torch.load(decoder_save_path))
 
     info["pre_decoder"] = pre_decoder

@@ -17,7 +17,7 @@ import os
 
 from . import util
 from .metrics import calculate_metrics as calculate_metrics_
-from .util import TaskType, load_json
+from .util import TaskType, load_json, get_categories
 
 ArrayDict = Dict[str, np.ndarray]
 TensorDict = Dict[str, torch.Tensor]
@@ -130,6 +130,68 @@ class Dataset:
         for part_metrics in metrics.values():
             part_metrics["score"] = score_sign * part_metrics[score_key]
         return metrics
+    
+class TabularDataset(Dataset):
+    def __init__(self, X_num, X_cat):
+        self.X_num = X_num
+        self.X_cat = X_cat
+
+    def __getitem__(self, index):
+        this_num = self.X_num[index]
+        this_cat = self.X_cat[index]
+
+        sample = (this_num, this_cat)
+
+        return sample
+
+    def __len__(self):
+        return self.X_num.shape[0]
+
+def preprocess(dataset_path, task_type = 'binclass', inverse = False, cat_encoding = None, concat = True):
+    
+    T_dict = {}
+
+    T_dict['normalization'] = "quantile"
+    T_dict['num_nan_policy'] = 'mean'
+    T_dict['cat_nan_policy'] =  None
+    T_dict['cat_min_frequency'] = None
+    T_dict['cat_encoding'] = cat_encoding
+    T_dict['y_policy'] = "default"
+
+    T = Transformations(**T_dict)
+
+    dataset = make_dataset(
+        data_path = dataset_path,
+        T = T,
+        task_type = task_type,
+        change_val = False,
+        concat = concat
+    )
+
+    if cat_encoding is None:
+        X_num = dataset.X_num
+        X_cat = dataset.X_cat
+
+        X_train_num, X_test_num = X_num['train'], X_num['test']
+        X_train_cat, X_test_cat = X_cat['train'], X_cat['test']
+        
+        categories = get_categories(X_train_cat)
+        d_numerical = X_train_num.shape[1]
+
+        X_num = (X_train_num, X_test_num)
+        X_cat = (X_train_cat, X_test_cat)
+
+
+        if inverse:
+            num_inverse = dataset.num_transform.inverse_transform
+            cat_inverse = dataset.cat_transform.inverse_transform
+
+            return X_num, X_cat, categories, d_numerical, num_inverse, cat_inverse
+        else:
+            return X_num, X_cat, categories, d_numerical
+    else:
+        return dataset
+
 
 
 def change_val(dataset: Dataset, val_size: float = 0.2):
