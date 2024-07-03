@@ -12,36 +12,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 warnings.filterwarnings("ignore")
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--dataname", type=str, default="adult")
-parser.add_argument("--model", type=str, default="real")
-parser.add_argument(
-    "--path", type=str, default=None, help="The file path of the synthetic data"
-)
 
-args = parser.parse_args()
-
-# def preprocess(train, test, info)
-
-#     def norm_data(data, )
-
-if __name__ == "__main__":
-    dataname = args.dataname
-    model = args.model
-
-    if not args.path:
-        train_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
-    else:
-        train_path = args.path
-    test_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/test.csv"
-
+def eval_mle(train_path, test_path, info_path):
     train = pd.read_csv(train_path).to_numpy()
     test = pd.read_csv(test_path).to_numpy()
 
-    with open(
-        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json",
-        "r",
-    ) as f:
+    with open(info_path, "r") as f:
         info = json.load(f)
 
     task_type = info["task_type"]
@@ -85,11 +61,34 @@ if __name__ == "__main__":
                 name = method["name"]
                 method.pop("name")
                 overall_scores[score_name][name] = method
+    return overall_scores
 
-    if not os.path.exists(f"eval/mle/{dataname}"):
-        os.makedirs(f"eval/mle/{dataname}")
 
-    save_path = f"eval/mle/{dataname}/{model}.json"
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataname", type=str, default="adult")
+    parser.add_argument("--model", type=str, default="real")
+    parser.add_argument(
+        "--path", type=str, default=None, help="The file path of the synthetic data"
+    )
+
+    args = parser.parse_args()
+
+    dataname = args.dataname
+    model = args.model
+
+    if not args.path:
+        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
+    else:
+        train_path = args.path
+    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/test.csv"
+
+    info_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json"
+
+    save_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}_mle.json"
+
+    overall_scores = eval_mle(syn_path, real_path, info_path)
+
     print("Saving scores to ", save_path)
     with open(save_path, "w") as json_file:
         json.dump(overall_scores, json_file, indent=4, separators=(", ", ": "))
