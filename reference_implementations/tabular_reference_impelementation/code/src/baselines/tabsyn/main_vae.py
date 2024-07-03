@@ -12,7 +12,7 @@ from tqdm import tqdm
 import json
 import time
 
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import (
+from src.baselines.tabsyn.model.vae import (
     Model_VAE,
     Encoder_model,
     Decoder_model,

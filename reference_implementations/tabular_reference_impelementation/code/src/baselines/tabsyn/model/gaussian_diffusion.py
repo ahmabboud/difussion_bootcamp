@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.utils import (
+from src.baselines.tabsyn.model.utils import (
     EDMLoss,
 )
 

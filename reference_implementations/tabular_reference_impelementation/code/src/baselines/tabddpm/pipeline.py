@@ -7,13 +7,13 @@ import numpy as np
 from copy import deepcopy
 import pandas as pd
 import src
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabddpm.models.gaussian_multinomial_diffusion import (
+from src.baselines.tabddpm.model.gaussian_multinomial_diffusion import (
     GaussianMultinomialDiffusion,
 )
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabddpm.models.denoise_model import (
+from src.baselines.tabddpm.model.denoise_model import (
     MLPDiffusion,
 )
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabddpm.utils import (
+from src.baselines.tabddpm.utils import (
     split_num_cat_target,
     recover_data,
 )

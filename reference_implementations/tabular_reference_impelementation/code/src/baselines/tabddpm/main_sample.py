@@ -1,6 +1,6 @@
 import os
 import argparse
-from baselines.tabddpm.tabddpm import TabDDPM
+from src.baselines.tabddpm.pipeline import TabDDPM
 
 import src
 import numpy as np

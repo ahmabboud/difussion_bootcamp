@@ -8,7 +8,7 @@ import torch
 import math
 
 import numpy as np
-from baselines.tabddpm.models.utils import (
+from src.baselines.tabddpm.model.utils import (
     normal_kl,
     log_add_exp,
     log_categorical,

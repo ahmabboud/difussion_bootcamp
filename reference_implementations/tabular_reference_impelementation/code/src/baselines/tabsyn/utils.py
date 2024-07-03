@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import torch
 from src import preprocess
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import (
+from src.baselines.tabsyn.model.vae import (
     Decoder_model,
 )
 

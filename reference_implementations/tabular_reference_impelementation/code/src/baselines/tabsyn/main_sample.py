@@ -4,13 +4,13 @@ import argparse
 import warnings
 import time
 
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.denoise_model import (
+from src.baselines.tabsyn.model.denoise_model import (
     MLPDiffusion,
 )
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.gaussian_diffusion import (
+from src.baselines.tabsyn.model.gaussian_diffusion import (
     Model,
 )
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.utils import (
+from src.baselines.tabsyn.utils import (
     get_input_generate,
     recover_data,
     split_num_cat_target,
