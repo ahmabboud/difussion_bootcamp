@@ -1,5 +1,4 @@
 import pandas as pd
-import os
 
 import json
 
@@ -56,31 +55,12 @@ def reorder(real_data, syn_data, info):
     return new_real_data, new_syn_data, metadata
 
 
-if __name__ == "__main__":
-    dataname = args.dataname
-    model = args.model
-
-    if not args.path:
-        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
-    else:
-        syn_path = args.path
-
-    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
-
-    data_dir = (
-        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
-    )
-    print(syn_path)
-
-    with open(f"{data_dir}/info.json", "r") as f:
+def eval_density(syn_path, real_path, info_path):
+    with open(info_path, "r") as f:
         info = json.load(f)
 
     syn_data = pd.read_csv(syn_path)
     real_data = pd.read_csv(real_path)
-
-    save_dir = f"eval/density/{dataname}/{model}"
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
 
     real_data.columns = range(len(real_data.columns))
     syn_data.columns = range(len(syn_data.columns))
@@ -100,14 +80,26 @@ if __name__ == "__main__":
     Shape = quality["Score"][0]
     Trend = quality["Score"][1]
 
-    with open(f"{save_dir}/quality.txt", "w") as f:
-        f.write(f"{Shape}\n")
-        f.write(f"{Trend}\n")
+    return Shape, Trend
 
-    Quality = (Shape + Trend) / 2
 
-    shapes = qual_report.get_details(property_name="Column Shapes")
-    trends = qual_report.get_details(property_name="Column Pair Trends")
+if __name__ == "__main__":
+    dataname = args.dataname
+    model = args.model
 
-    shapes.to_csv(f"{save_dir}/shape.csv")
-    trends.to_csv(f"{save_dir}/trend.csv")
+    if not args.path:
+        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
+    else:
+        syn_path = args.path
+
+    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
+
+    info_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json"
+
+    save_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}_density.txt"
+
+    shape, trend = eval_density(syn_path, real_path, info_path)
+
+    with open(save_dir, "w") as f:
+        f.write(f"Shape: {shape}\n")
+        f.write(f"Trend: {trend}\n")
