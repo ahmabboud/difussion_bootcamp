@@ -3,7 +3,7 @@ import os
 import sys
 
 import json
-from mle.mle import get_evaluator
+from scripts.eval.mle.mle import get_evaluator
 
 import warnings
 import argparse
