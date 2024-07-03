@@ -4,13 +4,13 @@ import argparse
 import warnings
 import time
 
-from baselines.tabsyn.model import MLPDiffusion, Model
-from baselines.tabsyn.latent_utils import (
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.denoise_model import MLPDiffusion
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.gaussian_diffusion import Model
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.utils import (
     get_input_generate,
     recover_data,
     split_num_cat_target,
 )
-from baselines.tabsyn.diffusion_utils import sample
 
 warnings.filterwarnings("ignore")
 
@@ -40,7 +40,7 @@ def main(args):
     num_samples = train_z.shape[0]
     sample_dim = in_dim
 
-    x_next = sample(model.denoise_fn_D, num_samples, sample_dim)
+    x_next = model.sample(num_samples, sample_dim)
     x_next = x_next * 2 + mean.to(device)
 
     syn_data = x_next.float().cpu().numpy()

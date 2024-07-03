@@ -8,8 +8,9 @@ import warnings
 import time
 
 from tqdm import tqdm
-from baselines.tabsyn.model import MLPDiffusion, Model
-from baselines.tabsyn.latent_utils import get_input_train
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.denoise_model import MLPDiffusion
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.gaussian_diffusion import Model
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.utils import get_input_train
 
 warnings.filterwarnings("ignore")
 
