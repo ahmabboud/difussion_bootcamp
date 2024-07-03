@@ -2,7 +2,9 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.utils import EDMLoss
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.utils import (
+    EDMLoss,
+)
 
 # ----------------------------------------------------------------------------
 # Loss function corresponding to the variance preserving (VP) formulation
@@ -18,6 +20,7 @@ S_churn = 1
 S_min = 0
 S_max = float("inf")
 S_noise = 1
+
 
 class Precond(nn.Module):
     def __init__(
@@ -81,11 +84,13 @@ class Model(nn.Module):
     def forward(self, x):
         loss = self.loss_fn(self.denoise_fn_D, x)
         return loss.mean(-1).mean()
-    
+
     def sample(self, num_samples, dim, num_steps=50, device="cuda:0"):
         latents = torch.randn([num_samples, dim], device=device)
 
-        step_indices = torch.arange(num_steps, dtype=torch.float32, device=latents.device)
+        step_indices = torch.arange(
+            num_steps, dtype=torch.float32, device=latents.device
+        )
 
         sigma_min = max(SIGMA_MIN, self.denoise_fn_D.sigma_min)
         sigma_max = min(SIGMA_MAX, self.denoise_fn_D.sigma_max)
@@ -96,20 +101,26 @@ class Model(nn.Module):
             / (num_steps - 1)
             * (sigma_min ** (1 / rho) - sigma_max ** (1 / rho))
         ) ** rho
-        t_steps = torch.cat([self.denoise_fn_D.round_sigma(t_steps), torch.zeros_like(t_steps[:1])])
+        t_steps = torch.cat(
+            [self.denoise_fn_D.round_sigma(t_steps), torch.zeros_like(t_steps[:1])]
+        )
 
         x_next = latents.to(torch.float32) * t_steps[0]
 
         with torch.no_grad():
             for i, (t_cur, t_next) in enumerate(zip(t_steps[:-1], t_steps[1:])):
-                x_next = self.sample_step(self.denoise_fn_D, num_steps, i, t_cur, t_next, x_next)
+                x_next = self.sample_step(
+                    self.denoise_fn_D, num_steps, i, t_cur, t_next, x_next
+                )
 
         return x_next
-        
+
     def sample_step(self, num_steps, i, t_cur, t_next, x_next):
         x_cur = x_next
         # Increase noise temporarily.
-        gamma = min(S_churn / num_steps, np.sqrt(2) - 1) if S_min <= t_cur <= S_max else 0
+        gamma = (
+            min(S_churn / num_steps, np.sqrt(2) - 1) if S_min <= t_cur <= S_max else 0
+        )
         t_hat = self.denoise_fn_D.round_sigma(t_cur + gamma * t_cur)
         x_hat = x_cur + (t_hat**2 - t_cur**2).sqrt() * S_noise * randn_like(x_cur)
         # Euler step.

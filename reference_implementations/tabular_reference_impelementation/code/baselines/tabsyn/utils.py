@@ -4,7 +4,9 @@ import numpy as np
 import pandas as pd
 import torch
 from src import preprocess
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import Decoder_model
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import (
+    Decoder_model,
+)
 
 
 def get_input_train(args):
@@ -12,10 +14,13 @@ def get_input_train(args):
 
     curr_dir = os.path.dirname(os.path.abspath(__file__))
 
-    dataset_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    dataset_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
 
     with open(
-        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json", "r"
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json",
+        "r",
     ) as f:
         info = json.load(f)
 
@@ -38,7 +43,9 @@ def get_input_generate(args):
     dataname = args.dataname
 
     curr_dir = os.path.dirname(os.path.abspath(__file__))
-    dataset_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    dataset_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
     ckpt_dir = f"/projects/aieng/diffusion_bootcamp/models/tabular/tabsyn/{dataname}"
 
     with open(f"{dataset_dir}/info.json", "r") as f:

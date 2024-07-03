@@ -2,7 +2,9 @@ import torch
 
 from baselines.tabddpm.main_train import main as train_tabddpm  # noqa: F401
 from baselines.tabddpm.main_sample import main as sample_tabddpm  # noqa: F401
-
+from baselines.tabsyn.main_train import main as train_tabsyn  # noqa: F401
+from baselines.tabsyn.main_sample import main as sample_tabsyn  # noqa: F401
+from baselines.tabsyn.main_vae import main as train_vae  # noqa: F401
 
 import argparse
 

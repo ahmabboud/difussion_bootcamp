@@ -4,6 +4,7 @@
 import torch
 import numpy as np
 
+
 class VPLoss:
     def __init__(self, beta_d=19.9, beta_min=0.1, epsilon_t=1e-5):
         self.beta_d = beta_d

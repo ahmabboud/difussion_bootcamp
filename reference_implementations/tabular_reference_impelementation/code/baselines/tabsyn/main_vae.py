@@ -12,7 +12,11 @@ from tqdm import tqdm
 import json
 import time
 
-from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import Model_VAE, Encoder_model, Decoder_model
+from reference_implementations.tabular_reference_impelementation.code.baselines.tabsyn.models.vae import (
+    Model_VAE,
+    Encoder_model,
+    Decoder_model,
+)
 from src import preprocess, TabularDataset
 
 warnings.filterwarnings("ignore")
@@ -54,7 +58,9 @@ def compute_loss(X_num, X_cat, Recon_X_num, Recon_X_cat, mu_z, logvar_z):
 
 def main(args):
     dataname = args.dataname
-    data_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    data_dir = (
+        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
+    )
 
     max_beta = args.max_beta
     min_beta = args.min_beta
