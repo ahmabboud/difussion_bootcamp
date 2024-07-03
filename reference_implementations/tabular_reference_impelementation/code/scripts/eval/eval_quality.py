@@ -24,7 +24,7 @@ def eval_quality(syn_path, real_path, info_path):
     syn_data = pd.read_csv(syn_path)
     real_data = pd.read_csv(real_path)
 
-    """ Special treatment for default dataset and CoDi model """
+    """ Special treatment for default dataset"""
 
     real_data.columns = range(len(real_data.columns))
     syn_data.columns = range(len(syn_data.columns))
@@ -47,55 +47,7 @@ def eval_quality(syn_path, real_path, info_path):
     cat_syn_data = syn_data[cat_col_idx]
 
     num_syn_data_np = num_syn_data.to_numpy()
-
-    # cat_syn_data_np = np.array
     cat_syn_data_np = cat_syn_data.to_numpy().astype("str")
-    if (dataname == "default" or dataname == "news") and model[:4] == "codi":
-        cat_syn_data_np = cat_syn_data.astype("int").to_numpy().astype("str")
-
-    elif model[:5] == "great":
-        if dataname == "shoppers":
-            cat_syn_data_np[:, 1] = (
-                cat_syn_data[11].astype("int").to_numpy().astype("str")
-            )
-            cat_syn_data_np[:, 2] = (
-                cat_syn_data[12].astype("int").to_numpy().astype("str")
-            )
-            cat_syn_data_np[:, 3] = (
-                cat_syn_data[13].astype("int").to_numpy().astype("str")
-            )
-
-            max_data = cat_real_data[14].max()
-
-            cat_syn_data.loc[cat_syn_data[14] > max_data, 14] = max_data
-            # cat_syn_data[14] = cat_syn_data[14].apply(lambda x: threshold if x > max_data else x)
-
-            cat_syn_data_np[:, 4] = (
-                cat_syn_data[14].astype("int").to_numpy().astype("str")
-            )
-            cat_syn_data_np[:, 4] = (
-                cat_syn_data[14].astype("int").to_numpy().astype("str")
-            )
-
-        elif dataname in ["default", "faults", "beijing"]:
-            columns = cat_real_data.columns
-            for i, col in enumerate(columns):
-                if cat_real_data[col].dtype == "int":
-                    max_data = cat_real_data[col].max()
-                    min_data = cat_real_data[col].min()
-
-                    cat_syn_data.loc[cat_syn_data[col] > max_data, col] = max_data
-                    cat_syn_data.loc[cat_syn_data[col] < min_data, col] = min_data
-
-                    cat_syn_data_np[:, i] = (
-                        cat_syn_data[col].astype("int").to_numpy().astype("str")
-                    )
-
-        else:
-            cat_syn_data_np = cat_syn_data.to_numpy().astype("str")
-
-    else:
-        cat_syn_data_np = cat_syn_data.to_numpy().astype("str")
 
     encoder = OneHotEncoder()
     encoder.fit(cat_real_data_np)
