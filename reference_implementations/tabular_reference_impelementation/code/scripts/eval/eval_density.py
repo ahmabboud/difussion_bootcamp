@@ -8,15 +8,6 @@ from sdmetrics.reports.single_table import QualityReport
 
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--dataname", type=str, default="adult")
-parser.add_argument("--model", type=str, default="tabsyn")
-parser.add_argument(
-    "--path", type=str, default=None, help="The file path of the synthetic data"
-)
-
-args = parser.parse_args()
-
 
 def reorder(real_data, syn_data, info):
     num_col_idx = info["num_col_idx"]
@@ -84,6 +75,15 @@ def eval_density(syn_path, real_path, info_path):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataname", type=str, default="adult")
+    parser.add_argument("--model", type=str, default="tabsyn")
+    parser.add_argument(
+        "--path", type=str, default=None, help="The file path of the synthetic data"
+    )
+
+    args = parser.parse_args()
+
     dataname = args.dataname
     model = args.model
 
