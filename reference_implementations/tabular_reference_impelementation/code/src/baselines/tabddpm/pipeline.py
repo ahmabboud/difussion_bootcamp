@@ -153,7 +153,6 @@ class TabDDPM:
         gaussian_loss_type="mse",
         scheduler="cosine",
         change_val=False,
-        ckpt_path=None,
         device=torch.device("cuda:0"),
     ):
         self.seed = seed
@@ -174,10 +173,6 @@ class TabDDPM:
             category_sizes=self.dataset.get_category_sizes("train"),
         )
         self.model.to(device)
-        if ckpt_path is not None:
-            self.model.load_state_dict(torch.load(ckpt_path, map_location=device))
-            print("Loaded model from", ckpt_path)
-
         self.diffusion = GaussianMultinomialDiffusion(
             num_classes=self.num_classes,
             num_numerical_features=self.num_numerical_features,
@@ -243,12 +238,17 @@ class TabDDPM:
     def sample(
         self,
         sample_save_path,
+        ckpt_path,
         batch_size=2000,
         num_samples=1000,
         disbalance=None,
         ddim=False,
         steps=1000,
     ):
+        if ckpt_path is not None:
+            self.model.load_state_dict(torch.load(ckpt_path, map_location=self.device))
+            print("Loaded model from", ckpt_path)
+
         self.diffusion.eval()
 
         start_time = time.time()
