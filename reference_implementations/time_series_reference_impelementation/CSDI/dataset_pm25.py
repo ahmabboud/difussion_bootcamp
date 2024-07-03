@@ -16,7 +16,7 @@ class PM25_Dataset(Dataset):
         if mode == "train":
             month_list = [1, 2, 4, 5, 7, 8, 10, 11]
             # 1st,4th,7th,10th months are excluded from histmask (since the months are used for creating missing patterns in test dataset)
-            flag_for_histmask = [0, 1, 0, 1, 0, 1, 0, 1] 
+            flag_for_histmask = [0, 1, 0, 1, 0, 1, 0, 1]
             month_list.pop(validindex)
             flag_for_histmask.pop(validindex)
         elif mode == "valid":
@@ -78,7 +78,9 @@ class PM25_Dataset(Dataset):
                 )
                 self.use_index += c_index.tolist()
                 self.cut_length += [0] * len(c_index)
-                if len(current_df) % eval_length != 0:  # avoid double-count for the last time-series
+                if (
+                    len(current_df) % eval_length != 0
+                ):  # avoid double-count for the last time-series
                     self.use_index += [len(self.index_month) - 1]
                     self.cut_length += [eval_length - len(current_df) % eval_length]
 
@@ -121,9 +123,7 @@ class PM25_Dataset(Dataset):
             "observed_mask": self.observed_mask[c_month][
                 c_index : c_index + self.eval_length
             ],
-            "gt_mask": self.gt_mask[c_month][
-                c_index : c_index + self.eval_length
-            ],
+            "gt_mask": self.gt_mask[c_month][c_index : c_index + self.eval_length],
             "hist_mask": self.observed_mask[hist_month][
                 hist_index : hist_index + self.eval_length
             ],

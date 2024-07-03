@@ -25,5 +25,5 @@ Environment Setup:
   conda create --name tsdiff --yes python=3.8 && conda activate tsdiff+
 
   pip install --editable "."
-  
+
   For tsdiff: pip unistall pykeops # cannot use pykeops on the cluster

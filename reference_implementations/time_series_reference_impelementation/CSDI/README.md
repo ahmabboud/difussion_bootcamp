@@ -6,19 +6,19 @@ This is the github repository for the NeurIPS 2021 paper "[CSDI: Conditional Sco
 Please install the packages in requirements.txt
 
 ## Preparation
-### Download the healthcare dataset 
+### Download the healthcare dataset
 ```shell
 python download.py physio
 ```
-### Download the air quality dataset 
+### Download the air quality dataset
 ```shell
 python download.py pm25
 ```
 
-### Download the elecricity dataset 
+### Download the elecricity dataset
 Please put files in [GoogleDrive](https://drive.google.com/drive/folders/1krZQofLdeQrzunuKkLXy8L_kMzQrVFI_?usp=drive_link) to the "data" folder.
 
-## Experiments 
+## Experiments
 
 ### training and imputation for the healthcare dataset
 ```shell

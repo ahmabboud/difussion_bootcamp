@@ -11,13 +11,16 @@ from utils import train, evaluate
 
 parser = argparse.ArgumentParser(description="CSDI")
 parser.add_argument("--config", type=str, default="base.yaml")
-parser.add_argument('--device', default='cuda:0', help='Device for Attack')
+parser.add_argument("--device", default="cuda:0", help="Device for Attack")
 parser.add_argument("--modelfolder", type=str, default="")
 parser.add_argument(
     "--targetstrategy", type=str, default="mix", choices=["mix", "random", "historical"]
 )
 parser.add_argument(
-    "--validationindex", type=int, default=0, help="index of month used for validation (value:[0-7])"
+    "--validationindex",
+    type=int,
+    default=0,
+    help="index of month used for validation (value:[0-7])",
 )
 parser.add_argument("--nsample", type=int, default=100)
 parser.add_argument("--unconditional", action="store_true")
@@ -34,12 +37,12 @@ config["model"]["target_strategy"] = args.targetstrategy
 
 print(json.dumps(config, indent=4))
 
-current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S") 
+current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 foldername = (
     "./save/pm25_validationindex" + str(args.validationindex) + "_" + current_time + "/"
 )
 
-print('model folder:', foldername)
+print("model folder:", foldername)
 os.makedirs(foldername, exist_ok=True)
 with open(foldername + "config.json", "w") as f:
     json.dump(config, f, indent=4)
