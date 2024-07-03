@@ -100,6 +100,9 @@ if __name__ == "__main__":
 
     shape, trend = eval_density(syn_path, real_path, info_path)
 
+    print("Shape:", shape)
+    print("Trend:", trend)
+
     with open(save_dir, "w") as f:
         f.write(f"Shape: {shape}\n")
         f.write(f"Trend: {trend}\n")
