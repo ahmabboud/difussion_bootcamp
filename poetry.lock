@@ -276,6 +276,19 @@ autograd = ">=1.2.0"
 scipy = ">=1.2.0"
 
 [[package]]
+name = "axial-positional-embedding"
+version = "0.2.1"
+description = "Axial Positional Embedding"
+optional = false
+python-versions = "*"
+files = [
+    {file = "axial_positional_embedding-0.2.1.tar.gz", hash = "sha256:2f9fe133b454474976db2b8481b0872637f9ff144d205246f05ddd19bd8ff8f3"},
+]
+
+[package.dependencies]
+torch = "*"
+
+[[package]]
 name = "be-great"
 version = "0.0.7"
 description = "Generating Realistic Tabular Data using Large Language Models"
@@ -800,6 +813,23 @@ colorama = {version = "*", markers = "sys_platform == \"win32\""}
 development = ["black", "flake8", "mypy", "pytest", "types-colorama"]
 
 [[package]]
+name = "colt5-attention"
+version = "0.11.0"
+description = "Conditionally Routed Attention"
+optional = false
+python-versions = "*"
+files = [
+    {file = "CoLT5_attention-0.11.0-py3-none-any.whl", hash = "sha256:116622411c92f869968f15eb724a391feee1ccf3cb987dabda8bd86021927d31"},
+    {file = "colt5_attention-0.11.0.tar.gz", hash = "sha256:6cfde717bc06b9748c9ea12b17ac245e4cae89afd7f655e4b0cccabc9721ecae"},
+]
+
+[package.dependencies]
+einops = ">=0.8.0"
+local-attention = ">=1.8.6"
+packaging = "*"
+torch = ">=1.10"
+
+[[package]]
 name = "comm"
 version = "0.2.2"
 description = "Jupyter Python Comm implementation, for usage in ipykernel, xeus-python etc."
@@ -1150,6 +1180,17 @@ python-versions = "*"
 files = [
     {file = "distlib-0.3.8-py2.py3-none-any.whl", hash = "sha256:034db59a0b96f8ca18035f36290806a9a6e6bd9d1ff91e45a7f172eb17e51784"},
     {file = "distlib-0.3.8.tar.gz", hash = "sha256:1530ea13e350031b6312d8580ddb6b27a104275a31106523b8f123787f494f64"},
+]
+
+[[package]]
+name = "einops"
+version = "0.8.0"
+description = "A new flavour of deep learning operations"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "einops-0.8.0-py3-none-any.whl", hash = "sha256:9572fb63046264a862693b0a87088af3bdc8c068fde03de63453cbbde245465f"},
+    {file = "einops-0.8.0.tar.gz", hash = "sha256:63486517fed345712a8385c100cb279108d9d47e6ae59099b07657e983deae85"},
 ]
 
 [[package]]
@@ -2322,6 +2363,39 @@ docs = ["requests (>=2.0.0)"]
 typing = ["mypy (>=1.0.0)", "types-setuptools"]
 
 [[package]]
+name = "linear-attention-transformer"
+version = "0.19.1"
+description = "Linear Attention Transformer"
+optional = false
+python-versions = "*"
+files = [
+    {file = "linear_attention_transformer-0.19.1-py3-none-any.whl", hash = "sha256:4d0ea2d7953210c7d5516c52028c2a07efc76cd799944476e1d5171f65c5efe8"},
+    {file = "linear_attention_transformer-0.19.1.tar.gz", hash = "sha256:8ef53a62ce43d56d3cd58cbd372645079e19fc601145440bb6530ee27ae0a9ca"},
+]
+
+[package.dependencies]
+axial-positional-embedding = "*"
+einops = "*"
+linformer = ">=0.1.0"
+local-attention = "*"
+product-key-memory = ">=0.1.5"
+torch = "*"
+
+[[package]]
+name = "linformer"
+version = "0.2.3"
+description = "Linformer implementation in Pytorch"
+optional = false
+python-versions = "*"
+files = [
+    {file = "linformer-0.2.3-py3-none-any.whl", hash = "sha256:6e44ab72443014582c967d4323e8034e8e0f51e9a0ab360c22c4e4c47366f13e"},
+    {file = "linformer-0.2.3.tar.gz", hash = "sha256:747a4dc025a557d164b61170f140ec4aa37cfca3ce088318f3d5f39194cfcaba"},
+]
+
+[package.dependencies]
+torch = "*"
+
+[[package]]
 name = "llvmlite"
 version = "0.43.0"
 description = "lightweight wrapper around basic LLVM functionality"
@@ -2350,6 +2424,21 @@ files = [
     {file = "llvmlite-0.43.0-cp39-cp39-win_amd64.whl", hash = "sha256:47e147cdda9037f94b399bf03bfd8a6b6b1f2f90be94a454e3386f006455a9b4"},
     {file = "llvmlite-0.43.0.tar.gz", hash = "sha256:ae2b5b5c3ef67354824fb75517c8db5fbe93bc02cd9671f3c62271626bc041d5"},
 ]
+
+[[package]]
+name = "local-attention"
+version = "1.9.11"
+description = "Local attention, window with lookback, for language modeling"
+optional = false
+python-versions = "*"
+files = [
+    {file = "local_attention-1.9.11-py3-none-any.whl", hash = "sha256:ebd96ca8cdafd86aa3c2ee8e05acb94db8c961d899a90ef7384f8a2e4a95d726"},
+    {file = "local_attention-1.9.11.tar.gz", hash = "sha256:8e948fc6a04181fb49742e9956bf2efdf7caa7ae6abeaa32136aaa3c4fa712d5"},
+]
+
+[package.dependencies]
+einops = ">=0.8.0"
+torch = "*"
 
 [[package]]
 name = "loguru"
@@ -3587,6 +3676,22 @@ files = [
 [package.dependencies]
 cymem = ">=2.0.2,<2.1.0"
 murmurhash = ">=0.28.0,<1.1.0"
+
+[[package]]
+name = "product-key-memory"
+version = "0.2.10"
+description = "Product Key Memory"
+optional = false
+python-versions = "*"
+files = [
+    {file = "product_key_memory-0.2.10-py3-none-any.whl", hash = "sha256:24b20cdb96efeb294459e07725a6221db58887444eb941fd75e5242de46d05d0"},
+    {file = "product_key_memory-0.2.10.tar.gz", hash = "sha256:7e1ca57d88805da7a9a3c2a273affb9bc8ad030e8c81d263f10a71f30c56fd9e"},
+]
+
+[package.dependencies]
+colt5-attention = ">=0.10.14"
+einops = ">=0.6"
+torch = "*"
 
 [[package]]
 name = "prompt-toolkit"
@@ -6492,4 +6597,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9.0,<3.10"
-content-hash = "fc57e5fe26d547e2b844701621a96d02c56a61bc8414fe2448810b31d077b423"
+content-hash = "ebea4ec2f162d83786648122994b891b0bfb44f8489d605da4e4c26ce2a7cbc5"
