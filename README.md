@@ -37,7 +37,7 @@ This project is licensed under the terms of the [LICENSE] file located in the ro
 
 ## Contribution
 *Add appropriate CONTRIBUTING.md for this bootcamp in the main directory.*
-To get started with contributing to our project, please read our [CONTRIBUTING.md] guide. 
+To get started with contributing to our project, please read our [CONTRIBUTING.md] guide.
 
 ## Contact Information
 
