@@ -8,7 +8,7 @@ import warnings
 import time
 
 from tqdm import tqdm
-from src.baselines.tabsyn.model.denoise_model import (
+from src.baselines.tabsyn.model.modules import (
     MLPDiffusion,
 )
 from src.baselines.tabsyn.model.gaussian_diffusion import (
