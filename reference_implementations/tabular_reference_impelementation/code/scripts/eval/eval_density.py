@@ -96,13 +96,13 @@ if __name__ == "__main__":
 
     info_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json"
 
-    save_dir = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}_density.txt"
+    save_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}_density.txt"
 
     shape, trend = eval_density(syn_path, real_path, info_path)
 
     print("Shape:", shape)
     print("Trend:", trend)
 
-    with open(save_dir, "w") as f:
+    with open(save_path, "w") as f:
         f.write(f"Shape: {shape}\n")
         f.write(f"Trend: {trend}\n")

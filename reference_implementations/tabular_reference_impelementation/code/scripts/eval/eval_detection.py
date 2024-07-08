@@ -12,15 +12,6 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--dataname", type=str, default="adult")
-parser.add_argument("--model", type=str, default="real")
-parser.add_argument(
-    "--path", type=str, default=None, help="The file path of the synthetic data"
-)
-
-args = parser.parse_args()
-
 
 def reorder(real_data, syn_data, info):
     num_col_idx = info["num_col_idx"]
@@ -58,25 +49,7 @@ def reorder(real_data, syn_data, info):
 
     return new_real_data, new_syn_data, metadata
 
-
-if __name__ == "__main__":
-    dataname = args.dataname
-    model = args.model
-
-    if not args.path:
-        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
-    else:
-        syn_path = args.path
-    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
-
-    data_dir = (
-        f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}"
-    )
-    print(syn_path)
-
-    with open(f"{data_dir}/info.json", "r") as f:
-        info = json.load(f)
-
+def eval_detection(syn_path, real_path, info_path):
     syn_data = pd.read_csv(syn_path)
     real_data = pd.read_csv(real_path)
 
@@ -86,6 +59,9 @@ if __name__ == "__main__":
 
     real_data.columns = range(len(real_data.columns))
     syn_data.columns = range(len(syn_data.columns))
+
+    with open(info_path, "r") as f:
+        info = json.load(f)
 
     metadata = info["metadata"]
     metadata["columns"] = {
@@ -99,5 +75,36 @@ if __name__ == "__main__":
     score = LogisticDetection.compute(
         real_data=new_real_data, synthetic_data=new_syn_data, metadata=metadata
     )
+    return score
 
-    print(f"{dataname}, {model}: {score}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataname", type=str, default="adult")
+    parser.add_argument("--model", type=str, default="real")
+    parser.add_argument(
+        "--path", type=str, default=None, help="The file path of the synthetic data"
+    )
+
+    args = parser.parse_args()
+
+    dataname = args.dataname
+    model = args.model
+
+    if not args.path:
+        syn_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}.csv"
+    else:
+        syn_path = args.path
+    real_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/train.csv"
+
+    info_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/processed_data/{dataname}/info.json"
+
+    save_path = f"/projects/aieng/diffusion_bootcamp/data/tabular/synthetic_data/{dataname}/{model}_detection.txt"
+
+    detection_score = eval_detection(syn_path, real_path, info_path)
+
+    print(f"{dataname}, {model}: {detection_score}")
+
+    with open(save_path, "w") as f:
+        f.write(f"Detection score for {dataname}, {model}: {detection_score}")
