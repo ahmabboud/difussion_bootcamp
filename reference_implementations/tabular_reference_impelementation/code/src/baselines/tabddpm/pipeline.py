@@ -42,7 +42,6 @@ class TabDDPM:
         self.gaussian_loss_type = gaussian_loss_type
         self.scheduler = scheduler
         self.change_val = change_val
-        self.info_path = f"{real_data_path}/info.json"
         print(model_params)
         self.model = self.get_model(
             model_type,
@@ -113,20 +112,20 @@ class TabDDPM:
             os.path.join(model_save_path, "loss.csv"), index=False
         )
 
+    def load_model(self, ckpt_path):
+        self.model.load_state_dict(torch.load(ckpt_path, map_location=self.device))
+        print("Loaded model from", ckpt_path)
+
     def sample(
         self,
+        info_path,
         sample_save_path,
-        ckpt_path,
         batch_size=2000,
         num_samples=1000,
         disbalance=None,
         ddim=False,
         steps=1000,
     ):
-        if ckpt_path is not None:
-            self.model.load_state_dict(torch.load(ckpt_path, map_location=self.device))
-            print("Loaded model from", ckpt_path)
-
         self.diffusion.eval()
 
         start_time = time.time()
@@ -143,7 +142,7 @@ class TabDDPM:
         num_inverse = self.dataset.num_transform.inverse_transform
         cat_inverse = self.dataset.cat_transform.inverse_transform
 
-        with open(self.info_path, "r") as f:
+        with open(info_path, "r") as f:
             info = json.load(f)
 
         syn_num, syn_cat, syn_target = split_num_cat_target(

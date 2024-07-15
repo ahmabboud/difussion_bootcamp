@@ -38,30 +38,30 @@ def main(args):
         change_val=False,
     )
 
-    K = np.array(dataset.get_category_sizes("train"))
-    if len(K) == 0 or raw_config["train"]["T"]["cat_encoding"] == "one-hot":
-        K = np.array([0])
+    """
+    Modification of configs
+    """
+
+    dim_categorical_features = np.array(dataset.get_category_sizes("train"))
+    if len(dim_categorical_features) == 0 or raw_config["train"]["T"]["cat_encoding"] == "one-hot":
+        dim_categorical_features = np.array([0])
 
     num_numerical_features = (
         dataset.X_num["train"].shape[1] if dataset.X_num is not None else 0
     )
-    d_in = np.sum(K) + num_numerical_features
-    raw_config["model_params"]["d_in"] = d_in
-    print(d_in)
 
-    """
-    Modification of configs
-    """
+    dim_input = np.sum(dim_categorical_features) + num_numerical_features
+    raw_config["model_params"]["d_in"] = dim_input
+
     print("START TRAINING")
     tabddpm = TabDDPM(
         dataset=dataset,
-        num_classes=K,
-        **raw_config["diffusion_params"],
-        real_data_path=real_data_path,
+        num_classes=num_numerical_features,
         model_type=raw_config["model_type"],
         model_params=raw_config["model_params"],
         num_numerical_features=num_numerical_features,
         device=device,
+        **raw_config["diffusion_params"],
     )
 
     tabddpm.train(
