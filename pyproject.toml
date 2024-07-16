@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "Diffusion models for tabular data and time series"
 authors = ["Vector AI Engineering <fl4health@vectorinstitute.ai>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.9.0,<3.10"
