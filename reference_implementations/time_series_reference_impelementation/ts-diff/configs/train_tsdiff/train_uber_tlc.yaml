@@ -14,13 +14,10 @@ max_epochs: 1000
 num_batches_per_epoch: 128
 batch_size: 64
 # Used only in callback,
-# the final evaluation uses 100 samples
-num_samples: 16
 sampler: ddpm
 sampler_params:
   guidance: quantile
   scale: 2
-use_validation_set: True
-eval_every: 50
+use_validation_set: False
 device: cuda:0
 setup: forecasting
