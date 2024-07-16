@@ -122,7 +122,6 @@ class TabDDPM:
         sample_save_path,
         batch_size=2000,
         num_samples=1000,
-        disbalance=None,
         ddim=False,
         steps=1000,
     ):
