@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --job-name="shoppers_tabsyn_train"
+#SBATCH --qos=m
+#SBATCH --nodes=1
+#SBATCH --gres=gpu:1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=0
+#SBATCH --output=shoppers-tabsyn-%j.out
+#SBATCH --error=shoppers-tabsyn-%j.err
+#SBATCH --time=8:00:00
+
+# load virtual environment
+source /projects/aieng/diffussion_bootcamp/env/tabsyn_env/bin/activate
+
+nvidia-smi
+
+python main.py --dataname shoppers --method vae --mode train
+
+python main.py --dataname shoppers --method tabsyn --mode train
