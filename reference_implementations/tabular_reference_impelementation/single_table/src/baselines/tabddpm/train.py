@@ -5,6 +5,7 @@ from copy import deepcopy
 import pandas as pd
 import time
 
+
 class Trainer:
     def __init__(
         self,
