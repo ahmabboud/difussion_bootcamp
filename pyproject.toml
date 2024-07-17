@@ -189,6 +189,7 @@ prdc = "^0.2"
 
 [tool.poetry.group.csdi.dependencies]
 linear-attention-transformer = "^0.19.1"
+wget = "^3.2"
 
 [build-system]
 requires = ["poetry-core"]

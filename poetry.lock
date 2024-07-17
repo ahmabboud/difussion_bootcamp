@@ -6233,6 +6233,16 @@ MarkupSafe = ">=2.1.1"
 watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
+name = "wget"
+version = "3.2"
+description = "pure python download utility"
+optional = false
+python-versions = "*"
+files = [
+    {file = "wget-3.2.zip", hash = "sha256:35e630eca2aa50ce998b9b1a127bb26b30dfee573702782aa982f875e3f16061"},
+]
+
+[[package]]
 name = "wheel"
 version = "0.43.0"
 description = "A built-package format for Python"
@@ -6628,4 +6638,4 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9.0,<3.10"
-content-hash = "2ee6cf911174ccac7c2afc3d177d81814997f384bd3317dfa31f5dda49266c03"
+content-hash = "71d8e9d9cd61b6f53857412e8a9c6f02087272adc938cfe0ed8c69260cfa1eb5"
