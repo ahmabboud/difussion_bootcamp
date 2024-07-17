@@ -38,7 +38,10 @@ def main(args):
     """
 
     dim_categorical_features = np.array(dataset.get_category_sizes("train"))
-    if len(dim_categorical_features) == 0 or raw_config["train"]["T"]["cat_encoding"] == "one-hot":
+    if (
+        len(dim_categorical_features) == 0
+        or raw_config["train"]["T"]["cat_encoding"] == "one-hot"
+    ):
         dim_categorical_features = np.array([0])
 
     num_numerical_features = (
@@ -53,7 +56,8 @@ def main(args):
     tabddpm = TabDDPM(
         dataset=dataset,
         num_classes=num_numerical_features,
-        **raw_config["diffusion_params"],ckpt_path=model_save_path,
+        **raw_config["diffusion_params"],
+        ckpt_path=model_save_path,
         model_type=raw_config["model_type"],
         model_params=raw_config["model_params"],
         num_numerical_features=num_numerical_features,

@@ -43,7 +43,10 @@ def main(args):
     """
 
     dim_categorical_features = np.array(dataset.get_category_sizes("train"))
-    if len(dim_categorical_features) == 0 or raw_config["train"]["T"]["cat_encoding"] == "one-hot":
+    if (
+        len(dim_categorical_features) == 0
+        or raw_config["train"]["T"]["cat_encoding"] == "one-hot"
+    ):
         dim_categorical_features = np.array([0])
 
     num_numerical_features = (

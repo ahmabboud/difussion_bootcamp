@@ -49,6 +49,7 @@ def reorder(real_data, syn_data, info):
 
     return new_real_data, new_syn_data, metadata
 
+
 def eval_detection(syn_path, real_path, info_path):
     syn_data = pd.read_csv(syn_path)
     real_data = pd.read_csv(real_path)
@@ -76,7 +77,6 @@ def eval_detection(syn_path, real_path, info_path):
         real_data=new_real_data, synthetic_data=new_syn_data, metadata=metadata
     )
     return score
-
 
 
 if __name__ == "__main__":
