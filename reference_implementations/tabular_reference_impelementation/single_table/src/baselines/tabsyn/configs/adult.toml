@@ -1,0 +1,37 @@
+task_type = "binclass"
+
+[loss_params]
+max_beta = 1e-2
+min_beta = 1e-5
+lambd = 0.7
+
+[model_params.vae]
+n_head = 1
+factor = 32
+num_layers = 2
+d_token = 4
+
+[train.vae]
+# num_epochs = 4000
+num_epochs = 10
+batch_size = 4096
+
+[train.vae.optim]
+lr = 1e-3
+weight_decay = 0
+factor = 0.95
+patience = 10
+
+[train.diffusion]
+# num_epochs = 10000 + 1
+num_epochs = 10
+batch_size = 4096
+
+[train.diffusion.optim]
+lr = 1e-3
+weight_decay = 0
+factor = 0.9
+patience = 20
+
+[sample]
+steps = 50
