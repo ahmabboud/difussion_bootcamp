@@ -21,7 +21,7 @@ batch_size = 4096
 num_dataset_workers = 4
 
 [train.diffusion]
-# num_epochs = 10000 + 1
+# num_epochs = 10001
 num_epochs = 9
 batch_size = 4096
 num_dataset_workers = 4
