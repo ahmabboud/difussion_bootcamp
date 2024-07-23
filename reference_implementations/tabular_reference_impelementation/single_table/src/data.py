@@ -150,18 +150,9 @@ class TabularDataset(Dataset):
 
 
 def preprocess(
-    dataset_path, task_type="binclass", inverse=False, cat_encoding=None, concat=True
+    dataset_path, transforms, task_type="binclass", inverse=False, concat=True
 ):
-    T_dict = {}
-
-    T_dict["normalization"] = "quantile"
-    T_dict["num_nan_policy"] = "mean"
-    T_dict["cat_nan_policy"] = None
-    T_dict["cat_min_frequency"] = None
-    T_dict["cat_encoding"] = cat_encoding
-    T_dict["y_policy"] = "default"
-
-    T = Transformations(**T_dict)
+    T = Transformations(**transforms)
 
     dataset = make_dataset(
         data_path=dataset_path,
@@ -171,7 +162,7 @@ def preprocess(
         concat=concat,
     )
 
-    if cat_encoding is None:
+    if transforms["cat_encoding"] is None:
         X_num = dataset.X_num
         X_cat = dataset.X_cat
 

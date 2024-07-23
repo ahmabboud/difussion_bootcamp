@@ -36,7 +36,8 @@ class TabSyn:
         # construct vae model
         self.vae_model, self.pre_encoder, self.pre_decoder = self.__get_vae_model(n_head, factor, num_layers, d_token)
         # construct vae optimizer and scheduler
-        self.vae_optimizer, self.vae_scheduler = self.__load_optim(self.vae_model, **optim_params)
+        if optim_params is not None:
+            self.vae_optimizer, self.vae_scheduler = self.__load_optim(self.vae_model, **optim_params)
         print("Successfully loaded VAE model.")
     
     def load_diffusion_model(self, in_dim, hid_dim, optim_params):
@@ -44,7 +45,8 @@ class TabSyn:
         # load diffusion model
         self.dif_model = self.__get_diffusion_model(in_dim = in_dim, hid_dim = hid_dim)
         # load optimizer and scheduler
-        self.dif_optimizer, self.dif_scheduler = self.__load_optim(self.dif_model, **optim_params)
+        if optim_params is not None:
+            self.dif_optimizer, self.dif_scheduler = self.__load_optim(self.dif_model, **optim_params)
         print("Successfully loaded diffusion model.")
 
     def __get_vae_model(self, n_head, factor, num_layers, d_token):
@@ -254,18 +256,18 @@ class TabSyn:
         end_time = time.time()
         print("Time: ", end_time - start_time)
 
-    # def load_model(self, model, pre_encoder, pre_decoder, ckpt_dir, model_name):
-    #     encoder_save_path = f"{ckpt_dir}/vae/encoder.pt"
-    #     decoder_save_path = f"{ckpt_dir}/vae/decoder.pt"
-    #     model_save_path = f"{ckpt_dir}/{model_name}"
+    def load_model_state(self, ckpt_dir, dif_ckpt_name = "model.pt"):
+        dif_model_save_path = os.path.join(ckpt_dir, dif_ckpt_name)
+        vae_model_save_path = os.path.join(ckpt_dir, "vae", "model.pt")
+        encoder_save_path = os.path.join(ckpt_dir, "vae", "encoder.pt")
+        decoder_save_path = os.path.join(ckpt_dir, "vae", "decoder.pt")
+        
+        self.dif_model.load_state_dict(torch.load(dif_model_save_path))
+        self.vae_model.load_state_dict(torch.load(vae_model_save_path))
+        self.pre_encoder.load_state_dict(torch.load(encoder_save_path))
+        self.pre_decoder.load_state_dict(torch.load(decoder_save_path))
 
-    #     pre_encoder.load_state_dict(torch.load(encoder_save_path))
-    #     pre_decoder.load_state_dict(torch.load(decoder_save_path))
-    #     model.load_state_dict(torch.load(model_save_path))
-
-    #     print("Loaded model from", ckpt_dir)
-
-    #     return model, pre_encoder, pre_decoder
+        print("Loaded model state from", ckpt_dir)
 
     def load_model_for_sampling(self, in_dim, hid_dim, d_numerical, categories, ckpt_dir, n_head, factor, num_layers, d_token):
         denoise_fn = MLPDiffusion(in_dim, 1024).to(self.device)
@@ -279,12 +281,13 @@ class TabSyn:
         self.dif_model = model
         self.pre_decoder = pre_decoder
 
-        return model, pre_decoder
-
     def sample(self, train_z, info, num_inverse, cat_inverse, save_path):
         '''
             Generating samples    
         '''
+        self.pre_decoder.cpu()
+        info["pre_decoder"] = self.pre_decoder
+
         in_dim = train_z.shape[1] 
         mean = train_z.mean(0)
 
@@ -309,5 +312,7 @@ class TabSyn:
         
         end_time = time.time()
         print("Time:", end_time - start_time)
+
+        self.pre_decoder.to(self.device)
 
         print("Saving sampled data to {}".format(save_path))

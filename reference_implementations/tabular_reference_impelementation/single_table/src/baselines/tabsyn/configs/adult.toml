@@ -6,6 +6,14 @@ factor = 32
 num_layers = 2
 d_token = 4
 
+[transforms]
+normalization = "quantile"
+num_nan_policy = "mean"
+cat_nan_policy = "__none__"
+cat_min_frequency = "__none__"
+cat_encoding = "__none__"
+y_policy = "default"
+
 [train.vae]
 # num_epochs = 4000
 num_epochs = 10
