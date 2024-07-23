@@ -31,23 +31,23 @@ class TabSyn:
         self.categories = num_classes
         self.device = device if device is not None else torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    def load_vae_model(self, n_head, factor, num_layers, d_token, optim_params):
+    def instantiate_vae(self, n_head, factor, num_layers, d_token, optim_params):
         """Construct VAE model and its optimizer and lr scheduler."""
         # construct vae model
         self.vae_model, self.pre_encoder, self.pre_decoder = self.__get_vae_model(n_head, factor, num_layers, d_token)
         # construct vae optimizer and scheduler
         if optim_params is not None:
             self.vae_optimizer, self.vae_scheduler = self.__load_optim(self.vae_model, **optim_params)
-        print("Successfully loaded VAE model.")
+        print("Successfully instantiated VAE model.")
     
-    def load_diffusion_model(self, in_dim, hid_dim, optim_params):
+    def instantiate_diffusion(self, in_dim, hid_dim, optim_params):
         """Construct Diffusion model and its optimizer and lr scheduler."""
         # load diffusion model
         self.dif_model = self.__get_diffusion_model(in_dim = in_dim, hid_dim = hid_dim)
         # load optimizer and scheduler
         if optim_params is not None:
             self.dif_optimizer, self.dif_scheduler = self.__load_optim(self.dif_model, **optim_params)
-        print("Successfully loaded diffusion model.")
+        print("Successfully instantiated diffusion model.")
 
     def __get_vae_model(self, n_head, factor, num_layers, d_token):
         model = Model_VAE(num_layers, self.d_numerical, self.categories, d_token, n_head = n_head, factor = factor, bias = True)
@@ -76,12 +76,19 @@ class TabSyn:
         scheduler = ReduceLROnPlateau(optimizer, mode="min", factor=factor, patience=patience, verbose=True)
         return optimizer, scheduler
 
-    def train_vae(self, max_beta, min_beta, lambd, num_epochs, model_save_path, encoder_save_path, decoder_save_path):
+    def train_vae(self, max_beta, min_beta, lambd, num_epochs, save_path):
+        # determine model save paths
+        model_save_path = os.path.join(save_path, "model.pt")
+        encoder_save_path = os.path.join(save_path, "encoder.pt")
+        decoder_save_path = os.path.join(save_path, "decoder.pt")
+        
+        # set initial state
         current_lr = self.vae_optimizer.param_groups[0]["lr"]
         patience = 0
         best_train_loss = float("inf")
-
         beta = max_beta
+
+        # training loop
         start_time = time.time()
         for epoch in range(num_epochs):
             pbar = tqdm(self.train_loader, total=len(self.train_loader))

@@ -42,6 +42,3 @@ patience = 20
 max_beta = 1e-2
 min_beta = 1e-5
 lambd = 0.7
-
-[sample]
-steps = 50
