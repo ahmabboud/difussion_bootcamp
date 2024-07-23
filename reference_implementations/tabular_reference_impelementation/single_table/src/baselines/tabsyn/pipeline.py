@@ -1,9 +1,10 @@
-import numpy as np
+import os
 import time
+import numpy as np
 from tqdm import tqdm
 
-import torch.nn as nn
 import torch
+import torch.nn as nn
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
 from src.baselines.tabsyn.model.vae import Model_VAE, Encoder_model, Decoder_model
@@ -18,19 +19,35 @@ class TabSyn:
         train_loader,
         X_test_num,
         X_test_cat,
-        device,
         num_numerical_features,
         num_classes,
+        device=None,
     ):
-        
+        """Train, sample, load and save TabSyn model."""
         self.train_loader = train_loader
         self.X_test_num = X_test_num
         self.X_test_cat = X_test_cat
-        self.device = device
         self.d_numerical = num_numerical_features
         self.categories = num_classes
+        self.device = device if device is not None else torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    def get_vae_model(self, n_head, factor, num_layers, d_token):
+    def load_vae_model(self, n_head, factor, num_layers, d_token, optim_params):
+        """Construct VAE model and its optimizer and lr scheduler."""
+        # construct vae model
+        self.vae_model, self.pre_encoder, self.pre_decoder = self.__get_vae_model(n_head, factor, num_layers, d_token)
+        # construct vae optimizer and scheduler
+        self.vae_optimizer, self.vae_scheduler = self.__load_optim(self.vae_model, **optim_params)
+        print("Successfully loaded VAE model.")
+    
+    def load_diffusion_model(self, in_dim, hid_dim, optim_params):
+        """Construct Diffusion model and its optimizer and lr scheduler."""
+        # load diffusion model
+        self.dif_model = self.__get_diffusion_model(in_dim = in_dim, hid_dim = hid_dim)
+        # load optimizer and scheduler
+        self.dif_optimizer, self.dif_scheduler = self.__load_optim(self.dif_model, **optim_params)
+        print("Successfully loaded diffusion model.")
+
+    def __get_vae_model(self, n_head, factor, num_layers, d_token):
         model = Model_VAE(num_layers, self.d_numerical, self.categories, d_token, n_head = n_head, factor = factor, bias = True)
         model = model.to(self.device)
 
@@ -41,19 +58,27 @@ class TabSyn:
         pre_decoder.eval()
 
         return model, pre_encoder, pre_decoder
-    
-    def load_optim(self, model, lr, weight_decay, factor, patience):
+
+    def __get_diffusion_model(self, in_dim, hid_dim):
+        denoise_fn = MLPDiffusion(in_dim, 1024).to(self.device)
+        print(denoise_fn)
+
+        num_params = sum(p.numel() for p in denoise_fn.parameters())
+        print("The number of parameters:", num_params)
+
+        model = Model(denoise_fn = denoise_fn, hid_dim = hid_dim).to(self.device)
+        return model
+
+    def __load_optim(self, model, lr, weight_decay, factor, patience):
         optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
         scheduler = ReduceLROnPlateau(optimizer, mode="min", factor=factor, patience=patience, verbose=True)
-
         return optimizer, scheduler
 
-    def train_vae(self, model, pre_encoder, pre_decoder, optimizer, scheduler, max_beta, min_beta, lambd, num_epochs, model_save_path, encoder_save_path, decoder_save_path, device):
-        current_lr = optimizer.param_groups[0]['lr']
+    def train_vae(self, max_beta, min_beta, lambd, num_epochs, model_save_path, encoder_save_path, decoder_save_path):
+        current_lr = self.vae_optimizer.param_groups[0]["lr"]
         patience = 0
-        best_train_loss = float('inf')
+        best_train_loss = float("inf")
 
-        # training loop
         beta = max_beta
         start_time = time.time()
         for epoch in range(num_epochs):
@@ -67,19 +92,19 @@ class TabSyn:
             curr_count = 0
 
             for batch_num, batch_cat in pbar:
-                model.train()
-                optimizer.zero_grad()
+                self.vae_model.train()
+                self.vae_optimizer.zero_grad()
 
-                batch_num = batch_num.to(device)
-                batch_cat = batch_cat.to(device)
+                batch_num = batch_num.to(self.device)
+                batch_cat = batch_cat.to(self.device)
 
-                Recon_X_num, Recon_X_cat, mu_z, std_z = model(batch_num, batch_cat)
+                Recon_X_num, Recon_X_cat, mu_z, std_z = self.vae_model(batch_num, batch_cat)
             
                 loss_mse, loss_ce, loss_kld, train_acc = self.compute_loss(batch_num, batch_cat, Recon_X_num, Recon_X_cat, mu_z, std_z)
 
                 loss = loss_mse + loss_ce + beta * loss_kld
                 loss.backward()
-                optimizer.step()
+                self.vae_optimizer.step()
 
                 batch_length = batch_num.shape[0]
                 curr_count += batch_length
@@ -90,54 +115,50 @@ class TabSyn:
             num_loss = curr_loss_gauss / curr_count
             cat_loss = curr_loss_multi / curr_count
             kl_loss = curr_loss_kl / curr_count
-            
 
             '''
                 Evaluation
             '''
-            model.eval()
+            self.vae_model.eval()
             with torch.no_grad():
-                Recon_X_num, Recon_X_cat, mu_z, std_z = model(self.X_test_num, self.X_test_cat)
+                Recon_X_num, Recon_X_cat, mu_z, std_z = self.vae_model(self.X_test_num, self.X_test_cat)
 
                 val_mse_loss, val_ce_loss, val_kl_loss, val_acc = self.compute_loss(self.X_test_num, self.X_test_cat, Recon_X_num, Recon_X_cat, mu_z, std_z)
                 val_loss = val_mse_loss.item() * 0 + val_ce_loss.item()    
 
-                scheduler.step(val_loss)
-                new_lr = optimizer.param_groups[0]['lr']
+                self.vae_scheduler.step(val_loss)
+                new_lr = self.vae_optimizer.param_groups[0]["lr"]
 
                 if new_lr != current_lr:
                     current_lr = new_lr
                     print(f"Learning rate updated: {current_lr}")
-                    
+
                 train_loss = val_loss
                 if train_loss < best_train_loss:
                     best_train_loss = train_loss
                     patience = 0
-                    torch.save(model.state_dict(), model_save_path)
+                    torch.save(self.vae_model.state_dict(), model_save_path)
                 else:
                     patience += 1
                     if patience == 10:
                         if beta > min_beta:
                             beta = beta * lambd
 
-
-            # print('epoch: {}, beta = {:.6f}, Train MSE: {:.6f}, Train CE:{:.6f}, Train KL:{:.6f}, Train ACC:{:6f}'.format(epoch, beta, num_loss, cat_loss, kl_loss, train_acc.item()))
-            print('epoch: {}, beta = {:.6f}, Train MSE: {:.6f}, Train CE:{:.6f}, Train KL:{:.6f}, Val MSE:{:.6f}, Val CE:{:.6f}, Train ACC:{:6f}, Val ACC:{:6f}'.format(epoch, beta, num_loss, cat_loss, kl_loss, val_mse_loss.item(), val_ce_loss.item(), train_acc.item(), val_acc.item() ))
+            # print("epoch: {}, beta = {:.6f}, Train MSE: {:.6f}, Train CE:{:.6f}, Train KL:{:.6f}, Train ACC:{:6f}".format(epoch, beta, num_loss, cat_loss, kl_loss, train_acc.item()))
+            print("epoch: {}, beta = {:.6f}, Train MSE: {:.6f}, Train CE:{:.6f}, Train KL:{:.6f}, Val MSE:{:.6f}, Val CE:{:.6f}, Train ACC:{:6f}, Val ACC:{:6f}".format(epoch, beta, num_loss, cat_loss, kl_loss, val_mse_loss.item(), val_ce_loss.item(), train_acc.item(), val_acc.item()))
 
         end_time = time.time()
-        print('Training time: {:.4f} mins'.format((end_time - start_time)/60))
+        print("Training time: {:.4f} mins".format((end_time - start_time)/60))
 
         # load and save encoder and decoder states
-        pre_encoder.load_weights(model)
-        pre_decoder.load_weights(model)
+        self.pre_encoder.load_weights(self.vae_model)
+        self.pre_decoder.load_weights(self.vae_model)
 
-        torch.save(pre_encoder.state_dict(), encoder_save_path)
-        torch.save(pre_decoder.state_dict(), decoder_save_path)
+        torch.save(self.pre_encoder.state_dict(), encoder_save_path)
+        torch.save(self.pre_decoder.state_dict(), decoder_save_path)
 
-        print('Successfully load and save the model!')
-
-        return model, pre_encoder, pre_decoder
-            
+        print("Successfully trained and saved the VAE model!")
+   
     def compute_loss(self, X_num, X_cat, Recon_X_num, Recon_X_cat, mu_z, logvar_z):
         ce_loss_fn = nn.CrossEntropyLoss()
         mse_loss = (X_num - Recon_X_num).pow(2).mean()
@@ -161,44 +182,35 @@ class TabSyn:
         loss_kld = -0.5 * torch.mean(temp.mean(-1).mean())
         return mse_loss, ce_loss, loss_kld, acc
     
-    def save_vae_embeddings(self, pre_encoder, X_train_num, X_train_cat, vae_ckpt_dir, device):
+    def save_vae_embeddings(self, X_train_num, X_train_cat, vae_ckpt_dir):
         # Saving latent embeddings
         with torch.no_grad():
-            X_train_num = X_train_num.to(device)
-            X_train_cat = X_train_cat.to(device)
+            X_train_num = X_train_num.to(self.device)
+            X_train_cat = X_train_cat.to(self.device)
 
-            train_z = pre_encoder(X_train_num, X_train_cat).detach().cpu().numpy()
+            train_z = self.pre_encoder(X_train_num, X_train_cat).detach().cpu().numpy()
 
-            np.save(f"{vae_ckpt_dir}/train_z.npy", train_z)
+            np.save(os.path.join(vae_ckpt_dir, "train_z.npy"), train_z)
 
-            print("Successfully save pretrained embeddings in disk!")
+            print("Successfully saved pretrained embeddings on disk!")
 
     def load_vae_embeddings(self, vae_ckpt_dir):
-        embedding_save_path = f"{vae_ckpt_dir}/train_z.npy"
+        embedding_save_path = os.path.join(vae_ckpt_dir, "train_z.npy")
         train_z = torch.tensor(np.load(embedding_save_path)).float()
 
+        # flatten embeddings
         train_z = train_z[:, 1:, :]
         B, num_tokens, token_dim = train_z.size()
         in_dim = num_tokens * token_dim
-        
+
         train_z = train_z.view(B, in_dim)
 
         return train_z, token_dim
     
-    def get_diffusion_model(self, in_dim, hid_dim, device):
-        denoise_fn = MLPDiffusion(in_dim, 1024).to(device)
-        print(denoise_fn)
+    def train_diffusion(self, train_loader, num_epochs, ckpt_path):
+        self.dif_model.train()
 
-        num_params = sum(p.numel() for p in denoise_fn.parameters())
-        print("the number of parameters", num_params)
-
-        model = Model(denoise_fn = denoise_fn, hid_dim = hid_dim).to(device)
-        return model
-    
-    def train_diffusion(self, model, train_loader, optimizer, scheduler, num_epochs, ckpt_path, device):
-        model.train()
-
-        best_loss = float('inf')
+        best_loss = float("inf")
         patience = 0
         start_time = time.time()
         for epoch in range(num_epochs):
@@ -209,38 +221,38 @@ class TabSyn:
             batch_loss = 0.0
             len_input = 0
             for batch in pbar:
-                inputs = batch.float().to(device)
-                loss = model(inputs)
+                inputs = batch.float().to(self.device)
+                loss = self.dif_model(inputs)
             
                 loss = loss.mean()
 
                 batch_loss += loss.item() * len(inputs)
                 len_input += len(inputs)
 
-                optimizer.zero_grad()
+                self.dif_optimizer.zero_grad()
                 loss.backward()
-                optimizer.step()
+                self.dif_optimizer.step()
 
                 pbar.set_postfix({"Loss": loss.item()})
 
             curr_loss = batch_loss/len_input
-            scheduler.step(curr_loss)
+            self.dif_scheduler.step(curr_loss)
 
             if curr_loss < best_loss:
                 best_loss = curr_loss
                 patience = 0
-                torch.save(model.state_dict(), f"{ckpt_path}/model.pt")
+                torch.save(self.dif_model.state_dict(), os.path.join(ckpt_path, "model.pt"))
             else:
                 patience += 1
                 if patience == 500:
-                    print('Early stopping')
+                    print("Early stopping")
                     break
 
             if epoch % 1000 == 0:
-                torch.save(model.state_dict(), f"{ckpt_path}/model_{epoch}.pt")
+                torch.save(self.dif_model.state_dict(), os.path.join(ckpt_path, f"model_{epoch}.pt"))
 
         end_time = time.time()
-        print('Time: ', end_time - start_time)
+        print("Time: ", end_time - start_time)
 
     # def load_model(self, model, pre_encoder, pre_decoder, ckpt_dir, model_name):
     #     encoder_save_path = f"{ckpt_dir}/vae/encoder.pt"
@@ -255,18 +267,21 @@ class TabSyn:
 
     #     return model, pre_encoder, pre_decoder
 
-    def load_model(self, in_dim, hid_dim, ckpt_dir, device, d_numerical, categories, n_head, factor, num_layers, d_token):
-        denoise_fn = MLPDiffusion(in_dim, 1024).to(device)
-        model = Model(denoise_fn = denoise_fn, hid_dim = hid_dim).to(device)
-        model.load_state_dict(torch.load(f'{ckpt_dir}/model.pt'))
+    def load_model_for_sampling(self, in_dim, hid_dim, d_numerical, categories, ckpt_dir, n_head, factor, num_layers, d_token):
+        denoise_fn = MLPDiffusion(in_dim, 1024).to(self.device)
+        model = Model(denoise_fn = denoise_fn, hid_dim = hid_dim).to(self.device)
+        model.load_state_dict(torch.load(os.path.join(ckpt_dir, "model.pt")))
 
-        pre_decoder = Decoder_model(2, d_numerical, categories, 4, n_head = 1, factor = 32)
-        decoder_save_path = f"{ckpt_dir}/vae/decoder.pt"
+        pre_decoder = Decoder_model(num_layers, d_numerical, categories, d_token, n_head = n_head, factor = factor)
+        decoder_save_path = os.path.join(ckpt_dir, "vae", "decoder.pt")
         pre_decoder.load_state_dict(torch.load(decoder_save_path))
+
+        self.dif_model = model
+        self.pre_decoder = pre_decoder
 
         return model, pre_decoder
 
-    def sample(self, model, train_z, info, num_inverse, cat_inverse, save_path, device):
+    def sample(self, train_z, info, num_inverse, cat_inverse, save_path):
         '''
             Generating samples    
         '''
@@ -278,21 +293,21 @@ class TabSyn:
         num_samples = train_z.shape[0]
         sample_dim = in_dim
 
-        x_next = sample(model.denoise_fn_D, num_samples, sample_dim)
-        x_next = x_next * 2 + mean.to(device)
+        x_next = sample(self.dif_model.denoise_fn_D, num_samples, sample_dim)
+        x_next = x_next * 2 + mean.to(self.device)
 
         syn_data = x_next.float().cpu().numpy()
-        syn_num, syn_cat, syn_target = split_num_cat_target(syn_data, info, num_inverse, cat_inverse, device) 
+        syn_num, syn_cat, syn_target = split_num_cat_target(syn_data, info, num_inverse, cat_inverse, self.device) 
 
         syn_df = recover_data(syn_num, syn_cat, syn_target, info)
 
-        idx_name_mapping = info['idx_name_mapping']
+        idx_name_mapping = info["idx_name_mapping"]
         idx_name_mapping = {int(key): value for key, value in idx_name_mapping.items()}
 
         syn_df.rename(columns = idx_name_mapping, inplace=True)
         syn_df.to_csv(save_path, index = False)
         
         end_time = time.time()
-        print('Time:', end_time - start_time)
+        print("Time:", end_time - start_time)
 
-        print('Saving sampled data to {}'.format(save_path))
+        print("Saving sampled data to {}".format(save_path))
