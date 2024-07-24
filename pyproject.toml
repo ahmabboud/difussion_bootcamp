@@ -9,6 +9,7 @@ readme = "README.md"
 python = ">=3.9.0,<3.10"
 pre-commit = "^3.7.0"
 ipykernel = "^6.29.4"
+xlrd = "^2.0.1"
 
 [tool.poetry.group.synthcity.dependencies]
 torch= "1.13.1"
@@ -189,6 +190,17 @@ prdc = "^0.2"
 
 [tool.poetry.group.csdi.dependencies]
 linear-attention-transformer = "^0.19.1"
+wget = "^3.2"
+
+
+[tool.poetry.group.tsdiff.dependencies]
+seaborn = "^0.13.2"
+gluonts = ">=0.12.3,<0.13.0"
+opt-einsum = ">=3.3.0,<3.4.0"
+einops = "^0.8.0"
+black = "^24.4.2"
+jupyter = "^1.0.0"
+rich = "^13.7.1"
 
 [build-system]
 requires = ["poetry-core"]
