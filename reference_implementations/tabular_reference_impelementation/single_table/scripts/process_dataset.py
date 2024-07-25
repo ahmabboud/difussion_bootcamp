@@ -60,16 +60,16 @@ def pre_proceed_default(data_df):
     # Define the mappings
     sex_mapping = {1: 'male', 2: 'female'}
     education_mapping = {
-        1: 'graduate school', 2: 'university', 3: 'high school',
-        4: 'others', 5: 'unknown', 6: 'unknown'
+        0: 'unknown_0', 1: 'graduate school', 2: 'university', 3: 'high school',
+        4: 'others', 5: 'unknown_1', 6: 'unknown_2'
     }
-    marriage_mapping = {1: 'married', 2: 'single', 3: 'others'}
+    marriage_mapping = {0: 'unknown' ,1: 'married', 2: 'single', 3: 'others'}
     pay_mapping = {
-        -1: 'pay duly', 1: 'payment delay for one month',
-        2: 'payment delay for two months', 3: 'payment delay for three months',
-        4: 'payment delay for four months', 5: 'payment delay for five months',
-        6: 'payment delay for six months', 7: 'payment delay for seven months',
-        8: 'payment delay for eight months', 9: 'payment delay for nine months and above'
+        -2: 'unknown', -1: 'pay duly', 0: 'payment delay for one month',
+        1: 'payment delay for two months', 2: 'payment delay for three months',
+        3: 'payment delay for four months', 4: 'payment delay for five months',
+        5: 'payment delay for six months', 6: 'payment delay for seven months',
+        7: 'payment delay for eight months', 8: 'payment delay for nine months and above'
     }
 
     # Apply the mappings
