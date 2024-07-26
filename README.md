@@ -10,8 +10,6 @@ Diffusion models are a class of generative models that have shown promising resu
 
 - **docs/**: Contains detailed documentation, additional resources, installation guides, and setup instructions that are not covered in this README.
 - **reference_implementations/**: Reference Implementations are organized by topics. Each topic has its own directory containing codes, notebooks, and a README for guidance.
-- **data/**: Includes sample datasets or links to datasets used in the bootcamp, along with usage instructions. It also contains the implementation of dataset modules, or anything related to that.
-- **scripts/**: Utility scripts for setup, data processing, submiting jobs, or other repetitive tasks.
 - **pyproject.toml**: The `pyproject.toml` file in this repository configures various build system requirements and dependencies, centralizing project settings in a standardized format.
 
 

@@ -21,7 +21,6 @@ class TabDDPM:
     def __init__(
         self,
         dataset,
-        real_data_path,
         model_type,
         model_params,
         num_numerical_features,

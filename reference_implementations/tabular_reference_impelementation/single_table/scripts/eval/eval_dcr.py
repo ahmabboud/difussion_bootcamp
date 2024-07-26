@@ -14,6 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 pd.options.mode.chained_assignment = None
 
+
 def eval_dcr(syn_path, real_path, test_path, info_path):
     with open(info_path, "r") as f:
         info = json.load(f)
@@ -84,8 +85,6 @@ def eval_dcr(syn_path, real_path, test_path, info_path):
     dcrs_test = []
     batch_size = 100
 
-    batch_syn_data_np = syn_data_np[i * batch_size : (i + 1) * batch_size]
-
     for i in range((syn_data_th.shape[0] // batch_size) + 1):
         if i != (syn_data_th.shape[0] // batch_size):
             batch_syn_data_th = syn_data_th[i * batch_size : (i + 1) * batch_size]
@@ -115,6 +114,7 @@ def eval_dcr(syn_path, real_path, test_path, info_path):
     score = (dcrs_real < dcrs_test).nonzero().shape[0] / dcrs_real.shape[0]
     return score
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataname", type=str, default="adult")
@@ -124,7 +124,6 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-
 
     dataname = args.dataname
     model = args.model
@@ -147,4 +146,3 @@ if __name__ == "__main__":
     with open(save_path, "w") as f:
         f.write("DCR Score, a value closer to 0.5 is better\n")
         f.write(f"{dataname}-{model}, DCR Score = {dcr_score}")
-
