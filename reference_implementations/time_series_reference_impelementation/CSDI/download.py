@@ -22,7 +22,7 @@ elif sys.argv[1] == "pm25":
         f.write(urlData)
     with zipfile.ZipFile(filename) as z:
         z.extractall("data/pm25")
-        
+
     def create_normalizer_pm25():
         df = pd.read_csv(
             "./data/pm25/Code/STMVL/SampleData/pm25_ground.txt",
@@ -37,4 +37,5 @@ elif sys.argv[1] == "pm25":
         path = "./data/pm25/pm25_meanstd.pk"
         with open(path, "wb") as f:
             pickle.dump([mean, std], f)
+
     create_normalizer_pm25()

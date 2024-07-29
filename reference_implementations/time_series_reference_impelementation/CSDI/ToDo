@@ -19,11 +19,11 @@
 [ToDo] Add description to the notebook
 [ToDo] Add the references to the notebook
 [ToDo] Revise the README.md
-
+[ToDo] Testing
 Environment Setup:
 
   conda create --name tsdiff --yes python=3.8 && conda activate tsdiff+
 
   pip install --editable "."
-  
+
   For tsdiff: pip unistall pykeops # cannot use pykeops on the cluster

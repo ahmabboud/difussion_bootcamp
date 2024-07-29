@@ -7,10 +7,43 @@ import pandas as pd
 from torch.utils.data import DataLoader, Dataset
 
 # 35 attributes which contains enough non-values
-attributes = ['DiasABP', 'HR', 'Na', 'Lactate', 'NIDiasABP', 'PaO2', 'WBC', 'pH', 'Albumin', 'ALT', 'Glucose', 'SaO2',
-              'Temp', 'AST', 'Bilirubin', 'HCO3', 'BUN', 'RespRate', 'Mg', 'HCT', 'SysABP', 'FiO2', 'K', 'GCS',
-              'Cholesterol', 'NISysABP', 'TroponinT', 'MAP', 'TroponinI', 'PaCO2', 'Platelets', 'Urine', 'NIMAP',
-              'Creatinine', 'ALP']
+attributes = [
+    "DiasABP",
+    "HR",
+    "Na",
+    "Lactate",
+    "NIDiasABP",
+    "PaO2",
+    "WBC",
+    "pH",
+    "Albumin",
+    "ALT",
+    "Glucose",
+    "SaO2",
+    "Temp",
+    "AST",
+    "Bilirubin",
+    "HCO3",
+    "BUN",
+    "RespRate",
+    "Mg",
+    "HCT",
+    "SysABP",
+    "FiO2",
+    "K",
+    "GCS",
+    "Cholesterol",
+    "NISysABP",
+    "TroponinT",
+    "MAP",
+    "TroponinI",
+    "PaCO2",
+    "Platelets",
+    "Urine",
+    "NIMAP",
+    "Creatinine",
+    "ALP",
+]
 
 
 def extract_hour(x):
@@ -82,7 +115,7 @@ class Physio_Dataset(Dataset):
             "./data/physio_missing" + str(missing_ratio) + "_seed" + str(seed) + ".pk"
         )
 
-        if os.path.isfile(path) == False:  # if datasetfile is none, create
+        if os.path.isfile(path):  # if datasetfile is none, create
             idlist = get_idlist()
             for id_ in idlist:
                 try:
@@ -142,7 +175,6 @@ class Physio_Dataset(Dataset):
 
 
 def get_dataloader(seed=1, nfold=None, batch_size=16, missing_ratio=0.1):
-
     # only to obtain total length of dataset
     dataset = Physio_Dataset(missing_ratio=missing_ratio, seed=seed)
     indlist = np.arange(len(dataset))
