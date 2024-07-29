@@ -1,2 +1,5 @@
 *.err
 *.out
+
+# Byte-compiled
+__pycache__/

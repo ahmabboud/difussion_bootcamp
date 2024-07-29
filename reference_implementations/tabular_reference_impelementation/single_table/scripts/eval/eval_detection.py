@@ -50,7 +50,7 @@ def reorder(real_data, syn_data, info):
     return new_real_data, new_syn_data, metadata
 
 
-def eval_detection(syn_path, real_path, info_path):
+def eval_detection(syn_path, real_path, info_path, dataname, model):
     syn_data = pd.read_csv(syn_path)
     real_data = pd.read_csv(real_path)
 
