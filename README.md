@@ -23,8 +23,8 @@ Here is the list of the covered topics:
   - TabSyn for Tabular Data Generation and Imputation
   - ClavaDDPM for Multi-relational Tabular Data Generation
 - Time series
-    - CSDI for Time Series Forecasting and Imputation
-    - TS-Diff for Time Series Forecasting, Synthesizing and Refining other Forecasting Models
+  - CSDI for Time Series Forecasting and Imputation
+  - TS-Diff for Time Series Forecasting, Synthesizing and Refining other Forecasting Models
 
 ## Getting Started
 
@@ -34,13 +34,11 @@ To get started with this bootcamp:
 3. Begin with each topic in the `reference_implementations/` directory, as guided by the README files.
 
 ## License
-*Add appropriate LICENSE for this bootcamp in the main directory.*
 This project is licensed under the terms of the [LICENSE] file located in the root directory of this repository.
 
 ## Contribution
-*Add appropriate CONTRIBUTING.md for this bootcamp in the main directory.*
 To get started with contributing to our project, please read our [CONTRIBUTING.md] guide.
 
 ## Contact Information
 
-For more information or help with navigating this repository, please contact [Vector AI ENG Team/Individual] at [Contact Email].
+For more information or help with navigating this repository, please contact Vector AI ENG Team at sana.ayromlou@vectorinstitute.ai .

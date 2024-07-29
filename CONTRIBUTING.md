@@ -21,6 +21,3 @@ Pre-commit hooks apply [black](https://black.readthedocs.io/en/stable/the_black_
 
 We use [ruff](https://docs.astral.sh/ruff/) for code formatting and static code
 analysis. Ruff checks various rules including [flake8](https://docs.astral.sh/ruff/faq/#how-does-ruff-compare-to-flake8). The pre-commit hooks show errors which you need to fix before submitting a PR.
-
-Last but not the least, we use type hints in our code which is then checked using
-[mypy](https://mypy.readthedocs.io/en/stable/).
