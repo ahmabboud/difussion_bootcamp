@@ -1,0 +1,144 @@
+Sat Jul 27 21:28:00 EDT 2024
+Running on node gpu078
+Chosen port for jupyter server 5896
+Saving logs in /h/yaspar/Documents/GitHub/diffusion_model_bootcamp
+Starting jupyter notebook...
+Fail to get yarn configuration. /fs01/projects/aieng/diffusion_bootcamp/env/diffusion-models-bootcamp-z7DAirMd-py3.9/lib/python3.9/site-packages/jupyterlab/staging/yarn.js:4
+(()=>{var Qge=Object.create;var AS=Object.defineProperty;var bge=Object.getOwnPropertyDescriptor;var Sge=Object.getOwnPropertyNames;var vge=Object.getPrototypeOf,xge=Object.prototype.hasOwnProperty;var J=(r=>typeof require<"u"?require:typeof Proxy<"u"?new Proxy(r,{get:(e,t)=>(typeof require<"u"?require:e)[t]}):r)(function(r){if(typeof require<"u")return require.apply(this,arguments);throw new Error('Dynamic require of "'+r+'" is not supported')});var Pge=(r,e)=>()=>(r&&(e=r(r=0)),e);var w=(r,e)=>()=>(e||r((e={exports:{}}).exports,e),e.exports),ut=(r,e)=>{for(var t in e)AS(r,t,{get:e[t],enumerable:!0})},Dge=(r,e,t,i)=>{if(e&&typeof e=="object"||typeof e=="function")for(let n of Sge(e))!xge.call(r,n)&&n!==t&&AS(r,n,{get:()=>e[n],enumerable:!(i=bge(e,n))||i.enumerable});return r};var Pe=(r,e,t)=>(t=r!=null?Qge(vge(r)):{},Dge(e||!r||!r.__esModule?AS(t,"default",{value:r,e
+
+SyntaxError: Unexpected token {
+    at createScript (vm.js:80:10)
+    at Object.runInThisContext (vm.js:139:10)
+    at Module._compile (module.js:616:28)
+    at Object.Module._extensions..js (module.js:663:10)
+    at Module.load (module.js:565:32)
+    at tryModuleLoad (module.js:505:12)
+    at Function.Module._load (module.js:497:3)
+    at Function.Module.runMain (module.js:693:10)
+    at startup (bootstrap_node.js:188:16)
+    at bootstrap_node.js:609:3
+
+[I 2024-07-27 21:28:05.304 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-07-27 21:28:05.311 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-07-27 21:28:05.317 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-07-27 21:28:05.322 ServerApp] notebook | extension was successfully linked.
+[I 2024-07-27 21:28:06.614 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-07-27 21:28:06.706 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-07-27 21:28:06.709 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-07-27 21:28:06.711 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-07-27 21:28:06.739 LabApp] JupyterLab extension loaded from /projects/aieng/diffusion_bootcamp/env/diffusion-models-bootcamp-z7DAirMd-py3.9/lib/python3.9/site-packages/jupyterlab
+[I 2024-07-27 21:28:06.739 LabApp] JupyterLab application directory is /fs01/projects/aieng/diffusion_bootcamp/env/diffusion-models-bootcamp-z7DAirMd-py3.9/share/jupyter/lab
+[I 2024-07-27 21:28:06.742 LabApp] Extension Manager is 'pypi'.
+[I 2024-07-27 21:28:06.767 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-07-27 21:28:06.774 ServerApp] notebook | extension was successfully loaded.
+[I 2024-07-27 21:28:06.776 ServerApp] Serving notebooks from local directory: /fs01/home/yaspar/Documents/GitHub/diffusion_model_bootcamp/reference_implementations/tabular_reference_impelementation/single_table
+[I 2024-07-27 21:28:06.777 ServerApp] Jupyter Server 2.14.2 is running at:
+[I 2024-07-27 21:28:06.777 ServerApp] http://gpu078:5896/tree?token=5e0ca06e3d2728a926bad77acf24717f8b2387a65b0b336b
+[I 2024-07-27 21:28:06.777 ServerApp]     http://127.0.0.1:5896/tree?token=5e0ca06e3d2728a926bad77acf24717f8b2387a65b0b336b
+[I 2024-07-27 21:28:06.777 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-07-27 21:28:06.808 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///fs01/home/yaspar/.local/share/jupyter/runtime/jpserver-28805-open.html
+    Or copy and paste one of these URLs:
+        http://gpu078:5896/tree?token=5e0ca06e3d2728a926bad77acf24717f8b2387a65b0b336b
+        http://127.0.0.1:5896/tree?token=5e0ca06e3d2728a926bad77acf24717f8b2387a65b0b336b
+Unable to connect to VS Code server: Error in request.
+Error: connect ENOENT /run/user/12832/vscode-ipc-79a4a088-8fa7-492a-bd36-0b903975d88a.sock
+    at PipeConnectWrap.afterConnect [as oncomplete] (node:net:1595:16) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'connect',
+  address: '/run/user/12832/vscode-ipc-79a4a088-8fa7-492a-bd36-0b903975d88a.sock'
+}
+[I 2024-07-27 21:28:07.522 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-07-27 21:29:42.631 ServerApp] 404 GET /hub/api (@172.17.15.246) 64.03ms referer=None
+[I 2024-07-27 21:29:42.635 ServerApp] 302 GET / (@172.17.15.246) 0.73ms
+[I 2024-07-27 21:29:42.641 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 1.14ms
+[W 2024-07-27 21:29:44.110 ServerApp] 404 GET /hub/api (@172.17.15.246) 3.23ms referer=None
+[I 2024-07-27 21:29:44.114 ServerApp] 302 GET / (@172.17.15.246) 0.99ms
+[I 2024-07-27 21:29:44.117 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 0.76ms
+[W 2024-07-27 21:29:53.799 ServerApp] 404 GET /hub/api (@172.17.15.246) 4.17ms referer=None
+[I 2024-07-27 21:29:53.805 ServerApp] 302 GET / (@172.17.15.246) 0.69ms
+[I 2024-07-27 21:29:53.809 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 0.94ms
+[I 2024-07-27 21:29:53.911 ServerApp] Kernel started: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-27 21:29:55.227 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-27 21:29:56.250 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.246) 4.00ms referer=None
+[W 2024-07-27 21:29:56.255 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.246) 3.99ms referer=None
+[W 2024-07-27 21:29:56.257 ServerApp] 404 GET /hub/api (@172.17.15.246) 5.60ms referer=None
+[W 2024-07-27 21:29:56.259 ServerApp] 404 GET /hub/api (@172.17.15.246) 7.34ms referer=None
+[I 2024-07-27 21:29:56.333 ServerApp] 302 GET / (@172.17.15.246) 0.97ms
+[I 2024-07-27 21:29:56.349 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 1.47ms
+[W 2024-07-27 21:29:56.362 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.246) 2.09ms referer=None
+[W 2024-07-27 21:29:56.365 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.246) 2.13ms referer=None
+[W 2024-07-27 22:01:11.558 ServerApp] 404 GET /hub/api (@172.17.15.246) 6.31ms referer=None
+[I 2024-07-27 22:01:11.878 ServerApp] 302 GET / (@172.17.15.246) 1.28ms
+[I 2024-07-27 22:01:12.470 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 1.88ms
+[W 2024-07-27 22:01:13.577 ServerApp] 404 GET /hub/api (@172.17.15.246) 2.41ms referer=None
+[I 2024-07-27 22:01:13.931 ServerApp] 302 GET / (@172.17.15.246) 1.06ms
+[I 2024-07-27 22:01:14.016 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 1.24ms
+[I 2024-07-27 22:01:14.393 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-27 22:01:15.606 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.246) 3.60ms referer=None
+[W 2024-07-27 22:01:15.607 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.246) 4.67ms referer=None
+[W 2024-07-27 22:01:15.610 ServerApp] 404 GET /hub/api (@172.17.15.246) 2.38ms referer=None
+[W 2024-07-27 22:01:15.612 ServerApp] 404 GET /hub/api (@172.17.15.246) 3.59ms referer=None
+[I 2024-07-27 22:01:16.137 ServerApp] 302 GET / (@172.17.15.246) 1.00ms
+[I 2024-07-27 22:01:16.281 JupyterNotebookApp] 302 GET /tree? (@172.17.15.246) 1.49ms
+[W 2024-07-27 22:01:16.404 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.246) 2.71ms referer=None
+[W 2024-07-27 22:01:16.410 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.246) 2.72ms referer=None
+[W 2024-07-27 22:42:36.840 ServerApp] 404 GET /hub/api (@172.17.15.237) 6.97ms referer=None
+[I 2024-07-27 22:42:37.291 ServerApp] 302 GET / (@172.17.15.237) 1.11ms
+[I 2024-07-27 22:42:37.443 JupyterNotebookApp] 302 GET /tree? (@172.17.15.237) 1.61ms
+[W 2024-07-27 22:42:38.593 ServerApp] 404 GET /hub/api (@172.17.15.237) 3.09ms referer=None
+[I 2024-07-27 22:42:38.598 ServerApp] 302 GET / (@172.17.15.237) 1.07ms
+[I 2024-07-27 22:42:38.604 JupyterNotebookApp] 302 GET /tree? (@172.17.15.237) 1.22ms
+[I 2024-07-27 22:42:38.651 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-27 22:42:39.532 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.237) 3.53ms referer=None
+[W 2024-07-27 22:42:39.535 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.237) 5.71ms referer=None
+[W 2024-07-27 22:42:39.540 ServerApp] 404 GET /hub/api (@172.17.15.237) 4.60ms referer=None
+[W 2024-07-27 22:42:39.541 ServerApp] 404 GET /hub/api (@172.17.15.237) 4.73ms referer=None
+[I 2024-07-27 22:42:39.619 ServerApp] 302 GET / (@172.17.15.237) 0.93ms
+[I 2024-07-27 22:42:39.735 JupyterNotebookApp] 302 GET /tree? (@172.17.15.237) 1.39ms
+[W 2024-07-27 22:42:39.777 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.237) 1.01ms referer=None
+[W 2024-07-27 22:42:39.789 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.237) 1.24ms referer=None
+[W 2024-07-27 23:28:09.411 ServerApp] 404 GET /hub/api (@172.17.15.236) 4.21ms referer=None
+[I 2024-07-27 23:28:09.610 ServerApp] 302 GET / (@172.17.15.236) 1.08ms
+[I 2024-07-27 23:28:09.981 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.67ms
+[W 2024-07-27 23:28:10.904 ServerApp] 404 GET /hub/api (@172.17.15.236) 2.81ms referer=None
+[I 2024-07-27 23:28:11.266 ServerApp] 302 GET / (@172.17.15.236) 1.03ms
+[I 2024-07-27 23:28:11.322 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.88ms
+[I 2024-07-27 23:28:11.729 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-27 23:28:13.094 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.236) 4.16ms referer=None
+[W 2024-07-27 23:28:13.098 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.236) 3.75ms referer=None
+[W 2024-07-27 23:28:13.100 ServerApp] 404 GET /hub/api (@172.17.15.236) 4.78ms referer=None
+[W 2024-07-27 23:28:13.101 ServerApp] 404 GET /hub/api (@172.17.15.236) 5.88ms referer=None
+[I 2024-07-27 23:28:13.199 ServerApp] 302 GET / (@172.17.15.236) 0.93ms
+[I 2024-07-27 23:28:13.401 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.55ms
+[W 2024-07-27 23:28:13.437 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.236) 2.99ms referer=None
+[W 2024-07-27 23:28:13.458 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.236) 1.36ms referer=None
+[W 2024-07-27 23:40:01.797 ServerApp] 404 GET /hub/api (@172.17.15.236) 2.99ms referer=None
+[I 2024-07-27 23:40:02.232 ServerApp] 302 GET / (@172.17.15.236) 1.12ms
+[I 2024-07-27 23:40:02.466 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.18ms
+[W 2024-07-27 23:40:03.842 ServerApp] 404 GET /hub/api (@172.17.15.236) 3.04ms referer=None
+[I 2024-07-27 23:40:03.869 ServerApp] 302 GET / (@172.17.15.236) 0.91ms
+[I 2024-07-27 23:40:03.882 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.22ms
+[I 2024-07-27 23:40:03.941 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-27 23:40:05.962 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.236) 3.15ms referer=None
+[W 2024-07-27 23:40:05.966 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.236) 3.80ms referer=None
+[W 2024-07-27 23:40:05.969 ServerApp] 404 GET /hub/api (@172.17.15.236) 5.49ms referer=None
+[W 2024-07-27 23:40:05.970 ServerApp] 404 GET /hub/api (@172.17.15.236) 6.43ms referer=None
+[I 2024-07-27 23:40:06.478 ServerApp] 302 GET / (@172.17.15.236) 1.09ms
+[I 2024-07-27 23:40:06.686 JupyterNotebookApp] 302 GET /tree? (@172.17.15.236) 1.42ms
+[W 2024-07-27 23:40:06.832 ServerApp] 404 GET /nbextensions/jupyterlab-plotly/extension.js (@172.17.15.236) 2.10ms referer=None
+[W 2024-07-27 23:40:07.024 ServerApp] 404 GET /nbextensions/jupyter-js-widgets/extension.js (@172.17.15.236) 2.99ms referer=None
+[I 2024-07-28 00:47:02.987 ServerApp] Kernel restarted: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-28 00:47:03.004 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[W 2024-07-28 00:47:05.237 ServerApp] Got events for closed stream <zmq.eventloop.zmqstream.ZMQStream object at 0x7eff489689a0>
+[I 2024-07-28 00:48:28.902 ServerApp] Kernel restarted: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-28 00:48:28.915 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[I 2024-07-28 00:49:47.743 ServerApp] Kernel restarted: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-28 00:49:47.759 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+[I 2024-07-28 00:50:47.753 ServerApp] Kernel interrupted: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-28 00:50:53.099 ServerApp] Kernel restarted: fc8c64fb-f5ff-462a-9ffc-44e396e58d96
+[I 2024-07-28 00:50:53.112 ServerApp] Connecting to kernel fc8c64fb-f5ff-462a-9ffc-44e396e58d96.
+slurmstepd: error: *** JOB 13006336 ON gpu078 CANCELLED AT 2024-07-28T01:27:58 ***

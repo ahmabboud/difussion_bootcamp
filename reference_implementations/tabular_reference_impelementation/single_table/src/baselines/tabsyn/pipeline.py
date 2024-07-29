@@ -203,7 +203,7 @@ class TabSyn:
 
             print("Successfully saved pretrained embeddings on disk!")
 
-    def load_vae_embeddings(self, vae_ckpt_dir):
+    def load_latent_embeddings(self, vae_ckpt_dir):
         embedding_save_path = os.path.join(vae_ckpt_dir, "train_z.npy")
         train_z = torch.tensor(np.load(embedding_save_path)).float()
 
@@ -288,19 +288,17 @@ class TabSyn:
         self.dif_model = model
         self.pre_decoder = pre_decoder
 
-    def sample(self, train_z, info, num_inverse, cat_inverse, save_path):
+    def sample(self, num_samples, in_dim, mean_input_emb, info, num_inverse, cat_inverse, save_path):
         '''
             Generating samples    
         '''
         self.pre_decoder.cpu()
         info["pre_decoder"] = self.pre_decoder
 
-        in_dim = train_z.shape[1] 
-        mean = train_z.mean(0)
+        mean = mean_input_emb
 
         start_time = time.time()
 
-        num_samples = train_z.shape[0]
         sample_dim = in_dim
 
         x_next = sample(self.dif_model.denoise_fn_D, num_samples, sample_dim)
