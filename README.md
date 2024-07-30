@@ -30,7 +30,15 @@ Here is the list of the covered topics:
 
 To get started with this bootcamp:
 1. Clone this repository to your machine.
-2. *Include setup and installation instructions here. For additional documentation, refer to the `docs/` directory.*
+2. Activate your python environment. If you are using Vector's cluster, you can activate it by refering to the `docs/technical_onboarding`, otherwise you can create a new environment using the following command:
+```bash
+pip install --upgrade pip poetry
+poetry env use [name of your python] #python3.9
+source $(poetry env info --path)/bin/activate
+poetry install --with "synthcity, tabsyn, clavaddpm, csdi, tsdiff"
+# Install the kernel for jupyter (only need to do it once for jupyter notebook kernel)
+ipython kernel install --user --name=diffusion_models
+```
 3. Begin with each topic in the `reference_implementations/` directory, as guided by the README files.
 
 ## License
