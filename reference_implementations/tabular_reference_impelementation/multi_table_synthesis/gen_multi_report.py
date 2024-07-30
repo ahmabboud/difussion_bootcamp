@@ -131,7 +131,7 @@ def get_long_range(real_tables, syn_tables, dataset_meta):
 def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
     print(f'generating multi-table report for {syn_data_path}')
 
-    tables, relation_order, dataset_meta = load_multi_table(real_data_path)
+    tables, relation_order, dataset_meta = load_multi_table(real_data_path, verbose=False)
     multi_metadata = get_multi_metadata(tables, relation_order)
     
     if syn_data_type == 'baseline':
@@ -185,8 +185,8 @@ def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
 
     all_avg_score /= num_scores
 
-    print('Long Range Scores:', avg_scores)
-    print('All avg scores: ', all_avg_score)
+    # print('Long Range Scores:', avg_scores)
+    # print('All avg scores: ', all_avg_score)
     
     result = {}
     result['hop_relation'] = hop_relation

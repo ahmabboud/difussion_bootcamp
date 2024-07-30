@@ -142,7 +142,8 @@ def pipeline_process_data(
         data_df, 
         info, 
         ratio=0.9,
-        save=False
+        save=False,
+        verbose=True
     ):
     num_data = data_df.shape[0]
 
@@ -172,10 +173,11 @@ def pipeline_process_data(
     if ratio < 1:
         test_df.columns = range(len(test_df.columns))
 
-    if ratio < 1:
-        print(name, train_df.shape, test_df.shape, data_df.shape)
-    else:
-        print(name, train_df.shape, data_df.shape)
+    if verbose:
+        if ratio < 1:
+            print("Table name: {}, Train dataframe shape: {}, Test dataframe shape: {}, Total dataframe shape: {}".format(name, train_df.shape, test_df.shape, data_df.shape))
+        else:
+            print("Table name: {}, Train dataframe shape: {}, Total dataframe shape: {}".format(name, train_df.shape, data_df.shape))
 
     col_info = {}
     
@@ -260,8 +262,12 @@ def pipeline_process_data(
         if ratio < 1:
             test_df.to_csv(f'synthetic/{name}/test.csv', index = False)
 
-    print('Numerical', X_num_train.shape)
-    print('Categorical', X_cat_train.shape)
+    if verbose:
+        print('Numerical', X_num_train.shape)
+        print('Categorical', X_cat_train.shape)
+
+        print("Numerical data shape: {}".format(X_num_train.shape))
+        print("Categorical data shape: {}".format(X_cat_train.shape))
 
     info['column_names'] = column_names
     info['train_num'] = train_df.shape[0]
@@ -307,21 +313,22 @@ def pipeline_process_data(
         with open(f'{save_dir}/info.json', 'w') as file:
             json.dump(info, file, indent=4)
 
-    print(f'Processing {name} Successfully!')
+    if verbose:
+        print(f'Processing {name} table successfully!\n')
 
-    print(name)
-    print('Total', info['train_num'] + info['test_num'] if ratio < 1 else info['train_num'])
-    print('Train', info['train_num'])
-    if ratio < 1:
-        print('Test', info['test_num'])
-    if info['task_type'] == 'regression':
-        num = len(info['num_col_idx'] + info['target_col_idx'])
-        cat = len(info['cat_col_idx'])
-    else:
-        cat = len(info['cat_col_idx'] + info['target_col_idx'])
-        num = len(info['num_col_idx'])
-    print('Num', num)
-    print('Cat', cat)
+    # print(name)
+    # print('Total', info['train_num'] + info['test_num'] if ratio < 1 else info['train_num'])
+    # print('Train', info['train_num'])
+    # if ratio < 1:
+    #     print('Test', info['test_num'])
+    # if info['task_type'] == 'regression':
+    #     num = len(info['num_col_idx'] + info['target_col_idx'])
+    #     cat = len(info['cat_col_idx'])
+    # else:
+    #     cat = len(info['cat_col_idx'] + info['target_col_idx'])
+    #     num = len(info['num_col_idx'])
+    # print('Num', num)
+    # print('Cat', cat)
 
     data = {
         'df': {
@@ -344,7 +351,7 @@ def pipeline_process_data(
 
 
 
-def load_multi_table(data_dir):
+def load_multi_table(data_dir, verbose=True):
     dataset_meta = json.load(open(os.path.join(data_dir, 'dataset_meta.json'), 'r'))
 
     relation_order = dataset_meta['relation_order']
@@ -372,7 +379,8 @@ def load_multi_table(data_dir):
             data_df=df_no_id,
             info=info,
             ratio=1,
-            save=False
+            save=False,
+            verbose=verbose
         )
         tables[table]['info'] = info
 
@@ -420,11 +428,11 @@ def sample_from_diffusion(
     K = np.array(dataset.get_category_sizes('train'))
     if len(K) == 0 or T_dict['cat_encoding'] == 'one-hot':
         K = np.array([0])
-    print(K)
+    # print(K)
 
     d_in = np.sum(K) + num_numerical_features
     model_params['d_in'] = d_in
-    print(d_in)
+    # print(d_in)
     _, empirical_class_dist = torch.unique(torch.from_numpy(dataset.y['train']), return_counts=True)
     x_gen, y_gen = diffusion.sample_all(sample_size, sample_batch_size, empirical_class_dist.float(), ddim=False)
     X_gen, y_gen = x_gen.numpy(), y_gen.numpy()
@@ -457,7 +465,7 @@ def sample_from_diffusion(
             uniq_vals = np.unique(X_num_real[:, col])
             if len(uniq_vals) <= 32 and ((uniq_vals - np.round(uniq_vals)) == 0).all():
                 disc_cols.append(col)
-        print("Discrete cols:", disc_cols)
+        # print("Discrete cols:", disc_cols)
         if model_params['is_y_cond'] == 'concat':
             y_gen = X_num[:, 0]
             X_num = X_num[:, 1:]
@@ -517,7 +525,7 @@ def train_model(
         df_info=df_info,
         std=0
     )
-    print(dataset.n_features)
+    # print(dataset.n_features)
     train_loader = lib.prepare_fast_dataloader(
         dataset, 
         split='train', 
@@ -530,14 +538,14 @@ def train_model(
     K = np.array(dataset.get_category_sizes('train'))
     if len(K) == 0 or T_dict['cat_encoding'] == 'one-hot':
         K = np.array([0])
-    print(K)
+    # print(K)
 
     num_numerical_features = dataset.X_num['train'].shape[1] if dataset.X_num is not None else 0
     d_in = np.sum(K) + num_numerical_features
     model_params['d_in'] = d_in
-    print(d_in)
+    # print(d_in)
 
-    print(model_params)
+    print("Model params: {}".format(model_params))
     model = get_model(
         model_type,
         model_params
@@ -926,7 +934,7 @@ def conditional_sampling_by_group_size(
             uniq_vals = np.unique(X_num_real[:, col])
             if len(uniq_vals) <= 32 and ((uniq_vals - np.round(uniq_vals)) == 0).all():
                 disc_cols.append(col)
-        print("Discrete cols:", disc_cols)
+        # print("Discrete cols:", disc_cols)
         if is_y_cond == 'concat':
             y_gen = X_num[:, 0]
             X_num = X_num[:, 1:]

@@ -260,7 +260,7 @@ def pair_clustering_keep_id(
     child_group_lengths = np.array([len(group) for group in child_group_data], dtype=int)
     num_clusters = min(num_clusters, len(cluster_data))
 
-    print('clustering')
+    # print('clustering')
     if clustering_method == 'kmeans':
         kmeans = KMeans(n_clusters=num_clusters, n_init='auto', init='k-means++')
         kmeans.fit(cluster_data)
@@ -316,7 +316,7 @@ def pair_clustering_keep_id(
 
     # Compute the average agree rate across all groups
     average_agree_rate = np.mean(agree_rates)
-    print('average agree rate: ', average_agree_rate)
+    print('Average agree rate: ', average_agree_rate)
 
     group_assignment = np.repeat(group_cluster_labels, child_group_lengths, axis=0).reshape((-1, 1))
 
@@ -392,7 +392,7 @@ def pair_clustering_keep_id(
         'size': len(set(parent_data_clusters.flatten()))
     }
 
-    print('num clusters: ', len(set(parent_data_clusters.flatten())))
+    print('Number of cluster centers: ', len(set(parent_data_clusters.flatten())))
 
     parent_domain_dict[relation_cluster_name] = new_col_entry.copy()
     child_domain_dict[relation_cluster_name] = new_col_entry.copy()

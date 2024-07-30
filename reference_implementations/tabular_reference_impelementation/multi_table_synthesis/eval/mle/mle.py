@@ -397,7 +397,10 @@ def _evaluate_multi_classification(train, test, info):
                         tmp.append(pred_prob[:, np.newaxis])
                     j += 1
 
-            roc_auc = roc_auc_score(np.eye(size)[y_valid], np.hstack(tmp), multi_class='ovr')
+            try:
+                roc_auc = roc_auc_score(np.eye(size)[y_valid], np.hstack(tmp), multi_class='ovr')
+            except:
+                roc_auc = 0.5
 
             results.append(
                 {   

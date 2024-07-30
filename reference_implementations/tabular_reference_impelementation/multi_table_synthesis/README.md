@@ -1,11 +1,4 @@
 # ClavaDDPM Refactoring Notes
-ToDo:
-[x] Clean up python venv for conda
-[] Test python venv on vector, especially with poetry
-[x] Add notes and visualization to notebook
-[] Measure runtime for training and sampling
-[] Hyperparameters tuning for custom dataset
-
 
 ## Setup python venv
 ```bash
