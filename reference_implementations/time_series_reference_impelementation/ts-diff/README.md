@@ -2,6 +2,10 @@
 
 This codebase contains the implementation of the NeurIPS 2023 paper [*Predict, Refine, Synthesize: Self-Guiding Diffusion Models for Probabilistic Time Series Forecasting*](https://arxiv.org/abs/2307.11494). In this paper, they propose *TSDiff*, an unconditional diffusion model for time series. This proposed self-guidance mechanism enables conditioning TSDiff for downstream tasks during inference, without requiring auxiliary networks or altering the training procedure. Furthermore, the refinement scheme leverages the implicit density learned by the diffusion model to iteratively refine the predictions of base forecasters. Finally, they demonstrate the high quality of the synthetic time series by training downstrain models solely on generated data and introducing the *Linear Predictive Score (LPS)*.
 
+# TSDiff: An Unconditional Diffusion Model for Time Series
+
+This repository contains the implementation of the NeurIPS 2023 paper [*Predict, Refine, Synthesize: Self-Guiding Diffusion Models for Probabilistic Time Series Forecasting*]. In this paper, *TSDiff*, an unconditional diffusion model, is designed for time series data. 
+
 ## Overview
 
 The primary contributions of this work include:
