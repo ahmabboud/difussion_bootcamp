@@ -36,7 +36,9 @@ pip install --upgrade pip poetry
 poetry env use [name of your python] #python3.9
 source $(poetry env info --path)/bin/activate
 poetry install --with "synthcity, tabsyn, clavaddpm, csdi, tsdiff"
-# Install the kernel for jupyter (only need to do it once for jupyter notebook kernel)
+# If your system is not compatible with pykeops, you can uninstall it using the following command
+pip uninstall pykeops 
+# Install the kernel for jupyter (only need to do it once)
 ipython kernel install --user --name=diffusion_models
 ```
 3. Begin with each topic in the `reference_implementations/` directory, as guided by the README files.
