@@ -224,6 +224,7 @@ def clava_synthesizing(tables, relation_order, save_dir, all_group_lengths_prob_
     for key, val in cleaned_tables.items():
         table_dir = os.path.join(
             configs['general']['workspace_dir'], 
+            configs['general']['exp_name'], 
             key, 
             f'{configs["general"]["sample_prefix"]}_final'
         )
@@ -297,6 +298,7 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
         for table, meta in dataset_meta['tables'].items():
             table_dir = os.path.join(
                 configs['general']['workspace_dir'], 
+                configs['general']['exp_name'], 
                 table, 
                 f'{configs["general"]["sample_prefix"]}_final'
             )
@@ -304,7 +306,7 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
     
     report = gen_multi_report(
         configs['general']['data_dir'],
-        configs['general']['workspace_dir'],
+        os.path.join(configs['general']['workspace_dir'], configs['general']['exp_name']),
         'clava'
     )
     
