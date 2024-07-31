@@ -56,7 +56,7 @@ def preprocess_news(info_path, raw_data_dir):
     with open(f"{info_path}/{name}.json", "w") as file:
         json.dump(info, file, indent=4)
 
-def pre_proceed_default(data_df):
+def preprocess_default(data_df):
     # Define the mappings
     sex_mapping = {1: 'male', 2: 'female'}
     education_mapping = {
@@ -173,7 +173,7 @@ def process_data(name, info_path, data_dir):
         data_df = data_df.drop("ID", axis=1)
 
     if name == "default":
-        data_df = pre_proceed_default(data_df)
+        data_df = preprocess_default(data_df)
 
     num_data = data_df.shape[0]
 
