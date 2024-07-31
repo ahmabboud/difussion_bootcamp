@@ -54,16 +54,16 @@ def clava_clustering(tables, relation_order, save_dir, configs):
         }
         pickle.dump(cluster_ckpt, open(os.path.join(save_dir, 'cluster_ckpt.pkl'), 'wb'))
 
+    for parent, child in relation_order:
+        if parent is None:
+            tables[child]['df']['placeholder'] = list(range(len(tables[child]['df'])))
+
     return tables, all_group_lengths_prob_dicts
 
 def clava_training(tables, relation_order, save_dir, configs):
     models = {}
     for parent, child in relation_order:
-        if os.path.exists(os.path.join(save_dir, f'models/{parent}_{child}_ckpt.pkl')):
-            print(f'{parent} -> {child} checkpoint found, loading...')
-            models[(parent, child)] = pickle.load(open(os.path.join(save_dir, f'models/{parent}_{child}_ckpt.pkl'), 'rb'))
-            continue
-        print(f'Training {parent} -> {child}')
+        print(f'Training {parent} -> {child} model from scratch')
         df_with_cluster = tables[child]['df']
         id_cols = [col for col in df_with_cluster.columns if '_id' in col]
         df_without_id = df_with_cluster.drop(columns=id_cols)
@@ -76,48 +76,24 @@ def clava_training(tables, relation_order, save_dir, configs):
         )
         models[(parent, child)] = result
         pickle.dump(result, open(os.path.join(save_dir, f'models/{parent}_{child}_ckpt.pkl'), 'wb'))
+    
+    return models
 
+def clava_load_pretrained(relation_order, save_dir):
+    models = {}
     for parent, child in relation_order:
-        if parent is None:
-            tables[child]['df']['placeholder'] = list(range(len(tables[child]['df'])))
+        assert os.path.exists(os.path.join(save_dir, f'models/{parent}_{child}_ckpt.pkl'))
+        print(f'{parent} -> {child} checkpoint found, loading...')
+        models[(parent, child)] = pickle.load(open(os.path.join(save_dir, f'models/{parent}_{child}_ckpt.pkl'), 'rb'))
     
-    return tables, models
+    return models
 
-def clava_synthesizing(tables, relation_order, save_dir, all_group_lengths_prob_dicts, models, configs, sample_scale=1):
-    all_exist = True
-    for key, val in tables.items():
-        table_dir = os.path.join(
-            configs['general']['workspace_dir'], 
-            key, 
-            f'{configs["general"]["sample_prefix"]}_final'
-        )
-        if not os.path.exists(os.path.join(table_dir, f'{key}_synthetic.csv')):
-            all_exist = False
-            break
-    if all_exist:
-        print('Synthetic tables found, loading...')
-        synthetic_tables = {}
-        for key, val in tables.items():
-            table_dir = os.path.join(
-                configs['general']['workspace_dir'], 
-                key, 
-                f'{configs["general"]["sample_prefix"]}_final'
-            )
-            synthetic_tables[key] = pd.read_csv(os.path.join(table_dir, f'{key}_synthetic.csv'))
-        return synthetic_tables, 0, 0
-    
+def clava_synthesizing(tables, relation_order, save_dir, all_group_lengths_prob_dicts, models, configs, sample_scale=1):   
     synthesizing_start_time = time.time()
     synthetic_tables = {}
-    if os.path.exists(os.path.join(save_dir, 'before_matching/synthetic_tables.pkl')):
-        print('Synthetic tables found, loading...')
-        synthetic_tables = pickle.load(open(os.path.join(save_dir, 'before_matching/synthetic_tables.pkl'), 'rb'))
 
     # Synthesize
     for parent, child in relation_order:
-        if (parent, child) in synthetic_tables:
-            print(f'{parent} -> {child} synthetic table found, skip...')
-            print('---------------------------------------------------')
-            continue
         print(f'Generating {parent} -> {child}')
         result = models[(parent, child)]
         df_with_cluster = tables[child]['df']
@@ -248,6 +224,7 @@ def clava_synthesizing(tables, relation_order, save_dir, all_group_lengths_prob_
     for key, val in cleaned_tables.items():
         table_dir = os.path.join(
             configs['general']['workspace_dir'], 
+            configs['general']['exp_name'], 
             key, 
             f'{configs["general"]["sample_prefix"]}_final'
         )
@@ -256,6 +233,20 @@ def clava_synthesizing(tables, relation_order, save_dir, all_group_lengths_prob_
 
     return cleaned_tables, synthesizing_time_spent, matching_time_spent
 
+def clava_load_synthesized_data(table_keys, table_dir):
+    all_exist = True
+    for key in table_keys:
+        if not os.path.exists(os.path.join(table_dir, key, '_final', f'{key}_synthetic.csv')):
+            all_exist = False
+            break
+    assert all_exist, 'Cannot load pre-synthesized data! Please run sampling from scratch.'
+    print('Synthetic tables found, loading...')
+    synthetic_tables = {}
+    for key in table_keys:
+        synthetic_tables[key] = pd.read_csv(os.path.join(table_dir, key, '_final', f'{key}_synthetic.csv'))
+    print('Synethic tables loaded!')
+    return synthetic_tables
+    
 def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None):
     metadata = MultiTableMetadata()
     for table_name, val in tables.items():
@@ -307,6 +298,7 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
         for table, meta in dataset_meta['tables'].items():
             table_dir = os.path.join(
                 configs['general']['workspace_dir'], 
+                configs['general']['exp_name'], 
                 table, 
                 f'{configs["general"]["sample_prefix"]}_final'
             )
@@ -314,7 +306,7 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
     
     report = gen_multi_report(
         configs['general']['data_dir'],
-        configs['general']['workspace_dir'],
+        os.path.join(configs['general']['workspace_dir'], configs['general']['exp_name']),
         'clava'
     )
     

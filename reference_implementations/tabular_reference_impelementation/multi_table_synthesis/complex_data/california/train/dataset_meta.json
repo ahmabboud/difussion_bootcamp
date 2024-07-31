@@ -1,1 +1,0 @@
-{"relation_order": [[null, "household"], ["household", "individual"]], "tables": {"household": {"children": ["individual"], "parents": []}, "individual": {"children": [], "parents": ["household"]}}}

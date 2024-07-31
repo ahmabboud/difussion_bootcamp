@@ -1,8 +1,8 @@
 {
     "general": {
-        "data_dir": "complex_data/california_20/train",
-        "exp_name": "california_20_debug",
-        "workspace_dir": "clavaDDPM_workspace/california_20_debug",
+        "data_dir": "../../../project_dir/raw_data/california_20/train",
+        "exp_name": "california_20",
+        "workspace_dir": "../../../project_dir/clavaDDPM/",
         "sample_prefix": ""
     },
     "clustering" : {
@@ -24,7 +24,7 @@
         "dropout": 0.0,
         "num_timesteps": 2000,
         "model_type": "mlp",
-        "iterations": 10000,
+        "iterations": 1,
         "batch_size": 4096,
         "lr": 6e-4,
         "gaussian_loss_type": "mse",
@@ -51,6 +51,6 @@
         "no_matching": false
     },
     "debug": {
-        "sample_scale": 0.1
+        "sample_scale": 0.0005
     }
 }
