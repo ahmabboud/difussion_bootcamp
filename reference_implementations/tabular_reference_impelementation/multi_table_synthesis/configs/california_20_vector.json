@@ -2,7 +2,7 @@
     "general": {
         "data_dir": "/fs01/projects/aieng/diffusion_bootcamp/data/tabular/raw_data/california_20/train",
         "exp_name": "california_20",
-        "workspace_dir": "/projects/aieng/diffusion_bootcamp/models/tabular/clavaDDPM",
+        "workspace_dir": "clavaDDPM_workspace/california",
         "sample_prefix": ""
     },
     "clustering" : {
