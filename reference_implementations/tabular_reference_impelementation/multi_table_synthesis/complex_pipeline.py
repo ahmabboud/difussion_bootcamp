@@ -304,8 +304,12 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
             )
             synthetic_tables[table] = pd.read_csv(os.path.join(table_dir, f'{table}_synthetic.csv'))
     
+    if 'test_data_dir' in configs['general']:
+        real_data_path = configs['general']['test_data_dir']
+    else:
+        real_data_path = configs['general']['data_dir']
     report = gen_multi_report(
-        configs['general']['data_dir'],
+        real_data_path,
         os.path.join(configs['general']['workspace_dir'], configs['general']['exp_name']),
         'clava'
     )

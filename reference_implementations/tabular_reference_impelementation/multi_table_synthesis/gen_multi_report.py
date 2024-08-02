@@ -157,6 +157,14 @@ def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
         real_tables[table] = val['df']
         syn_tables[table] = syn[table]['df']
 
+    for key in real_tables.keys():
+        for col in real_tables[key].columns:
+            if real_tables[key][col].dtype == 'object':
+                try:
+                    real_tables[key][col] = real_tables[key][col].astype(int)
+                except ValueError:
+                    print(f"Column {col} cannot be converted to int.")
+
     multi_report = multi_eval_quality(
         real_tables,
         syn_tables,
