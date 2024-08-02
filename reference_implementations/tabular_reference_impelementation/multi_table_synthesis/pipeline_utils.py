@@ -173,12 +173,6 @@ def pipeline_process_data(
     if ratio < 1:
         test_df.columns = range(len(test_df.columns))
 
-    if verbose:
-        if ratio < 1:
-            print("Table name: {}, Train dataframe shape: {}, Test dataframe shape: {}, Total dataframe shape: {}".format(name, train_df.shape, test_df.shape, data_df.shape))
-        else:
-            print("Table name: {}, Train dataframe shape: {}, Total dataframe shape: {}".format(name, train_df.shape, data_df.shape))
-
     col_info = {}
     
     for col_idx in num_col_idx:
@@ -262,12 +256,6 @@ def pipeline_process_data(
         if ratio < 1:
             test_df.to_csv(f'synthetic/{name}/test.csv', index = False)
 
-    if verbose:
-        print('Numerical', X_num_train.shape)
-        print('Categorical', X_cat_train.shape)
-
-        print("Numerical data shape: {}".format(X_num_train.shape))
-        print("Categorical data shape: {}".format(X_cat_train.shape))
 
     info['column_names'] = column_names
     info['train_num'] = train_df.shape[0]
@@ -314,7 +302,14 @@ def pipeline_process_data(
             json.dump(info, file, indent=4)
 
     if verbose:
-        print(f'Processing {name} table successfully!\n')
+        if ratio < 1:
+            str_shape = "Train dataframe shape: {}, Test dataframe shape: {}, Total dataframe shape: {}".format(train_df.shape, test_df.shape, data_df.shape)
+        else:
+            str_shape = "Table name: {}, Total dataframe shape: {}".format(name, data_df.shape)
+
+        str_shape += ", Numerical data shape: {}".format(X_num_train.shape)
+        str_shape += ", Categorical data shape: {}".format(X_cat_train.shape)
+        print(str_shape)
 
     # print(name)
     # print('Total', info['train_num'] + info['test_num'] if ratio < 1 else info['train_num'])

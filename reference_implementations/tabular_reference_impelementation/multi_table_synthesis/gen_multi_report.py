@@ -129,6 +129,8 @@ def get_long_range(real_tables, syn_tables, dataset_meta):
 
 
 def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
+    syn_data_path = os.path.abspath(syn_data_path)
+    real_data_path = os.path.abspath(real_data_path)
     print(f'generating multi-table report for {syn_data_path}')
 
     tables, relation_order, dataset_meta = load_multi_table(real_data_path, verbose=False)
@@ -158,7 +160,8 @@ def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
     multi_report = multi_eval_quality(
         real_tables,
         syn_tables,
-        multi_metadata
+        multi_metadata,
+        verbose=False
     )
 
     one_hop = multi_report.get_details('Intertable Trends').dropna(subset=['Score'])
