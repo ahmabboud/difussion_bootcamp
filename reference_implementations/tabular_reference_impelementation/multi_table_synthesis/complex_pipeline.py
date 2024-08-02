@@ -303,15 +303,23 @@ def clava_eval(tables, save_dir, configs, relation_order, synthetic_tables=None)
                 f'{configs["general"]["sample_prefix"]}_final'
             )
             synthetic_tables[table] = pd.read_csv(os.path.join(table_dir, f'{table}_synthetic.csv'))
+
+    syn_data = {}
+    for table, val in tables.items():
+        syn_data[table] = {}
+        syn_data[table]['df'] = synthetic_tables[table]
+        syn_data[table]['domain'] = val['domain']
     
     if 'test_data_dir' in configs['general']:
         real_data_path = configs['general']['test_data_dir']
     else:
         real_data_path = configs['general']['data_dir']
+    syn_data_path = os.path.join(configs['general']['workspace_dir'], configs['general']['exp_name'])
     report = gen_multi_report(
         real_data_path,
-        os.path.join(configs['general']['workspace_dir'], configs['general']['exp_name']),
-        'clava'
+        syn_data_path,
+        'clava',
+        syn_data=syn_data
     )
     
     pickle.dump(metadata, open(os.path.join(save_dir, 'metadata.pkl'), 'wb'))

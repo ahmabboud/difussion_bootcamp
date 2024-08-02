@@ -128,7 +128,7 @@ def get_long_range(real_tables, syn_tables, dataset_meta):
     return res
 
 
-def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
+def gen_multi_report(real_data_path, syn_data_path, syn_data_type, syn_data=None):
     syn_data_path = os.path.abspath(syn_data_path)
     real_data_path = os.path.abspath(real_data_path)
     print(f'generating multi-table report for {syn_data_path}')
@@ -136,12 +136,15 @@ def gen_multi_report(real_data_path, syn_data_path, syn_data_type):
     tables, relation_order, dataset_meta = load_multi_table(real_data_path, verbose=False)
     multi_metadata = get_multi_metadata(tables, relation_order)
     
-    if syn_data_type == 'baseline':
-        syn = baseline_load_synthetic_data(syn_data_path, tables)
-    elif syn_data_type == 'clava':
-        syn = clava_load_synthetic_data(syn_data_path, tables)
-    elif syn_data_type == 'sdv':
-        syn = sdv_load_synthetic_data(syn_data_path, tables)
+    if syn_data is None:
+        if syn_data_type == 'baseline':
+            syn = baseline_load_synthetic_data(syn_data_path, tables)
+        elif syn_data_type == 'clava':
+            syn = clava_load_synthetic_data(syn_data_path, tables)
+        elif syn_data_type == 'sdv':
+            syn = sdv_load_synthetic_data(syn_data_path, tables)
+    else:
+        syn = syn_data
 
     for table_name, _ in syn.items():
         domain = tables[table_name]['domain']
