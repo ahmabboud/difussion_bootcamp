@@ -1,31 +1,21 @@
 import os
 import numpy as np
 import torch
-import argparse
 import warnings
+from pprint import pprint
 
-from tabsyn.model import MLPDiffusion, Model
-from tabsyn.latent_utils import recover_data, split_num_cat_target
-from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
+# from tabsyn.model import MLPDiffusion, Model
+from src.baselines.tabsyn.model.modules import MLPDiffusion, Model
+# from tabsyn.latent_utils import recover_data, split_num_cat_target
+from src.baselines.tabsyn.utils import recover_data, split_num_cat_target
+# from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
+from src.baselines.tabsyn.model.vae import Model_VAE, Encoder_model, Decoder_model
 import json
-from tabsyn.utils import preprocess
+# from tabsyn.utils import preprocess
+from src.data import preprocess
+from src import load_config
 
 warnings.filterwarnings("ignore")
-
-parser = argparse.ArgumentParser(
-    description="Missing Value Imputation for the Target Column"
-)
-
-parser.add_argument("--dataname", type=str, default="adult", help="Name of dataset.")
-parser.add_argument("--gpu", type=int, default=0, help="GPU index.")
-
-args = parser.parse_args()
-
-# check cuda
-if args.gpu != -1 and torch.cuda.is_available():
-    args.device = f"cuda:{args.gpu}"
-else:
-    args.device = "cpu"
 
 class_labels = None
 randn_like = torch.randn_like
@@ -61,25 +51,24 @@ def step(net, num_steps, i, t_cur, t_next, x_next):
     return x_next
 
 
-if __name__ == "__main__":
-    dataname = args.dataname
-    device = args.device
-    epoch = args.epoch
-    mask_cols = args.cols = [0]
+def main(dataname, device):
+    # dataname = args.dataname
+    # device = args.device
+    # epoch = args.epoch
+    mask_cols = [0]
 
     num_trials = 1
 
-    data_dir = f"data/{dataname}"
+    data_dir = f"data/tabular/processed_data/{dataname}"
 
     d_token = 4
     token_bias = True
-    device = args.device
     n_head = 1
     factor = 32
 
     num_layers = 2
 
-    info_path = f"data/{dataname}/info.json"
+    info_path = f"data/tabular/processed_data/{dataname}/info.json"
 
     with open(info_path, "r") as f:
         info = json.load(f)
@@ -90,14 +79,17 @@ if __name__ == "__main__":
 
     task_type = info["task_type"]
 
-    ckpt_dir = f"tabsyn/vae/ckpt/{dataname}"
+    ckpt_dir = f"models/tabsyn/{dataname}/vae"
     model_save_path = f"{ckpt_dir}/model.pt"
     encoder_save_path = f"{ckpt_dir}/encoder.pt"
     decoder_save_path = f"{ckpt_dir}/decoder.pt"
 
+    config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
+    raw_config = load_config(config_path)
+
     for trial in range(50):
         X_num, X_cat, categories, d_numerical = preprocess(
-            data_dir, task_type=info["task_type"]
+            data_dir, task_type=info["task_type"], transforms=raw_config["transforms"],
         )
 
         X_train_num, X_test_num = X_num
@@ -162,7 +154,7 @@ if __name__ == "__main__":
 
         x = pre_encoder(X_test_num, X_test_cat).detach().cpu().numpy()
 
-        embedding_save_path = f"tabsyn/vae/ckpt/{dataname}/train_z.npy"
+        embedding_save_path = f"models/tabsyn/{dataname}/vae/train_z.npy"
         train_z = torch.tensor(np.load(embedding_save_path)).float()
         train_z = train_z[:, 1:, :]
 
@@ -179,7 +171,7 @@ if __name__ == "__main__":
         denoise_fn = MLPDiffusion(in_dim, 1024).to(device)
         model = Model(denoise_fn=denoise_fn, hid_dim=train_z.shape[1]).to(device)
 
-        model.load_state_dict(torch.load(f"tabsyn/ckpt/{dataname}/model.pt"))
+        model.load_state_dict(torch.load(f"models/tabsyn/{dataname}/model.pt"))
 
         # Define the masking area
 
@@ -237,7 +229,7 @@ if __name__ == "__main__":
                             x_t = x_t_prev + n  # new x_t
 
         _, _, _, _, num_inverse, cat_inverse = preprocess(
-            data_dir, task_type=info["task_type"], inverse=True
+            data_dir, task_type=info["task_type"], transforms=raw_config["transforms"], inverse=True
         )
         x_t = x_t * 2 + mean.to(device)
 
@@ -246,7 +238,7 @@ if __name__ == "__main__":
 
         syn_data = x_t.float().cpu().numpy()
         syn_num, syn_cat, syn_target = split_num_cat_target(
-            syn_data, info, num_inverse, cat_inverse, args.device
+            syn_data, info, num_inverse, cat_inverse, device
         )
 
         syn_df = recover_data(syn_num, syn_cat, syn_target, info)
@@ -256,7 +248,7 @@ if __name__ == "__main__":
 
         syn_df.rename(columns=idx_name_mapping, inplace=True)
 
-        save_dir = f"impute/{dataname}"
+        save_dir = f"impute/tabsyn/{dataname}"
         os.makedirs(save_dir) if not os.path.exists(save_dir) else None
 
         syn_df.to_csv(f"{save_dir}/{trial}.csv", index=False)

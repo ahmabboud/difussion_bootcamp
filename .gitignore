@@ -3,3 +3,12 @@
 
 # Byte-compiled
 __pycache__/
+
+# data files
+data/
+
+# model files
+models/
+
+# imputed data files
+impute/
