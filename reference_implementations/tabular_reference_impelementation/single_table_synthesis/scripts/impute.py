@@ -1,24 +1,18 @@
 import os
 import numpy as np
-import torch
-import warnings
-from pprint import pprint
-
-# from tabsyn.model import MLPDiffusion, Model
-from src.baselines.tabsyn.model.modules import MLPDiffusion, Model
-# from tabsyn.latent_utils import recover_data, split_num_cat_target
-from src.baselines.tabsyn.utils import recover_data, split_num_cat_target
-# from tabsyn.vae.model import Model_VAE, Encoder_model, Decoder_model
-from src.baselines.tabsyn.model.vae import Model_VAE, Encoder_model, Decoder_model
 import json
-# from tabsyn.utils import preprocess
+import torch
+
+from src.baselines.tabsyn.model.modules import MLPDiffusion, Model
+from src.baselines.tabsyn.utils import recover_data, split_num_cat_target
+from src.baselines.tabsyn.model.vae import Model_VAE, Encoder_model, Decoder_model
 from src.data import preprocess
 from src import load_config
 
+import warnings
 warnings.filterwarnings("ignore")
 
 class_labels = None
-randn_like = torch.randn_like
 
 SIGMA_MIN = 0.002
 SIGMA_MAX = 80
@@ -35,7 +29,7 @@ def step(net, num_steps, i, t_cur, t_next, x_next):
     # Increase noise temporarily.
     gamma = min(S_churn / num_steps, np.sqrt(2) - 1) if S_min <= t_cur <= S_max else 0
     t_hat = net.round_sigma(t_cur + gamma * t_cur)
-    x_hat = x_cur + (t_hat**2 - t_cur**2).sqrt() * S_noise * randn_like(x_cur)
+    x_hat = x_cur + (t_hat**2 - t_cur**2).sqrt() * S_noise * torch.randn_like(x_cur)
     # Euler step.
 
     denoised = net(x_hat, t_hat).to(torch.float32)
@@ -51,25 +45,23 @@ def step(net, num_steps, i, t_cur, t_next, x_next):
     return x_next
 
 
-def main(dataname, device):
+def impute(dataname, processed_data_dir, info_path, model_path, impute_path, device):
     # dataname = args.dataname
     # device = args.device
     # epoch = args.epoch
-    mask_cols = [0]
+    # mask_cols = [0]
 
-    num_trials = 1
+    num_trials = 50
 
-    data_dir = f"data/tabular/processed_data/{dataname}"
+    data_dir = os.path.join(processed_data_dir, dataname)
 
     d_token = 4
-    token_bias = True
+    # token_bias = True
     n_head = 1
     factor = 32
-
     num_layers = 2
 
-    info_path = f"data/tabular/processed_data/{dataname}/info.json"
-
+    # get info about dataset columns
     with open(info_path, "r") as f:
         info = json.load(f)
 
@@ -79,15 +71,18 @@ def main(dataname, device):
 
     task_type = info["task_type"]
 
-    ckpt_dir = f"models/tabsyn/{dataname}/vae"
-    model_save_path = f"{ckpt_dir}/model.pt"
-    encoder_save_path = f"{ckpt_dir}/encoder.pt"
-    decoder_save_path = f"{ckpt_dir}/decoder.pt"
+    # get trained VAE checkpoint
+    ckpt_dir = os.path.join(model_path, dataname, "vae")
+    model_save_path = os.path.join(ckpt_dir, "model.pt")
+    encoder_save_path = os.path.join(ckpt_dir, "encoder.pt")
+    decoder_save_path = os.path.join(ckpt_dir, "decoder.pt")
 
+    # get model config
     config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
     raw_config = load_config(config_path)
 
-    for trial in range(50):
+    for trial in range(num_trials):
+        # prepare data
         X_num, X_cat, categories, d_numerical = preprocess(
             data_dir, task_type=info["task_type"], transforms=raw_config["transforms"],
         )
@@ -101,9 +96,9 @@ def main(dataname, device):
         )
         X_train_cat, X_test_cat = torch.tensor(X_train_cat), torch.tensor(X_test_cat)
 
+        # mask target column
         mask_idx = 0
-
-        if task_type == "bin_class":
+        if task_type == "binclass":
             unique_values, counts = np.unique(
                 X_train_cat[:, mask_idx], return_counts=True
             )
@@ -123,6 +118,7 @@ def main(dataname, device):
             X_train_num[:, mask_idx] = avg
             X_test_num[:, mask_idx] = avg
 
+        # load trained VAE from checkpoint
         model = Model_VAE(
             num_layers,
             d_numerical,
@@ -152,9 +148,11 @@ def main(dataname, device):
         X_test_num = X_test_num.to(device)
         X_test_cat = X_test_cat.to(device)
 
+        # embed masked and unmasked data together
         x = pre_encoder(X_test_num, X_test_cat).detach().cpu().numpy()
+        embedding_save_path = os.path.join(model_path, dataname, "vae", "train_z.npy")
 
-        embedding_save_path = f"models/tabsyn/{dataname}/vae/train_z.npy"
+        # load and normalized embedded data
         train_z = torch.tensor(np.load(embedding_save_path)).float()
         train_z = train_z[:, 1:, :]
 
@@ -168,15 +166,14 @@ def main(dataname, device):
 
         x = ((x - mean) / 2).to(device)
 
+        # load trained diffusion model from checkpoint
         denoise_fn = MLPDiffusion(in_dim, 1024).to(device)
         model = Model(denoise_fn=denoise_fn, hid_dim=train_z.shape[1]).to(device)
-
-        model.load_state_dict(torch.load(f"models/tabsyn/{dataname}/model.pt"))
+        model.load_state_dict(torch.load(os.path.join(model_path, dataname, "model.pt")))
 
         # Define the masking area
-
-        mask_idx = [0]
-        if task_type == "bin_class":
+        mask_idx = np.array([0])
+        if task_type == "binclass":
             mask_idx += d_numerical
 
         mask_list = [list(range(i * token_dim, (i + 1) * token_dim)) for i in mask_idx]
@@ -184,7 +181,10 @@ def main(dataname, device):
         mask[mask_list] = True
 
         ###########################
+        # Diffusion Denoising
+        ###########################
 
+        # configs setup
         num_steps = 50
         N = 20
         net = model.denoise_fn_D
@@ -197,6 +197,7 @@ def main(dataname, device):
         sigma_min = max(SIGMA_MIN, net.sigma_min)
         sigma_max = min(SIGMA_MAX, net.sigma_max)
 
+        # setup diffusion steps
         t_steps = (
             sigma_max ** (1 / rho)
             + step_indices
@@ -208,6 +209,7 @@ def main(dataname, device):
         mask = mask.to(torch.int).to(device)
         x_t = x_t.to(torch.float32) * t_steps[0]
 
+        # reverse diffusion for imputation
         with torch.no_grad():
             for i, (t_cur, t_next) in enumerate(zip(t_steps[:-1], t_steps[1:])):
                 print(i)
@@ -228,6 +230,7 @@ def main(dataname, device):
                         else:
                             x_t = x_t_prev + n  # new x_t
 
+        # get detokenizer
         _, _, _, _, num_inverse, cat_inverse = preprocess(
             data_dir, task_type=info["task_type"], transforms=raw_config["transforms"], inverse=True
         )
@@ -241,6 +244,7 @@ def main(dataname, device):
             syn_data, info, num_inverse, cat_inverse, device
         )
 
+        # impute data
         syn_df = recover_data(syn_num, syn_cat, syn_target, info)
 
         idx_name_mapping = info["idx_name_mapping"]
@@ -248,7 +252,7 @@ def main(dataname, device):
 
         syn_df.rename(columns=idx_name_mapping, inplace=True)
 
-        save_dir = f"impute/tabsyn/{dataname}"
+        save_dir = os.path.join(impute_path, dataname)
         os.makedirs(save_dir) if not os.path.exists(save_dir) else None
 
-        syn_df.to_csv(f"{save_dir}/{trial}.csv", index=False)
+        syn_df.to_csv(os.path.join(save_dir, f"{trial}.csv"), index=False)
