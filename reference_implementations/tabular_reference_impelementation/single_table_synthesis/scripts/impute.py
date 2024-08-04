@@ -2,7 +2,6 @@ import os
 import numpy as np
 import json
 import torch
-from pprint import pprint
 
 from src.baselines.tabsyn.model.modules import MLPDiffusion, Model
 from src.baselines.tabsyn.utils import recover_data, split_num_cat_target
@@ -48,7 +47,6 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
     # get model config
     config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
     raw_config = load_config(config_path)
-    pprint(raw_config)
 
     # number of resampling trials in imputation
     num_trials = raw_config["impute"]["num_trials"]

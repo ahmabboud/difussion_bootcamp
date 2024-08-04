@@ -1,14 +1,22 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.metrics import f1_score, roc_auc_score
+from src import load_config
 
 
-def main(dataname="default", col=0):
-    data_dir = f"data/tabular/processed_data/{dataname}"
+def eval_impute(dataname, processed_data_dir, impute_path, col=0):
 
+    # set paths
+    data_dir = os.path.join(processed_data_dir, dataname)
     real_path = f"{data_dir}/test.csv"
 
+    # get model config
+    config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
+    raw_config = load_config(config_path)
+    # number of resampling trials in imputation
+    num_trials = raw_config["impute"]["num_trials"]
 
     encoder = OneHotEncoder()
 
@@ -17,10 +25,9 @@ def main(dataname="default", col=0):
     real_target = real_data[target_col].to_numpy().reshape(-1, 1)
     real_y = encoder.fit_transform(real_target).toarray()
 
-
     syn_y = []
-    for i in range(9):
-        syn_path = f"impute/tabsyn/{dataname}/{i}.csv"
+    for i in range(num_trials):
+        syn_path = os.path.join(impute_path, dataname, f"{i}.csv")
         syn_data = pd.read_csv(syn_path)
         target = syn_data[target_col].to_numpy().reshape(-1, 1)
         syn_y.append(encoder.transform(target).toarray())
