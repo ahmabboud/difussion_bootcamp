@@ -11,7 +11,8 @@ This folder is part of a series of implementations focusing on diffusion models 
 This section includes code structure and description of the files:
 
 - [config/](https://github.com/VectorInstitute/diffusion_model_bootcamp/tree/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/config) ==>  Contains configuration files that specify model parameters and experimental settings.
-- [dataset/](https://github.com/VectorInstitute/diffusion_model_bootcamp/tree/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/dataset) 
+- [dataset/](https://github.com/VectorInstitute/diffusion_model_bootcamp/tree/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/dataset)
+  -  [dataset_download.py](https://github.com/VectorInstitute/diffusion_model_bootcamp/blob/main/reference_implementations/time_series_reference_impelementation/CSDI/dataset/dataset_download.py) ==>  For downloading the dataset.
   - [dataset_forecasting.py](https://github.com/VectorInstitute/diffusion_model_bootcamp/blob/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/dataset/dataset_forecasting.py) ==>  Handles loading and preprocessing data for forecasting tasks.
   - [dataset_physio.py](https://github.com/VectorInstitute/diffusion_model_bootcamp/blob/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/dataset/dataset_physio.py) ==>  Manages physiological data specific to time series imputation analysis.
   - [dataset_pm25.py](https://github.com/VectorInstitute/diffusion_model_bootcamp/blob/gs_bootcamp/reference_implementations/time_series_reference_impelementation/CSDI/dataset/dataset_pm25.py) ==>  Dedicated to handling PM2.5 environmental data sets for imputation.

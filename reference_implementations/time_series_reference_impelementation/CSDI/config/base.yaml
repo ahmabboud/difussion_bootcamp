@@ -24,3 +24,4 @@ model:
   timeemb: 128
   featureemb: 16
   target_strategy: "random"
+  test_missing_ratio: 0.1
