@@ -2,6 +2,7 @@ import os
 import numpy as np
 import json
 import torch
+from pprint import pprint
 
 from src.baselines.tabsyn.model.modules import MLPDiffusion, Model
 from src.baselines.tabsyn.utils import recover_data, split_num_cat_target
@@ -12,19 +13,10 @@ from src import load_config
 import warnings
 warnings.filterwarnings("ignore")
 
-class_labels = None
-
-SIGMA_MIN = 0.002
-SIGMA_MAX = 80
-rho = 7
-S_churn = 1
-S_min = 0
-S_max = float("inf")
-S_noise = 1
-
+# class_labels = None
 
 ## One denoising step from t to t-1
-def step(net, num_steps, i, t_cur, t_next, x_next):
+def step(net, num_steps, i, t_cur, t_next, x_next, S_churn, S_min, S_max, S_noise):
     x_cur = x_next
     # Increase noise temporarily.
     gamma = min(S_churn / num_steps, np.sqrt(2) - 1) if S_min <= t_cur <= S_max else 0
@@ -51,15 +43,31 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
     # epoch = args.epoch
     # mask_cols = [0]
 
-    num_trials = 50
-
     data_dir = os.path.join(processed_data_dir, dataname)
 
-    d_token = 4
+    # get model config
+    config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
+    raw_config = load_config(config_path)
+    pprint(raw_config)
+
+    # number of resampling trials in imputation
+    num_trials = raw_config["impute"]["num_trials"]
+
+    # determine imputation parameters
+    SIGMA_MIN = raw_config["impute"]["SIGMA_MIN"]
+    SIGMA_MAX = raw_config["impute"]["SIGMA_MAX"]
+    rho = raw_config["impute"]["rho"]
+    S_churn = raw_config["impute"]["S_churn"]
+    S_min = raw_config["impute"]["S_min"]
+    S_max = raw_config["impute"]["S_max"]
+    S_noise = raw_config["impute"]["S_noise"]
+
+    # get model params
+    d_token = raw_config["model_params"]["d_token"]
     # token_bias = True
-    n_head = 1
-    factor = 32
-    num_layers = 2
+    n_head = raw_config["model_params"]["n_head"]
+    factor = raw_config["model_params"]["factor"]
+    num_layers = raw_config["model_params"]["num_layers"]
 
     # get info about dataset columns
     with open(info_path, "r") as f:
@@ -76,10 +84,6 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
     model_save_path = os.path.join(ckpt_dir, "model.pt")
     encoder_save_path = os.path.join(ckpt_dir, "encoder.pt")
     decoder_save_path = os.path.join(ckpt_dir, "decoder.pt")
-
-    # get model config
-    config_path = os.path.join("src/baselines/tabsyn/configs", f"{dataname}.toml")
-    raw_config = load_config(config_path)
 
     for trial in range(num_trials):
         # prepare data
@@ -185,8 +189,9 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
         ###########################
 
         # configs setup
-        num_steps = 50
-        N = 20
+
+        num_steps = raw_config["impute"]["num_steps"]
+        N = raw_config["impute"]["N"]
         net = model.denoise_fn_D
 
         num_samples, dim = x.shape[0], x.shape[1]
@@ -219,7 +224,7 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
                         n_prev = torch.randn_like(x).to(device) * t_next
 
                         x_known_t_prev = x + n_prev
-                        x_unknown_t_prev = step(net, num_steps, i, t_cur, t_next, x_t)
+                        x_unknown_t_prev = step(net, num_steps, i, t_cur, t_next, x_t, S_churn, S_min, S_max, S_noise)
 
                         x_t_prev = x_known_t_prev * (1 - mask) + x_unknown_t_prev * mask
 
