@@ -42,3 +42,15 @@ patience = 20
 max_beta = 1e-2
 min_beta = 1e-5
 lambd = 0.7
+
+[impute]
+num_trials = 50
+SIGMA_MIN = 0.002
+SIGMA_MAX = 80
+rho = 7
+S_churn = 1
+S_min = 0
+S_max = inf
+S_noise = 1
+num_steps = 50
+N = 20
