@@ -1,10 +1,10 @@
 {
     "general": {
-        "data_dir": "complex_data/movie_lens/preprocessed/train",
+        "data_dir": "../../../project_dir/raw_data/movie_lens/preprocessed/train",
         "exp_name": "movie_lens_train",
         "workspace_dir": "clavaDDPM_workspace/movie_lens",
         "sample_prefix": "",
-        "test_data_dir": "complex_data/movie_lens/preprocessed/test"
+        "test_data_dir": "../../../project_dir/raw_data/movie_lens/preprocessed/test"
     },
     "clustering" : {
         "parent_scale": 1.0,
@@ -48,5 +48,8 @@
         "matching_batch_size": 1000,
         "unique_matching": true,
         "no_matching": false
+    },
+    "debug": {
+        "sample_scale": 1.0
     }
 }
