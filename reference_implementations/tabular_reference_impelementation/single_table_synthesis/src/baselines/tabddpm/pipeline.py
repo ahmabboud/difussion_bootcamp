@@ -64,8 +64,7 @@ class TabDDPM:
 
         self.diffusion.to(self.device)
 
-    def get_model(self, model_name, model_params, n_num_features, category_sizes):
-        print(model_name)
+    def get_model(self, model_name, model_params):
         if model_name == "mlp":
             model = MLPDiffusion(**model_params)
         else:
@@ -133,8 +132,6 @@ class TabDDPM:
             x_gen = self.diffusion.sample_all(
                 num_samples, batch_size, ddim=True, steps=steps
             )
-
-        print("Shape", x_gen.shape)
 
         syn_data = x_gen
         num_inverse = self.dataset.num_transform.inverse_transform

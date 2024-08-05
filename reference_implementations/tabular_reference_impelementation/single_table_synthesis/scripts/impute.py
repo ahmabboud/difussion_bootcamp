@@ -215,7 +215,6 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
         # reverse diffusion for imputation
         with torch.no_grad():
             for i, (t_cur, t_next) in enumerate(zip(t_steps[:-1], t_steps[1:])):
-                print(i)
                 if i < num_steps - 1:
                     for j in range(N):
                         n_curr = torch.randn_like(x).to(device) * t_cur
@@ -232,6 +231,7 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
                             x_t = x_t_prev  # turn to x_{t-1}
                         else:
                             x_t = x_t_prev + n  # new x_t
+            print(f"Trial {i} completed")
 
         # get detokenizer
         _, _, _, _, num_inverse, cat_inverse = preprocess(

@@ -1,7 +1,3 @@
-parent_dir = "configs/default"
-model_save_path = "ckpt/default"
-sample_save_path = "sampled/default"
-real_data_path = "Data/default"
 num_numerical_features = 14
 task_type = "binclass"
 model_type = "mlp"

@@ -1,7 +1,3 @@
-parent_dir = "configs/adult"
-model_save_path = "ckpt/adult"
-sample_save_path = "sampled/adult"
-real_data_path = "Data/adult"
 
 num_numerical_features = 6
 model_type = "mlp"

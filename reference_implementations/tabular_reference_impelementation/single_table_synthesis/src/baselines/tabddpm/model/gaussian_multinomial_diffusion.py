@@ -1049,7 +1049,7 @@ class GaussianMultinomialDiffusion(torch.nn.Module):
             uniform_logits = torch.zeros(
                 (b, len(self.num_classes_expanded)), device=device
             )
-            print(uniform_logits.shape)
+
             log_z = self.log_sample_categorical(uniform_logits)
 
         for i in reversed(range(0, self.num_timesteps)):

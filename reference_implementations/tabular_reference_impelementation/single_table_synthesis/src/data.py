@@ -587,7 +587,6 @@ def make_dataset(
     change_val: bool,
     concat=True,
 ):
-    print("data_path", data_path)
 
     # classification
     if task_type == "binclass" or task_type == "multiclass":

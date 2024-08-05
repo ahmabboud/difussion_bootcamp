@@ -1,7 +1,3 @@
-parent_dir = "configs/beijing"
-model_save_path = "ckpt/beijing"
-sample_save_path = "sampled/beijing"
-real_data_path = "Data/beijing"
 num_numerical_features = 6
 task_type = "regression"
 model_type = "mlp"

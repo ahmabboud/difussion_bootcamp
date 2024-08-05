@@ -222,8 +222,6 @@ def process_data(name, info_path, data_dir):
     train_df.columns = range(len(train_df.columns))
     test_df.columns = range(len(test_df.columns))
 
-    print(name, train_df.shape, test_df.shape, data_df.shape)
-
     col_info = {}
 
     for col_idx in num_col_idx:
@@ -290,9 +288,6 @@ def process_data(name, info_path, data_dir):
     if not os.path.exists(f"{synthetic_data_dir}/{name}"):
         os.makedirs(f"{synthetic_data_dir}/{name}")
 
-    print("Numerical", X_num_train.shape)
-    print("Categorical", X_cat_train.shape)
-
     info["column_names"] = column_names
     info["train_num"] = train_df.shape[0]
     info["test_num"] = test_df.shape[0]
@@ -334,18 +329,18 @@ def process_data(name, info_path, data_dir):
 
     print(f"Processing and Saving {name} Successfully!")
 
-    print(name)
-    print("Total", info["train_num"] + info["test_num"])
-    print("Train", info["train_num"])
-    print("Test", info["test_num"])
+    print("Dataset Name:", name)
+    print("Total Size:", info["train_num"] + info["test_num"])
+    print("Train Size:", info["train_num"])
+    print("Test Size:", info["test_num"])
     if info["task_type"] == "regression":
         num = len(info["num_col_idx"] + info["target_col_idx"])
         cat = len(info["cat_col_idx"])
     else:
         cat = len(info["cat_col_idx"] + info["target_col_idx"])
         num = len(info["num_col_idx"])
-    print("Num", num)
-    print("Cat", cat)
+    print("Number of Numerical Columns:", num)
+    print("Number of Categorical Columns:", cat)
 
 
 if __name__ == "__main__":

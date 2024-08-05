@@ -1,7 +1,3 @@
-parent_dir = "configs/news"
-model_save_path = "ckpt/news"
-sample_save_path = "sampled/news"
-real_data_path = "Data/news"
 num_numerical_features = 45
 task_type = "regression"
 model_type = "mlp"
