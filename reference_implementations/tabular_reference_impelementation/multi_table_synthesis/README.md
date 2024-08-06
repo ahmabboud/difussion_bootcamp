@@ -37,5 +37,5 @@ This section includes code structure and description of the files:
 ## Getting Started
 To get started with the materials in this topic:
 1. Ensure you have followed the reference to the installation guide and environment setup in `\docs`.
-2. Run the notebook `ClavaDDPM` to learn about the ClavaDDPM algorithm and its implementation step by step. Please first make sure to set the kernel to `diffusion_model` in the notebook.
+2. Run the notebook `ClavaDDPM.ipynb` to learn about the ClavaDDPM algorithm and its implementation step by step. Please first make sure to set the kernel to `diffusion_model` in the notebook.
 

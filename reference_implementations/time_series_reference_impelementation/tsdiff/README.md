@@ -62,5 +62,5 @@ This section includes code structure and description of the files
 ## Getting Started
 To get started with the materials in this topic:
 1. Ensure you have followed the reference to the installation guide and environment setup in `\docs`.
-2. Move to notebook tsdiff_forcasting to learn about TSDiff algorithm and its implementation. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to forecast time series data.
-3. Move to notebook tsdiff_data_synthesis to learn about applying TSDiff for generating synthetic time series data. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to generate synthetic data.
+2. Move to notebook `tsdiff_forcasting.ipynb` to learn about TSDiff algorithm and its implementation. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to forecast time series data.
+3. Move to notebook `tsdiff_data_synthesis.ipynb` to learn about applying TSDiff for generating synthetic time series data. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to generate synthetic data.
