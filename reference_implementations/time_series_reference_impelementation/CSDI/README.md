@@ -4,8 +4,8 @@
 This folder is part of a series of implementations focusing on diffusion models applied to time series data, specifically using the CSDI (Conditional Score-based Diffusion Model) framework. These implementations are designed to provide insights and practical experience with state-of-the-art models in time series data forecasting and imputation.
 
 ### Notebooks
-- **CSDI_forecasting.ipynb** - Demonstrates the use of the CSDI model for time series forecasting tasks. It includes a brief description of the algorithm, its implementation, and a demonstration of how to use it for forecasting.
-- **CSDI_imputation.ipynb** - Focuses on the application of the CSDI model for data imputation in time series. It includes a brief description of the algorithm, its implementation, and a demonstration of how to use it for imputation.
+- **csdi_forecasting.ipynb** - Demonstrates the use of the CSDI model for time series forecasting tasks. It includes a brief description of the algorithm, its implementation, and a demonstration of how to use it for forecasting.
+- **csdi_imputation.ipynb** - Focuses on the application of the CSDI model for data imputation in time series. It includes a brief description of the algorithm, its implementation, and a demonstration of how to use it for imputation.
 
 ### Code
 This section includes code structure and description of the files:
@@ -33,5 +33,5 @@ This section includes code structure and description of the files:
 ## Getting Started
 To start working with the materials and code in this topic:
 1. Ensure you have followed the reference to the installation guide and environment setup in \docs.
-2. Move to notebook `CSDI_imputation.ipynb` to learn about CSDI algorithm and its implementation to imputation. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to download data.
-3. Move to notebook `CSDI_forecasting.ipynb` to learn about the implementation of CSDI to forecasting task. Please first make sure to set the kernel to `diffusion_model` in the notebook. 
+2. Move to notebook `csdi_imputation.ipynb` to learn about CSDI algorithm and its implementation to imputation. Please first make sure to set the kernel to `diffusion_model` in the notebook. Further run the code to download data.
+3. Move to notebook `csdi_forecasting.ipynb` to learn about the implementation of CSDI to forecasting task. Please first make sure to set the kernel to `diffusion_model` in the notebook. 
