@@ -84,6 +84,7 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
     decoder_save_path = os.path.join(ckpt_dir, "decoder.pt")
 
     for trial in range(num_trials):
+        print(f"Trial {trail} started!")
         # prepare data
         X_num, X_cat, categories, d_numerical = preprocess(
             data_dir, task_type=info["task_type"], transforms=raw_config["transforms"],
@@ -231,7 +232,6 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
                             x_t = x_t_prev  # turn to x_{t-1}
                         else:
                             x_t = x_t_prev + n  # new x_t
-            print(f"Trial {i} completed")
 
         # get detokenizer
         _, _, _, _, num_inverse, cat_inverse = preprocess(

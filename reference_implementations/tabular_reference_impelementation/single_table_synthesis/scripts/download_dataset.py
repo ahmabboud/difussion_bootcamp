@@ -24,7 +24,7 @@ def download_from_uci(name, data_dir, name_url_dict_uci):
         print(f"Finish unzipping {name}.")
 
     else:
-        print("Aready downloaded.")
+        print("Already downloaded.")
 
 
 if __name__ == "__main__":

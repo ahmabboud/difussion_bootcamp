@@ -45,8 +45,6 @@ class TabDDPM:
         self.model = self.get_model(
             model_type,
             model_params,
-            self.num_numerical_features,
-            category_sizes=self.dataset.get_category_sizes("train"),
         )
         self.model.to(device)
         self.diffusion = GaussianMultinomialDiffusion(
