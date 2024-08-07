@@ -84,7 +84,7 @@ def impute(dataname, processed_data_dir, info_path, model_path, impute_path, dev
     decoder_save_path = os.path.join(ckpt_dir, "decoder.pt")
 
     for trial in range(num_trials):
-        print(f"Trial {trail} started!")
+        print(f"Trial {trial} started!")
         # prepare data
         X_num, X_cat, categories, d_numerical = preprocess(
             data_dir, task_type=info["task_type"], transforms=raw_config["transforms"],
