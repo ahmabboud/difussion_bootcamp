@@ -1,15 +1,14 @@
 {
     "general": {
-        "data_dir": "../../../project_dir/raw_data/california_20/train",
-        "exp_name": "california_20",
-        "workspace_dir": "../../../project_dir/clavaDDPM/",
-        "sample_prefix": ""
+        "data_dir": "../../../project_dir/raw_data/ccs/preprocessed/train",
+        "exp_name": "ccs_train",
+        "workspace_dir": "clavaDDPM_workspace/ccs",
+        "sample_prefix": "",
+        "test_data_dir": "../../../project_dir/raw_data/ccs/preprocessed/test"
     },
     "clustering" : {
         "parent_scale": 1.0,
-        "num_clusters": {
-            "individual": 25
-        },
+        "num_clusters": 50,
         "clustering_method": "both"
     },
     "diffusion": {
@@ -24,7 +23,7 @@
         "dropout": 0.0,
         "num_timesteps": 2000,
         "model_type": "mlp",
-        "iterations": 1,
+        "iterations": 200000,
         "batch_size": 4096,
         "lr": 6e-4,
         "gaussian_loss_type": "mse",
@@ -38,7 +37,7 @@
         "lr": 0.0001,
         "dim_t": 128,
         "batch_size": 4096,
-        "iterations": 1000
+        "iterations": 20000
     },
     "sampling": {
         "batch_size": 20000,
@@ -51,6 +50,6 @@
         "no_matching": false
     },
     "debug": {
-        "sample_scale": 0.0005
+        "sample_scale": 1.0
     }
 }
