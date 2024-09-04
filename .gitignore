@@ -12,3 +12,6 @@ models/
 
 # imputed data files
 impute/
+
+# ignore Virtual environment
+.venv/
