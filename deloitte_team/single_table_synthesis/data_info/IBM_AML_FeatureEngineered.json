@@ -1,0 +1,43 @@
+{
+    "name": "IBM_AML_FeatureEngineered",
+    "task_type": "binclass",
+    "header": null,
+    "column_names": [
+        "SecondsSinceEpoch",
+        "Identitcal Account Activity",
+        "Amount Received",
+        "Receiving Currency",
+        "Amount Paid",
+        "Payment Currency",
+        "Payment Format",
+        "Is Laundering"
+    ],
+    "num_col_idx": [
+        0,
+        2,
+        4
+    ],
+    "cat_col_idx": [
+        1,
+        3,
+        5,
+        6
+    ],
+    "target_col_idx": [
+        7
+    ],
+    "file_type": "csv",
+    "data_path": "/projects/diffusion_bootcamp/datasets/ibmaml/HI-Small_Trans.csv",
+    "column_info": {
+        "SecondsSinceEpoch": "int",
+        "Identitcal Account Activity": "int",
+        "Amount Received": "float",
+        "Receiving Currency": "str",
+        "Amount Paid": "float",
+        "Payment Currency": "str",
+        "Payment Format": "str",
+        "Is Laundering": "int"
+    },
+    "train_num": 32561,
+    "test_num": 16281
+}
