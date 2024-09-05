@@ -1,0 +1,42 @@
+{
+    "name": "aml",
+    "task_type": "binclass",
+    "header": "infer",
+    "column_names": [
+        "minute",
+        "hour",
+        "day",
+        "time_differences",
+        "bank_matching",
+        "account_matching",
+        "Amount Recieved",
+        "Receiving Currency",
+        "Amount Paid",
+        "Payment Currency",
+        "Payment Format",
+        "Is Laundering"
+    ],
+    "num_col_idx": [
+        3,
+        6,
+        8
+    ],
+    "cat_col_idx": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        7,
+        9,
+        10
+    ],
+    "target_col_idx": [
+        11
+    ],
+    "file_type": "csv",
+    "data_path": "/projects/diffusion_bootcamp/team_spaces/deloitte/raw_data/aml/train.csv",
+    "test_path": "/projects/diffusion_bootcamp/team_spaces/deloitte/raw_data/aml/test.csv",
+    "train_num": 4570511,
+    "test_num": 507834
+}
