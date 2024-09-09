@@ -15,15 +15,17 @@ cat_encoding = "__none__"
 y_policy = "default"
 
 [train.vae]
-num_epochs = 4000
-# num_epochs = 10
-batch_size = 4096
+# num_epochs = 4000
+num_epochs = 10
+# batch_size = 4096
+batch_size = 2048
 num_dataset_workers = 4
 
 [train.diffusion]
-num_epochs = 10001
-# num_epochs = 9
-batch_size = 4096
+# num_epochs = 10001
+num_epochs = 9
+# batch_size = 4096
+batch_size = 2048
 num_dataset_workers = 4
 
 [train.optim.vae]
