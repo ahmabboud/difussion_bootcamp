@@ -1,7 +1,7 @@
 {
     "name": "IBM_AML_FeatureEngineered_FS1",
     "task_type": "binclass",
-    "header": null,
+    "header": "infer",
     "column_names": [
         "Destination_1",
         "Destination_2",
@@ -85,8 +85,8 @@
         36
     ],
     "file_type": "csv",
-    "data_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/raw_data/IBM_AML_FeatureEngineered_FS1/flattened_sample.csv",
-    "test_path":null,
+    "data_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/processed_data/IBM_AML_FeatureEngineered_FS1/train.csv",
+    "test_path":"/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/processed_data/IBM_AML_FeatureEngineered_FS1/test.csv",
     "column_info": {
         "Destination_1": "bool",
         "Destination_2": "bool",
