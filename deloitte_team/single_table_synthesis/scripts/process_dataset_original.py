@@ -5,21 +5,6 @@ import json
 import argparse
 
 
-
-def preprocess_aml_fs1(info_path):
-    with open(f"{info_path}/IBM_AML_FeatureEngineered_FS1.json", "r") as f:
-        info = json.load(f)
-
-    data_path = info["raw_data_path"]
-
-    data_df = pd.read_csv(data_path)
-    columns = data_df.columns
-
-    # data_df = data_df[columns[1:]]   ## to be investigated
-
-    df_cleaned = data_df.dropna()
-    df_cleaned.to_csv(info["data_path"], index=False)
-
 def preprocess_beijing(info_path):
     with open(f"{info_path}/beijing.json", "r") as f:
         info = json.load(f)
@@ -142,12 +127,8 @@ def process_data(name, info_path, data_dir):
     processed_data_dir = os.path.join(data_dir, "processed_data")
     synthetic_data_dir = os.path.join(data_dir, "synthetic_data")
 
-
-
     if name == "news":
         preprocess_news(info_path, raw_data_dir)
-    elif name=="IBM_AML_FeatureEngineered_FS1":
-        preprocess_aml_fs1(info_path)
     elif name == "beijing":
         preprocess_beijing(info_path)
 
@@ -346,5 +327,5 @@ if __name__ == "__main__":
     if args.dataname:
         process_data(args.dataname, INFO_PATH, DATA_DIR)
     else:
-        for name in ["adult", "default", "shoppers", "magic", "beijing", "news","IBM_AML_FeatureEngineered_FS1"]:
+        for name in ["adult", "default", "shoppers", "magic", "beijing", "news"]:
             process_data(name, INFO_PATH, DATA_DIR)
