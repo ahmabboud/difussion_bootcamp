@@ -210,11 +210,13 @@ def process_data(name, info_path, data_dir):
             data_df, cat_columns, num_train, num_test
         )
 
+
     train_df.columns = range(len(train_df.columns))
     test_df.columns = range(len(test_df.columns))
 
     col_info = {}
-
+    
+    print(f"num Col index:{num_col_idx}, Cat col index: {cat_col_idx}")
     for col_idx in num_col_idx:
         col_info[col_idx] = {}
         col_info["type"] = "numerical"
