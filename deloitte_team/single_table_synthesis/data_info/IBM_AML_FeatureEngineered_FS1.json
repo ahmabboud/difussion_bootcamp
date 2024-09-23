@@ -1,5 +1,5 @@
 {
-    "name": "IBM_AML_FeatureEngineered_FS1",
+    "name": "aml",
     "task_type": "binclass",
     "header": "infer",
     "column_names": [
@@ -26,12 +26,6 @@
         "Is FanOut"
     ],
     "num_col_idx": [
-        16,
-        17,
-        18,
-        19
-    ],
-    "cat_col_idx": [
         0,
         1,
         2,
@@ -47,37 +41,44 @@
         12,
         13,
         14,
-        15
+        15,
+        16,
+        17,
+        18,
+        19
+    ],
+    "cat_col_idx": [
+        20
     ],
     "target_col_idx": [
         20
     ],
     "file_type": "csv",
     "data_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/raw_data/IBM_AML_FeatureEngineered_FS1/train.csv",
-    "test_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/test_data/IBM_AML_FeatureEngineered_FS1/test.csv",
+    "test_path": null,
     "column_info": {
-        "Destination_1": "str",
-        "Destination_2": "str",
-        "Destination_3": "str",
-        "Destination_4": "str",
-        "Destination_5": "str",
-        "Destination_6": "str",
-        "Destination_7": "str",
-        "Destination_8": "str",
-        "Destination_9": "str",
-        "Destination_10": "str",
-        "Destination_11": "str",
-        "Destination_12": "str",
-        "Destination_13": "str",
-        "Destination_14": "str",
-        "Destination_15": "str",
-        "Destination_16": "str",
+        "Destination_1": "float",
+        "Destination_2": "float",
+        "Destination_3": "float",
+        "Destination_4": "float",
+        "Destination_5": "float",
+        "Destination_6": "float",
+        "Destination_7": "float",
+        "Destination_8": "float",
+        "Destination_9": "float",
+        "Destination_10": "float",
+        "Destination_11": "float",
+        "Destination_12": "float",
+        "Destination_13": "float",
+        "Destination_14": "float",
+        "Destination_15": "float",
+        "Destination_16": "float",
         "number_transactions_above_9k_cad": "float",
         "min_day_to_max_day_range": "float",
         "avg_transaction_frequency_in_days": "float",
         "transaction_frequency_variance_in_days": "float",
         "Is FanOut": "str"
     },
-    "train_num": 16,
-    "test_num": 4
+    "train_num": 20,
+    "test_num": 0
     }
