@@ -15,3 +15,5 @@ impute/
 
 # ignore Virtual environment
 .venv/
+# Ignore backups
+deloitte_team/single_table_synthesis/workspace/*.bkp

@@ -1,5 +1,5 @@
 {
-    "name": "aml",
+    "name": "IBM_AML_FeatureEngineered_FS1",
     "task_type": "binclass",
     "header": "infer",
     "column_names": [
@@ -39,7 +39,7 @@
         "min_day_to_max_day_range",
         "avg_transaction_frequency_in_days",
         "transaction_frequency_variance_in_days",
-        "Is FanOut"
+        "Is_FanOut"
     ],
     "num_col_idx": [
         0,
@@ -85,8 +85,8 @@
         36
     ],
     "file_type": "csv",
-    "data_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/raw_data/IBM_AML_FeatureEngineered_FS1/train.csv",
-    "test_path":"/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/test_data/IBM_AML_FeatureEngineered_FS1/test.csv",
+    "data_path": "/h/ws_aabboud/diffusion_model_bootcamp/deloitte_team/single_table_synthesis/data/raw_data/IBM_AML_FeatureEngineered_FS1/IBM_AML_FeatureEngineered_FS1.csv",
+    "test_path":null,
     "column_info": {
         "Destination_1": "float",
         "Destination_2": "float",
@@ -124,7 +124,7 @@
         "min_day_to_max_day_range": "float",
         "avg_transaction_frequency_in_days": "float",
         "transaction_frequency_variance_in_days": "float",
-        "Is FanOut": "str"
+        "Is_FanOut": "str"
     },
     "train_num": 90,
     "test_num": 0

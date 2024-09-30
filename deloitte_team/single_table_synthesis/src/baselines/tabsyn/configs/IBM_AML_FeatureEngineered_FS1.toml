@@ -45,7 +45,7 @@ lambd = 0.7
 
 
 [impute]
-num_trials = 50
+num_trials = 30
 SIGMA_MIN = 0.002
 SIGMA_MAX = 80
 rho = 7
@@ -53,5 +53,5 @@ S_churn = 1
 S_min = 0
 S_max = inf
 S_noise = 1
-num_steps = 50
+num_steps = 30
 N = 20
